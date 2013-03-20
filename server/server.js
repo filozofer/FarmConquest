@@ -1,8 +1,8 @@
 /*this is a comment //with a smaller comment// writed by lucien*/
 
-var PaPaEstEnHauT = 0;
-<<<<<<< HEAD
-var MaMamnEstEnBaS = 1;
+var PaPaEstEnHauT = 6;
+
+var MaMamnEstEnBaS = 9;
 
 
 var PapaEstSurMaman = 69;
