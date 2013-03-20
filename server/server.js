@@ -1,7 +1,6 @@
 /*this is a comment //with a smaller comment// writed by lucien*/
 
 var PaPaEstEnHauT = 0;
-var MaMamnEstEnBaS = 1;
+var MaManEstEnBaS = 1;
 
-
-var PapaEstSurMaman = 69;
+1234567890!=987654321
