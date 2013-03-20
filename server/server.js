@@ -1,8 +1,12 @@
-/*this is a comment //with a smaller comment// writed by lucien*/
 
-var PaPaEstEnHauT = 6;
+var http = require('http');
 
-var MaMamnEstEnBaS = 9;
+httpServer = http.createServeur(function (req, res){
+       console.log('Server Start...');
+});
 
+httpServer.listen(1337);
 
-var PapaEstSurMaman = 69;
+var io = require('socket.io').listen(httpServer);
+
+require('controllers/userControllers.js');
