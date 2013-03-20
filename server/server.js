@@ -2,3 +2,6 @@
 
 var PaPaEstEnHauT = 0;
 var MaMamnEstEnBaS = 1;
+
+
+var PapaEstSurMaman = 69;
