@@ -1,7 +1,7 @@
 
 var http = require('http');
 
-httpServer = http.createServeur(function (req, res){
+http.createServeur(function (req, res){
        console.log('Server Start...');
 });
 
