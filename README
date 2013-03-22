@@ -78,7 +78,7 @@ When you push your code changes to OpenShift, if you want dynamic reloading
 of your javascript files in "development" mode, you can either use the
 hot_deploy marker (see .openshift/markers/README) or add the following to
 package.json.
-   "scripts": { "start": "supervisor <relative-path-from-repo-to>/server.js" },
+   "scripts": { "start": "supervisor <relative-path-from-repo-to>/main.js" },
 
 This will run Node with Supervisor - https://npmjs.org/package/supervisor
 
@@ -111,9 +111,9 @@ installed:
 
 Once you have completed the above setup, you can then run your application
 locally by using any one of these commands:
-    node server.js
+    node main.js
     npm start -d
-    supervisor server.js
+    supervisor main.js
 
 And then iterate on developing+testing your application.
 

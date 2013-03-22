@@ -1,12 +1,7 @@
 
-var http = require('http');
+var Server = require('./server/main');
 
-http.createServeur(function(req, res){
-       console.log('Server Start...');
-});
+var server = new Server();
+server.init();
+server.callControllers();
 
-httpServer.listen(1337);
-
-var io = require('socket.io').listen(httpServer);
-
-require('controllers/userControllers.js');

@@ -1,19 +1,24 @@
-var User = require("user.js");
 
-io.sockets.on('connection', function(socket){
+/*
+    User Controller class
+ */
+UserController = function(socket){
 
-    console.log('User get page !');
-
-    socket.on('login', function(user){
-       //TODO
-       console.log('login');
-       socket.emit('login', true);
+    socket.on('login', function(userLogin){
+        //TODO
+        console.log('login ' + userLogin.username + ' ' + userLogin.password);
+        socket.emit('login', true);
     });
 
-    socket.on('register', function(user){
+    socket.on('register', function(userRegister){
         //TODO
         console.log('register');
         socket.emit('register');
     });
 
-});
+};
+
+module.exports = UserController;
+
+
+

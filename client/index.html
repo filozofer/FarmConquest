@@ -15,6 +15,7 @@
                     <input type="text" name="username" id="usernameLoginInput" />
                     <label for="passwordLoginInput">Password</label>
                     <input type="password" name="password" id="passwordLoginInput" />
+                    <input type="submit" value="Connect" />
                 </form>
             </section>
 
@@ -24,8 +25,8 @@
 
         </section>
 
-        <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="../node_modules/socket.io/socket.io.js"></script>
-        <script type="text/javascript" src="js/client.js"></script>
+        <!--<script type="text/javascript" src="js/lib/jquery-1.9.1.min.js"></script>-->
+        <script type="text/javascript" src="http://localhost:1337/socket.io/socket.io.js"></script>
+        <script data-main="js/client" src="js/lib/require-jquery.js"></script>
 	</body>
 </html>
