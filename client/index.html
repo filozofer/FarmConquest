@@ -2,29 +2,85 @@
 <html>
 	<head>
 		<title>Farm Conquest</title>
-		<meta charset="utf-8" />
+        <meta charset="utf-8" />
+        <link href="css/bootstrap.min.css" media="all" rel="stylesheet" type="text/css" />
+        <link href="css/page.css" media="all" rel="stylesheet" type="text/css" />
 	</head>
 	<body>
-		<h1>Farm Conquest</h1>
 
-        <section id="connexionBox">
+        <header>
+            <img src="img/main/angry-farmer.jpg" alt="Angry Farmer" id="img_banner" />
+            <h1>Farmer Quest</h1>
+        </header>
 
-            <section id="login">
-                <form id="loginForm" action="" method="post">
-                    <label for="usernameLoginInput">Username</label>
-                    <input type="text" name="username" id="usernameLoginInput" />
-                    <label for="passwordLoginInput">Password</label>
-                    <input type="password" name="password" id="passwordLoginInput" />
-                    <input type="submit" value="Connect" />
-                </form>
-            </section>
+        <section id="section_intro">
 
-            <section id="register">
+            <div class="center windowsMinSize">
+                <section id="section_login">
 
-            </section>
+                    <div class="center">
+                        <h3>Connexion</h3>
+                        <form id="form_login" class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="input_username">Username</label>
+                                <div class="controls">
+                                    <input type="text" id="input_username">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input_password">Password</label>
+                                <div class="controls">
+                                    <input type="password" id="input_password">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button type="submit" class="btn">Se Connecter</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
 
+                <section id="section_register">
+
+                    <div class="center">
+                        <h3>Inscription</h3>
+                        <form id="form_register" class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="input_username_r">Username</label>
+                                <div class="controls">
+                                    <input type="text" id="input_username_r">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input_password_r">Password</label>
+                                <div class="controls">
+                                    <input type="password" id="input_password_r">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="input_password_r">Password Confirmation</label>
+                                <div class="controls">
+                                    <input type="password" id="input_password_conf_r">
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button type="submit" class="btn">Créer mon compte !</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
         </section>
 
+        <section id="container">
+
+            <section id="section_canvas">TODO</section>
+
+        </section>
         <script type="text/javascript" src="http://localhost:1337/socket.io/socket.io.js"></script>
         <script data-main="js/client" src="js/lib/require-jquery.js"></script>
 	</body>

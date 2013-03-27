@@ -1,0 +1,54 @@
+
+
+body {
+    margin: 0;
+    width: 100%;
+    background-image: url('../img/main/background.jpg');
+}
+
+header {
+    width: 60%;
+    min-width: 600px;
+    height: 200px;
+    margin: auto;
+    background-color: white;
+}
+
+#img_banner {
+    height: 200px;
+    float: left;
+}
+
+#section_intro {
+    width: 80%;
+    height: 400px;
+    min-width: 960px;
+    margin: auto;
+    margin-top: 30px;
+    padding-top: 80px;
+    font-size: 20px;
+    text-align: center;
+    z-index: 2;
+    background-color: white;
+    border-radius: 10px;
+    border: 2px solid black;
+}
+
+#section_login {
+    width: 45%;
+    float: left;
+}
+
+#section_register {
+    width: 45%;
+    float:left;
+    border-left: 4px solid black;
+}
+
+.center {
+    margin: auto;
+}
+
+.windowsMinSize {
+    min-width: 950px;
+}
