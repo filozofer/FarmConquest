@@ -1,7 +1,10 @@
 
 define(function(){
 
-    var User = Class.extend({
+    var User = Class.create();
+    User.prototype = {
+
+            initialize:function(){},
 
             create : function (username, mail, password, dateOfCreation){
                 this.username = username;
@@ -15,7 +18,7 @@ define(function(){
                 this.password = password;
             }
 
-    });
+    };
 
     return User;
 });

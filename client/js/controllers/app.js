@@ -1,13 +1,13 @@
 
 
-//Import Entity
-//var User = require(['entity/user']);
+define(function() {
 
-define(['jquery'], function($) {
+    var App = Class.create();
+    App.prototype = {
 
-    var App = Class.extend({
+        initialize: function(){},
 
-         init: function(){
+        init: function(){
             var socket = io.connect('http://localhost:1337');
              return socket;
          },
@@ -16,7 +16,7 @@ define(['jquery'], function($) {
             window.scrollTo(0, 1);
         }
 
-    });
+    };
 
     return App;
 });

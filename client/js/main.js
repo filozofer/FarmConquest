@@ -6,34 +6,37 @@
  * To change this template use File | Settings | File Templates.
  */
 
-define(['jquery', 'controllers/app', 'controllers/userController'], function($, App, UserController) {
-    var app, userController, game;
+define(['jquery', 'controllers/app', 'controllers/userController'], function(jQuery, App, UserController) {
 
-    //Load the App (html part)
-    var initApp = function() {
-        $(document).ready(function() {
+    jQuery(function($) {
 
-            //Load Controllers
-            app = new App();
-            userController = new UserController();
+        var app, userController, game;
 
-            //Call init configurations
-            app.center();
-            socket = app.init();
+        //Load the App (html part)
+        var initApp = function() {
 
-            //Init all events from controllers
-            userController.initEvents();
+                //Load Controllers
+                app = new App();
+                userController = new UserController();
 
-            //Log+ContinueLoad
-            console.log("App initialized.");
-            initGame();
-        });
-    };
+                //Call init configurations
+                app.center();
+                socket = app.init();
 
-    //Load the Game (canvas part)
-    var initGame = function() {
-        //console.log("TODO GAME");
-    };
+                //Init all events from controllers
+                userController.initEvents();
 
-    initApp();
+                //Log+ContinueLoad
+                console.log("App initialized.");
+                initGame();
+        };
+
+        //Load the Game (canvas part)
+        var initGame = function() {
+            //console.log("TODO GAME");
+        };
+
+        initApp();
+    });
+
 });

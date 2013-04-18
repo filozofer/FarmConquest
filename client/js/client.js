@@ -1,4 +1,4 @@
 
-define(['lib/class'], function() {
+define(['lib/prototype'], function() {
     require(["main"]);
 });
