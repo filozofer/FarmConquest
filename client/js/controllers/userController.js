@@ -26,6 +26,16 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
                     self.registerEvent();
                 });
 
+                //A ENLEVER (ByPass du Login)
+                $j('#section_intro').fadeOut();
+
+                                        //Declare lib draw canvas
+                                        var ifcl = new FCL("section_canvas", 700, 500);
+                                        var tileTest = new Tile(0,0);
+                                        var tileTest2 = new Tile(0,1);
+                                        ifcl.putTexture(new Vector2(10,10), "img/facebook.png", tileTest);
+                                        ifcl.putTexture(new Vector2(200,300), "img/facebook.png", tileTest2);
+
             },
 
             loginEvent: function() {
