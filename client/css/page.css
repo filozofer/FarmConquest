@@ -1,4 +1,5 @@
 
+/* GENERAL */
 
 body {
     margin: 0;
@@ -18,6 +19,8 @@ header {
     height: 200px;
     float: left;
 }
+
+/* LOGIN REGISTER PANEL */
 
 #section_intro {
     width: 80%;
@@ -52,3 +55,84 @@ header {
 .windowsMinSize {
     min-width: 950px;
 }
+
+/* GAME */
+
+#container {
+    width: 980px;
+    height: 600px;
+    margin: auto;
+    margin-top: 30px;
+    padding-top: 80px;
+    z-index: 3;
+    background-color: gray;
+    border: 2px solid black;
+}
+
+#section_canvas {
+    height: 440px;
+}
+
+/* GAME MENU BOX */
+
+#game_menu_box {
+    height: 160px;
+    background-color: white;
+}
+
+#mg_reglages {
+
+}
+
+#mg_bag {
+
+}
+
+#mg_arrosoir {
+
+}
+
+#mg_engrais {
+
+}
+
+#mg_alliance {
+
+}
+
+#mg_map {
+
+}
+
+#mg_arrowUp {
+
+}
+
+#mg_arrowBot {
+
+}
+
+#mg_infoList {
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
