@@ -77,43 +77,86 @@ header {
 
 #game_menu_box {
     height: 160px;
+    width: 980px;
     background-color: white;
+    position: absolute;
 }
 
 #mg_reglages {
-
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }
 
 #mg_bag {
+    position: absolute;
+    top: 25px;
+    left: 320px;
+    border-collapse: collapse;
+}
 
+#mg_bag td{
+    border: 1px solid black;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
 }
 
 #mg_arrosoir {
-
+    position: absolute;
+    top: 5px;
+    left: 700px;
 }
 
 #mg_engrais {
-
+    position: absolute;
+    top: 5px;
+    left: 760px;
 }
 
 #mg_alliance {
-
+    position: absolute;
+    top: 5px;
+    left: 820px;
 }
 
 #mg_map {
-
+    position: absolute;
+    top: 5px;
+    left: 880px;
 }
 
 #mg_arrowUp {
-
+    position: absolute;
+    top: 50px;
+    left: 675px;
 }
 
 #mg_arrowBot {
-
+    position: absolute;
+    top: 100px;
+    left: 675px;
 }
 
 #mg_infoList {
+    position: absolute;
+    top: 70px;
+    left: 700px;
+    list-style-type: none;
+}
 
+#mg_infoList li {
+    display: inline-block;
+    width: 245px;
+    height: 20px;
+}
+
+#mg_infoList li.pair{
+    background-color: #696969;
+}
+
+#mg_infoList li.impair{
+    background-color: #d3d3d3;
 }
 
 
