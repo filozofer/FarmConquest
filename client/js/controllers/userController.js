@@ -29,12 +29,15 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
                 //A ENLEVER (ByPass du Login)
                 $j('#section_intro').fadeOut();
 
-                                        //Declare lib draw canvas
-                                        var ifcl = new FCL("section_canvas", 700, 500);
-                                        var tileTest = new Tile(0,0);
-                                        var tileTest2 = new Tile(0,1);
-                                        ifcl.putTexture(new Vector2(10,10), "img/facebook.png", tileTest);
-                                        ifcl.putTexture(new Vector2(200,300), "img/facebook.png", tileTest2);
+                var ifcl = new FCL("section_canvas", 980, 440);
+                var tileTest = new Tile(0,0);
+                var tileTest2 = new Tile(0,1);
+                ifcl.putTexture(new Vector2(10,10), "img/facebook.png", tileTest);
+                ifcl.putTexture(new Vector2(200,300), "img/facebook.png", tileTest2);
+
+                var mfcl = new FCL("mg_map_minimize", 165, 100);
+                var test = "test";
+                mfcl.putTexture(new Vector2(0,0), "img/gameMenu/minimap.png", test);
 
             },
 

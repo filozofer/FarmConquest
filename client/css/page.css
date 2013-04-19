@@ -88,6 +88,35 @@ header {
     left: 0px;
 }
 
+#mg_map_minimize {
+    position: absolute;
+    top: 35px;
+    left: 30px;
+}
+
+.mg_span_infos {
+    position: absolute;
+    display: inline-block;
+    background-color: #778899;
+    width: 50px;
+    height: 20px;
+}
+
+#mg_nom_joueur {
+    top: 45px;
+    left: 174px;
+}
+
+#mg_money_joueur {
+    top: 75px;
+    left: 174px;
+}
+
+#mg_autres_joueur {
+    top: 105px;
+    left: 174px;
+}
+
 #mg_bag {
     position: absolute;
     top: 25px;
