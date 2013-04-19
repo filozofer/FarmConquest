@@ -4,11 +4,12 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
 
         jQuery.noConflict();
         var $j = jQuery;
-
         var UserController = Class.create();
         UserController.prototype = {
 
-            initialize: function(){},
+            initialize: function(){
+                this.ifcl = undefined;
+            },
 
             initEvents: function(){
 
@@ -26,9 +27,12 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
                     self.registerEvent();
                 });
 
+
+
             },
 
             loginEvent: function() {
+                var self = this;
                 var userLogin = new User();
                 userLogin.createLogin($j("#input_username").val(), $j("#input_password").val());
                 socket.emit('login', userLogin);
@@ -41,15 +45,7 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
                         $j('#section_intro').fadeOut();
 
                         //Declare lib draw canvas
-                        var ifcl = new FCL("section_canvas", 700, 500);
-                        var tileTest = new Tile(0,0);
-                        var tileTest2 = new Tile(0,1);
-                        ifcl.putTexture(new Vector2(10,10), "img/facebook.png", tileTest);
-                        ifcl.putTexture(new Vector2(200,300), "img/facebook.png", tileTest2);
-
-                        var mfcl = new FCL("mg_map_minimize", 165, 100);
-                        var test = "test";
-                        mfcl.putTexture(new Vector2(0,0), "img/gameMenu/minimap.png", test);
+                        self.ifcl = new FCL("section_canvas", 700, 500);
 
 
                     } else {
@@ -67,6 +63,58 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
                             }
                         });
                     }
+
+                });
+
+                socket.on('worldArray', function(resp){
+                    var serverWorld = new Array();
+                    serverWorld = resp.world;
+                    var world = new Array();
+
+
+
+                    var centerScreen = new Object();
+                    centerScreen.X = self.ifcl.stage.attrs.width/2;
+                    centerScreen.Y = self.ifcl.stage.attrs.height/2;
+                    // CENTER = 0,0
+                    var tileCenter = new Tile(0,0);
+
+                    //var ScreenMinX = tileCenter.X - (centerScreen.X / 40);
+                    var ScreenMinX = 0;
+                    var ScreenMaxX = 5;
+                    var ScreenMinY = 0;
+                    var ScreenMaxY = 5;
+                    var tileWidth = 40;
+                    var tileHeight = 20;
+
+                    for(var i=ScreenMinX; i<ScreenMaxX; i++){
+
+                        if (serverWorld[i] != 'undefined'){
+                            world[i] = new Array();
+                            for(var j=ScreenMinY; j<ScreenMaxY; j++){
+
+                                if(serverWorld[i][j] != 'undefined'){
+                                    var element = serverWorld[i][j];
+                                    var tileX = element.X;
+                                    var tileY = element.Y;
+                                    world[i][j] = new Tile(tileX, tileY);
+
+                                    var tile = world[i][j];
+                                    tile.XPx = centerScreen.X - ((tile.Y - tileCenter.Y) * (tileWidth/2)) +((tile.X - tileCenter.X) * (tileWidth/2)) - (tileWidth/2);
+                                    tile.YPx = centerScreen.Y + ((tile.Y - tileCenter.Y) * (tileHeight/2)) +((tile.X - tileCenter.X) * (tileHeight/2)) - (tileHeight/2);
+
+                                    world[i][j] = tile;
+
+                                    self.ifcl.putTexture(new Vector2(tile.XPx, tile.YPx), 'img/tileTest.png', world[i][j]);
+
+                                 }
+                             }
+
+                        }
+
+                    }
+
+
 
                 });
             },

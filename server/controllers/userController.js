@@ -28,8 +28,24 @@ UserController = function(socket, db, mongoose){
                errorsMessages.push("bad_login");
             }
             mongoose.connection.close();
+
+
+
+            //TEMP - WORLD GENERATION
+            var world = new Array();
+            for(var i = -10; i<10; i++){
+                world[i] = new Array();
+                for (var j=-10; j<10; j++){
+                    world[i][j] = new Object();
+                    world[i][j].X = i;
+                    world[i][j].Y = j;
+                }
+            }
+
+
             //Send response
             socket.emit('login_resp', {'loginState': loginState, 'errorsMessages': errorsMessages});
+            socket.emit('worldArray', {'world': world});
         })
     });
 
