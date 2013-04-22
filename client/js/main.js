@@ -17,18 +17,27 @@ define(['jquery', 'controllers/app', 'controllers/userController'], function(jQu
 
                 //Load Controllers
                 app = new App();
-                userController = new UserController();
+                userController = new UserController(app);
 
                 //Call init configurations
                 app.center();
                 socket = app.init();
+                app.loadRessources();
 
-                //Init all events from controllers
-                userController.initEvents();
+                var first = true;
+                $(document).on('loadRessourcesOver', function() {
+                    if(first)
+                    {
+                        first = false;
 
-                //Log+ContinueLoad
-                console.log("App initialized.");
-                initGame();
+                        //Init all events from controllers
+                        userController.initEvents();
+
+                        //Log+ContinueLoad
+                        console.log("App initialized.");
+                        initGame();
+                    }
+                });
         };
 
         //Load the Game (canvas part)

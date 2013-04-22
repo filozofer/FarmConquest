@@ -32,10 +32,10 @@ UserController = function(socket, db, mongoose){
 
 
             //TEMP - WORLD GENERATION
-            var world = new Array();
-            for(var i = -10; i<10; i++){
-                world[i] = new Array();
-                for (var j=-10; j<10; j++){
+            var world = new Object();
+            for(var i = -25; i<25; i++){
+                world[i] = new Object();
+                for (var j=-25; j<25; j++){
                     world[i][j] = new Object();
                     world[i][j].X = i;
                     world[i][j].Y = j;

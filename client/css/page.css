@@ -35,6 +35,7 @@ header {
     background-color: white;
     border-radius: 10px;
     border: 2px solid black;
+    display: none;
 }
 
 #section_login {
@@ -63,14 +64,31 @@ header {
     height: 600px;
     margin: auto;
     margin-top: 30px;
-    padding-top: 80px;
     z-index: 3;
     background-color: gray;
     border: 2px solid black;
+    display: none;
+}
+
+#loading_window {
+    width: 980px;
+    height: 600px;
+    margin: auto;
+    margin-top: 30px;
+    background-color: black;
+    text-align:center;
+}
+
+#pourcentage {
+    margin: auto;
+    padding-top: 300px;
+    color: white;
+    font-size: 20px;
 }
 
 #section_canvas {
     height: 440px;
+    display: none;
 }
 
 /* GAME MENU BOX */
@@ -80,6 +98,7 @@ header {
     width: 980px;
     background-color: white;
     position: absolute;
+    display:none;
 }
 
 #mg_reglages {
