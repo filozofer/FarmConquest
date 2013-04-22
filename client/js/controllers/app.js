@@ -64,7 +64,20 @@ define(['jquery'], function(jQuery){
             this.Ressources[key] = new Image();
             this.Ressources[key].src = source;
             this.chargement++;
-            this.Ressources[key].onload = function(){self.chargement--;};
+            this.Ressources[key].onload = function(){
+
+                //Create HitBox
+                var KImage = new Kinetic.Image({
+                    image: self.Ressources[key],
+                    width: self.Ressources[key].width,
+                    height: self.Ressources[key].height
+                });
+                KImage.createImageHitRegion();
+                self.Ressources[key].imageHitRegion = KImage.imageHitRegion;
+
+                //Decrease loading
+                self.chargement--;
+            };
         }
 
     };

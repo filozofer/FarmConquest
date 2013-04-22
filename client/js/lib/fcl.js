@@ -30,9 +30,7 @@ define(['./kinetic'], function(){
                 width: imageObj.width,
                 height: imageObj.height
             });
-            customImg.createImageHitRegion(function(){
-
-            });
+            customImg.imageHitRegion = imageObj.imageHitRegion;
 
             customImg.objectLinked = objectLinked;
             customImg = this.manageEvent(customImg);
