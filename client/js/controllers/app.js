@@ -13,12 +13,60 @@ define(['jquery'], function(jQuery){
             this.chargement = 0;
             this.chargementMax = 0;
             this.manageLoadingInterval = undefined;
+            this.Config = this.getConfig();
+            this.Type = this.generateType();
         },
 
         init: function(){
             var socket = io.connect('http://localhost:1337');
              return socket;
          },
+
+        getConfig: function(){
+            var self = this;
+            var configuration = new Object();
+
+            //URLs
+            configuration.baseURL = this.getBaseURL();
+            configuration.clientURL = configuration.baseURL + "client/";
+            configuration.serverURL = configuration.baseURL + "server/";
+
+            //FOLDERS
+            configuration.imagePath = configuration.clientURL + "img/";
+
+            return configuration;
+        },
+
+        generateType: function(){
+            var self = this;
+            var type = new Object();
+
+            //TYPES
+            type.IMAGE = "image";
+            type.SOUND = "sound";
+
+            return type;
+        },
+
+        getBaseURL: function() {
+            var url = location.href;  // entire url including querystring - also: window.location.href;
+            var baseURL = url.substring(0, url.indexOf('/', 14));
+
+            if (baseURL.indexOf('http://localhost') != -1) {
+                    // Base Url for localhost
+                    var url = location.href;  // window.location.href;
+                    var pathname = location.pathname;  // window.location.pathname;
+                    var index1 = url.indexOf(pathname);
+                    var index2 = url.indexOf("/", index1 + 1);
+                    var baseLocalUrl = url.substr(0, index2);
+
+                    return baseLocalUrl + "/";
+                }
+                else {
+                    // Root Url for domain name
+                    return baseURL + "/";
+                }
+        },
 
         center: function() {
             window.scrollTo(0, 1);
@@ -29,9 +77,9 @@ define(['jquery'], function(jQuery){
             var self = this;
 
             /* Load Images */
-            this.addRessource("tileTest", "img/tileTest.png");
-            this.addRessource("tileSet", "img/tileSet.png");
-            this.addRessource("farmer", "img/farmer.png");
+            this.addRessource("tileTest", self.Type.IMAGE, "tileTest.png");
+            this.addRessource("tileSet", self.Type.IMAGE, "tileSet.png");
+            this.addRessource("farmer", self.Type.IMAGE, "farmer.png");
 
             this.chargementMax = this.chargement;
 
@@ -59,10 +107,15 @@ define(['jquery'], function(jQuery){
             }
         },
 
-        addRessource: function(key, source) {
+        addRessource: function(key, type, source) {
             var self = this;
+
+            if (type == self.Type.IMAGE){
+
+            var imgSrc = self.Config.imagePath + source;
+
             this.Ressources[key] = new Image();
-            this.Ressources[key].src = source;
+            this.Ressources[key].src = imgSrc;
             this.chargement++;
             this.Ressources[key].onload = function(){
 
@@ -78,6 +131,7 @@ define(['jquery'], function(jQuery){
                 //Decrease loading
                 self.chargement--;
             };
+            }
         }
 
     };
