@@ -1,6 +1,6 @@
 
 
-define(['jquery'], function(jQuery){
+define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
 
     jQuery.noConflict();
     var $j = jQuery;
@@ -33,6 +33,10 @@ define(['jquery'], function(jQuery){
 
             //FOLDERS
             configuration.imagePath = configuration.clientURL + "img/";
+
+            //TEXTURE
+            configuration.tileHeight = 40;
+            configuration.tileWidth = 80;
 
             return configuration;
         },
@@ -114,6 +118,7 @@ define(['jquery'], function(jQuery){
 
             var imgSrc = self.Config.imagePath + source;
 
+            /*
             this.Ressources[key] = new Image();
             this.Ressources[key].src = imgSrc;
             this.chargement++;
@@ -131,6 +136,28 @@ define(['jquery'], function(jQuery){
                 //Decrease loading
                 self.chargement--;
             };
+            */
+
+            var newImg = new Image();
+                        newImg.src = imgSrc;
+                        this.chargement++;
+                        newImg.onload = function(){
+
+                            //Create HitBox
+                            var KImage = new Kinetic.Image({
+                                image: newImg,
+                                width: newImg.width,
+                                height: newImg.height,
+                                x: 300,
+                                y: 300
+                            });
+                            KImage.createImageHitRegion();
+                            self.Ressources[key] = KImage;
+
+
+                            //Decrease loading
+                            self.chargement--;
+                        };
             }
         }
 

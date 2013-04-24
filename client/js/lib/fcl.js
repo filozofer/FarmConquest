@@ -23,6 +23,7 @@ define(['./kinetic'], function(){
 		putTexture: function(vector, imageObj, objectLinked){
             var self = this;
 
+            /*
             var customImg = new Kinetic.Image({
                 image: imageObj,
                 x: vector.X,
@@ -31,6 +32,14 @@ define(['./kinetic'], function(){
                 height: imageObj.height
             });
             customImg.imageHitRegion = imageObj.imageHitRegion;
+            */
+
+            var customImg = imageObj.clone();
+            customImg.setX(vector.X);
+            customImg.setY(vector.Y);
+            //customImg.imageHitRegion = imageObj.imageHitRegion.clone();
+
+            //customImg.createImageHitRegion();
 
             customImg.objectLinked = objectLinked;
             customImg = this.manageEvent(customImg);

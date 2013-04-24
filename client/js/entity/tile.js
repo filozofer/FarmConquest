@@ -15,12 +15,10 @@ define(function(){
 
 		mouseOverEvent: function(){
 		    this.image.setOpacity(0.5);
-		    console.log("overTile");
 		},
 
 		mouseOutEvent: function(){
 		    this.image.setOpacity(1);
-		    console.log("outTile");
 		}
 
     };
