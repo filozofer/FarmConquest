@@ -14,14 +14,16 @@ define(function(){
 		},
 
 		mouseOverEvent: function(){
-		    this.image.setStroke('red');
-		    this.image.setStrokeWidth(4);
-		    this.image.enableStroke();
+		    //this.image.setStroke('red');
+		    //this.image.setStrokeWidth(4);
+		    //this.image.enableStroke();
+		    this.image.setOpacity(0.5);
 		    console.log("overTile");
 		},
 
 		mouseOutEvent: function(){
-		    this.image.disableStroke();
+		    //this.image.disableStroke();
+		    this.image.setOpacity(1);
 		    console.log("outTile");
 		}
 
