@@ -88,8 +88,6 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
                 var tileWidth = self.app.Config.tileWidth;
                 var tileHeight = self.app.Config.tileHeight;
 
-                var nbAppelleFonction = 0;
-
                 for(var i=ScreenMinX; i<ScreenMaxX; i++){
 
                     if (serverWorld[i] != 'undefined'){
@@ -112,8 +110,6 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
                                     tile.YPx >= -tileHeight &&
                                     tile.YPx <= self.ifcl.stage.attrs.height + tileHeight)
                                 {
-                                    nbAppelleFonction++;
-                                    console.log("putTexture : " + nbAppelleFonction);
                                     self.ifcl.putTexture(new Vector2(tile.XPx, tile.YPx), self.app.Ressources["tileTest"] , world[i][j]);
                                 }
                             }

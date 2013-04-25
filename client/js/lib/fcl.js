@@ -9,43 +9,69 @@ define(['./kinetic'], function(){
 		           width: x,
 		           height: y
 		         });
-		    
-		    this.layer = new Kinetic.Layer();
-			
+
+		    this.layers = new Object();
+
 		},
 
         draw: function() {
             this.stage.clear();
-            this.layer.drawHit();
-            this.stage.add(this.layer);
+
+            for (var i in this.layers){
+                //this.layers[i].drawHit();
+                this.stage.add(this.layers[i]);
+            }
+            //this.layer.drawHit();
+            //this.stage.add(this.layer);
         },
 
 		putTexture: function(vector, imageObj, objectLinked){
             var self = this;
 
-            /*
+
             var customImg = new Kinetic.Image({
                 image: imageObj,
                 x: vector.X,
-                y: vector.Y,
-                width: imageObj.width,
-                height: imageObj.height
+                y: vector.Y
             });
-            customImg.imageHitRegion = imageObj.imageHitRegion;
-            */
+            //customImg.imageHitRegion = imageObj.imageHitRegion;
 
+            /*
             var customImg = imageObj.clone();
             customImg.setX(vector.X);
             customImg.setY(vector.Y);
+            customImg.setName(vector.X + " - " + vector.Y);
             //customImg.imageHitRegion = imageObj.imageHitRegion.clone();
+            */
 
-            //customImg.createImageHitRegion();
+            if (this.layers[vector.Y] == undefined){
+                this.layers[vector.Y] = new Kinetic.Layer();
+
+                /*
+                this.layers[vector.Y].on('click', function(evt) {
+                        // get the shape that was clicked on
+                        var shape = evt.targetNode;
+                        alert('you clicked on \"' + shape.getName() + '\"');
+                      });
+                */
+            }
+
+            /*
+            customImg.createImageHitRegion(function(){
+                self.layers[vector.Y].draw();
+            });
+            */
 
             customImg.objectLinked = objectLinked;
             customImg = this.manageEvent(customImg);
             objectLinked.image = customImg;
 
-            this.layer.add(customImg);
+            customImg.createImageHitRegion(function(){
+                            console.log("img add to layer");
+                        });
+
+            this.layers[vector.Y].add(customImg);
+            //this.layers[vector.Y].add(customImg);
 		},
 		
 		getMousePos: function(evt) {
@@ -63,13 +89,16 @@ define(['./kinetic'], function(){
             {
                 customImg.on("click", function(){
                     this.objectLinked.clickEvent();
+                    console.log("onclick");
                 });
             }
             if(typeof customImg.objectLinked.mouseOverEvent == 'function')
             {
                 customImg.on("mouseover", function(){
                     this.objectLinked.mouseOverEvent();
-                    self.layer.draw();
+                    self.layers[customImg.getY()].drawScene(self.layers[customImg.getY()].getCanvas());
+                    //self.layers[customImg.getY()].drawHit();
+                    console.log("OVER IMG = " + customImg.getX() + " - " + customImg.getY());
                 });
             }
             if(typeof customImg.objectLinked.mouseDownEvent == 'function')
@@ -88,7 +117,9 @@ define(['./kinetic'], function(){
             {
                 customImg.on("mouseout", function(){
                     this.objectLinked.mouseOutEvent();
-                    self.layer.draw();
+                    self.layers[customImg.getY()].drawScene(self.layers[customImg.getY()].getCanvas());
+                    //self.layers[customImg.getY()].drawHit();
+                    console.log("OUT IMG = " + customImg.getX() + " - " + customImg.getY());
                 });
             }
             if(typeof customImg.objectLinked.mouseEnterEvent == 'function')

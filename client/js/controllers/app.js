@@ -118,12 +118,14 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
 
             var imgSrc = self.Config.imagePath + source;
 
-            /*
             this.Ressources[key] = new Image();
             this.Ressources[key].src = imgSrc;
             this.chargement++;
             this.Ressources[key].onload = function(){
 
+            console.log(imgSrc);
+
+                /*
                 //Create HitBox
                 var KImage = new Kinetic.Image({
                     image: self.Ressources[key],
@@ -132,12 +134,13 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
                 });
                 KImage.createImageHitRegion();
                 self.Ressources[key].imageHitRegion = KImage.imageHitRegion;
+                */
 
                 //Decrease loading
                 self.chargement--;
             };
-            */
 
+            /*
             var newImg = new Image();
                         newImg.src = imgSrc;
                         this.chargement++;
@@ -147,17 +150,16 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
                             var KImage = new Kinetic.Image({
                                 image: newImg,
                                 width: newImg.width,
-                                height: newImg.height,
-                                x: 300,
-                                y: 300
+                                height: newImg.height
                             });
-                            KImage.createImageHitRegion();
+                            //KImage.createImageHitRegion();
                             self.Ressources[key] = KImage;
 
 
                             //Decrease loading
                             self.chargement--;
                         };
+                        */
             }
         }
 
