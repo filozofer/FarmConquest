@@ -28,7 +28,7 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
 
             //URLs
             configuration.baseURL = this.getBaseURL();
-            configuration.clientURL = configuration.baseURL + "client/";
+            configuration.clientURL = configuration.baseURL + "";
             configuration.serverURL = configuration.baseURL + "server/";
 
             //FOLDERS

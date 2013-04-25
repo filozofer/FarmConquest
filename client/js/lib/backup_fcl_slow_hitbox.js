@@ -12,35 +12,74 @@ define(['./kinetic'], function(){
 
 		    this.layers = new Object();
 
+            this.chargement = undefined;
+
 		},
 
         draw: function() {
             this.stage.clear();
 
             for (var i in this.layers){
+                //this.layers[i].drawHit();
                 this.stage.add(this.layers[i]);
+                //this.stage.drawHit();
             }
+            //this.layer.drawHit();
+            //this.stage.add(this.layer);
         },
 
 		putTexture: function(vector, imageObj, objectLinked){
             var self = this;
+
+            if(this.chargement == undefined){this.chargement = 0;}
+            this.chargement++;
+
 
             var customImg = new Kinetic.Image({
                 image: imageObj,
                 x: vector.X,
                 y: vector.Y
             });
+            //customImg.imageHitRegion = imageObj.imageHitRegion;
+
+            /*
+            var customImg = imageObj.clone();
+            customImg.setX(vector.X);
+            customImg.setY(vector.Y);
+            customImg.setName(vector.X + " - " + vector.Y);
+            //customImg.imageHitRegion = imageObj.imageHitRegion.clone();
+            */
+
+            if (this.layers[vector.Y] == undefined){
+                this.layers[vector.Y] = new Kinetic.Layer();
+
+                /*
+                this.layers[vector.Y].on('click', function(evt) {
+                        // get the shape that was clicked on
+                        var shape = evt.targetNode;
+                        alert('you clicked on \"' + shape.getName() + '\"');
+                      });
+                */
+            }
+
+            /*
+            customImg.createImageHitRegion(function(){
+                self.layers[vector.Y].draw();
+            });
+            */
 
             customImg.objectLinked = objectLinked;
             customImg = this.manageEvent(customImg);
             objectLinked.image = customImg;
 
-            //customImg.createImageHitRegion();
+            customImg.createImageHitRegion(function(){
+                            console.log("img add to layer");
+                            self.chargement--;
+                        });
 
-            if (this.layers[vector.Y] == undefined){
-                this.layers[vector.Y] = new Kinetic.Layer();
-            }
+
             this.layers[vector.Y].add(customImg);
+            //this.layers[vector.Y].add(customImg);
 		},
 		
 		getMousePos: function(evt) {
@@ -51,6 +90,24 @@ define(['./kinetic'], function(){
 		        };
 		 },
 
+        launchCheckHitBox: function(){
+            var self = this;
+           this.manageLoadingInterval = window.setInterval(function(){ self.manageLoading();}, 100);
+        },
+
+        manageLoading: function() {
+            if(this.chargement == 0)
+            {
+                for (var i in this.layers){
+                    this.layers[i].draw();
+                    this.stage.add(this.layers[i]);
+                }
+                this.chargement = undefined;
+                window.clearInterval(this.manageLoadingInterval);
+            }
+
+        },
+
         manageEvent: function(customImg) {
             var self = this;
 
@@ -58,6 +115,7 @@ define(['./kinetic'], function(){
             {
                 customImg.on("click", function(){
                     this.objectLinked.clickEvent();
+                    console.log("onclick");
                 });
             }
             if(typeof customImg.objectLinked.mouseOverEvent == 'function')
@@ -65,6 +123,8 @@ define(['./kinetic'], function(){
                 customImg.on("mouseover", function(){
                     this.objectLinked.mouseOverEvent();
                     self.layers[customImg.getY()].drawScene(self.layers[customImg.getY()].getCanvas());
+                    //self.layers[customImg.getY()].drawHit();
+                    console.log("OVER IMG = " + customImg.getX() + " - " + customImg.getY());
                 });
             }
             if(typeof customImg.objectLinked.mouseDownEvent == 'function')
@@ -84,6 +144,8 @@ define(['./kinetic'], function(){
                 customImg.on("mouseout", function(){
                     this.objectLinked.mouseOutEvent();
                     self.layers[customImg.getY()].drawScene(self.layers[customImg.getY()].getCanvas());
+                    //self.layers[customImg.getY()].drawHit();
+                    console.log("OUT IMG = " + customImg.getX() + " - " + customImg.getY());
                 });
             }
             if(typeof customImg.objectLinked.mouseEnterEvent == 'function')

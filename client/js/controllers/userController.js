@@ -118,6 +118,7 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
                 }
 
                 self.ifcl.draw();
+
             });
         },
 
