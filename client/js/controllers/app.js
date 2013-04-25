@@ -115,51 +115,14 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             var self = this;
 
             if (type == self.Type.IMAGE){
-
-            var imgSrc = self.Config.imagePath + source;
-
-            this.Ressources[key] = new Image();
-            this.Ressources[key].src = imgSrc;
-            this.chargement++;
-            this.Ressources[key].onload = function(){
-
-            console.log(imgSrc);
-
-                /*
-                //Create HitBox
-                var KImage = new Kinetic.Image({
-                    image: self.Ressources[key],
-                    width: self.Ressources[key].width,
-                    height: self.Ressources[key].height
-                });
-                KImage.createImageHitRegion();
-                self.Ressources[key].imageHitRegion = KImage.imageHitRegion;
-                */
-
-                //Decrease loading
-                self.chargement--;
-            };
-
-            /*
-            var newImg = new Image();
-                        newImg.src = imgSrc;
-                        this.chargement++;
-                        newImg.onload = function(){
-
-                            //Create HitBox
-                            var KImage = new Kinetic.Image({
-                                image: newImg,
-                                width: newImg.width,
-                                height: newImg.height
-                            });
-                            //KImage.createImageHitRegion();
-                            self.Ressources[key] = KImage;
-
-
-                            //Decrease loading
-                            self.chargement--;
-                        };
-                        */
+                var imgSrc = self.Config.imagePath + source;
+                this.Ressources[key] = new Image();
+                this.Ressources[key].src = imgSrc;
+                this.chargement++;
+                this.Ressources[key].onload = function(){
+                    //Decrease loading
+                    self.chargement--;
+                };
             }
         }
 
