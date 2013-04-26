@@ -10,6 +10,7 @@ db = require('./lib/db');
 
 //Controllers Import
 var UserController = require('./controllers/userController');
+var GameController = require('./controllers/gameController');
 
 LoadServer = cls.Class.extend({
 
@@ -32,6 +33,7 @@ LoadServer = cls.Class.extend({
 
             //Call Controllers
             new UserController(socket, db, mongoose);
+            new GameController(socket, db, mongoose);
 
         });
 

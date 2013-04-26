@@ -6,11 +6,11 @@
  * To change this template use File | Settings | File Templates.
  */
 
-define(['jquery', 'controllers/app', 'controllers/userController'], function(jQuery, App, UserController) {
+define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/gameController'], function(jQuery, App, UserController, GameController) {
 
     jQuery(function($) {
 
-        var app, userController, game;
+        var app, userController, gameController;
 
         //Load the App (html part)
         var initApp = function() {
@@ -18,6 +18,7 @@ define(['jquery', 'controllers/app', 'controllers/userController'], function(jQu
                 //Load Controllers
                 app = new App();
                 userController = new UserController(app);
+                gameController = new GameController(app);
 
                 //Call init configurations
                 app.center();
@@ -42,7 +43,7 @@ define(['jquery', 'controllers/app', 'controllers/userController'], function(jQu
 
         //Load the Game (canvas part)
         var initGame = function() {
-            //console.log("TODO GAME");
+            gameController.initEvents();
         };
 
         initApp();

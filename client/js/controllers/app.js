@@ -19,7 +19,8 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
 
         init: function(){
             var socket = io.connect('http://localhost:1337');
-             return socket;
+            socket.sessions = new Object();
+            return socket;
          },
 
         getConfig: function(){

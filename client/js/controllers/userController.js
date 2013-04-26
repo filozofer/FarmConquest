@@ -1,6 +1,6 @@
 
 
-define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQuery, User, Vector2, FCL, Tile) {
+define(['jquery', '../entity/user'], function(jQuery, User) {
 
     jQuery.noConflict();
     var $j = jQuery;
@@ -8,14 +8,13 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
     UserController.prototype = {
 
         initialize: function(app){
-            this.ifcl = undefined;
             this.app = app;
         },
 
         initEvents: function(){
 
             var self = this;
-            GLOBAL = new Object();
+            GLOBAL_USERCONTROLLER = new Object();
 
             //Submit form login
             $j('#form_login').on('submit', function(event){
@@ -45,9 +44,11 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
                         $j("#container").fadeIn();
                     });
 
-                    //Declare lib draw canvas
-                    self.ifcl = new FCL("section_canvas", 980, 440);
+                    //Add User in session
+                    socket.sessions["currentUser"] = userLogin;
 
+                    //Call gameController
+                    $j(document).trigger('startGame');
 
                 } else {
                     errorsMessages.forEach(function(element){
@@ -67,59 +68,6 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
 
             });
 
-            socket.on('worldArray', function(resp){
-
-
-
-                var serverWorld = resp.world;
-                var world = new Object();
-
-                var centerScreen = new Object();
-                centerScreen.X = self.ifcl.stage.attrs.width/2;
-                centerScreen.Y = self.ifcl.stage.attrs.height/2;
-                // CENTER = 0,0
-                var tileCenter = new Tile(0,0);
-
-                //var ScreenMinX = tileCenter.X - (centerScreen.X / 40);
-                var ScreenMinX = -13;
-                var ScreenMaxX = 14;
-                var ScreenMinY = -13;
-                var ScreenMaxY = 14;
-                var tileWidth = self.app.Config.tileWidth;
-                var tileHeight = self.app.Config.tileHeight;
-
-                for(var i=ScreenMinX; i<ScreenMaxX; i++){
-
-                    if (serverWorld[i] != 'undefined'){
-                        world[i] = new Object();
-                        for(var j=ScreenMinY; j<ScreenMaxY; j++){
-
-                            if(serverWorld[i][j] != 'undefined'){
-                                var element = serverWorld[i][j];
-                                var tileX = element.X;
-                                var tileY = element.Y;
-                                world[i][j] = new Tile(tileX, tileY);
-
-                                var tile = world[i][j];
-                                tile.XPx = centerScreen.X - ((tile.Y - tileCenter.Y) * (tileWidth/2)) +((tile.X - tileCenter.X) * (tileWidth/2)) - (tileWidth/2);
-                                tile.YPx = centerScreen.Y + ((tile.Y - tileCenter.Y) * (tileHeight/2)) +((tile.X - tileCenter.X) * (tileHeight/2)) - (tileHeight/2);
-                                world[i][j] = tile;
-
-                                if(tile.XPx >= -tileWidth &&
-                                    tile.XPx <= self.ifcl.stage.attrs.width + tileWidth &&
-                                    tile.YPx >= -tileHeight &&
-                                    tile.YPx <= self.ifcl.stage.attrs.height + tileHeight)
-                                {
-                                    self.ifcl.putTexture(new Vector2(tile.XPx, tile.YPx), self.app.Ressources["tileTest"] , world[i][j]);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                self.ifcl.draw();
-
-            });
         },
 
         registerEvent: function(){
@@ -139,10 +87,10 @@ define(['jquery', '../entity/user', '../lib/vector2', '../lib/fcl', '../entity/t
 
             userRegister.createLogin(username, password);
             socket.emit('register', userRegister);
-            GLOBAL.receiveRegister = false;
+            GLOBAL_USERCONTROLLER.receiveRegister = false;
 
             socket.on('register_resp', function(resp){
-                if(GLOBAL.receiveRegister){ return; } else { GLOBAL.receiveRegister = true;}
+                if(GLOBAL_USERCONTROLLER.receiveRegister){ return; } else { GLOBAL_USERCONTROLLER.receiveRegister = true;}
                 var registerState = resp.registerState;
                 var errorsMessages = resp.errorsMessages;
                 if(registerState) {
