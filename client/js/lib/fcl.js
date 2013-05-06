@@ -3,14 +3,26 @@ define(['./kinetic'], function(){
 	var FCL = Class.create();
 	FCL.prototype = {
 		initialize: function(idContainer, x, y){
-			
+
+            //Stage Kinnetic
 			this.stage = new Kinetic.Stage({
 		           container: idContainer,
 		           width: x,
 		           height: y
 		         });
 
+            //Layers Names
+            this.L_NAME = new Object();
+            this.L_NAME.tiles = "tiles";
+            this.L_NAME.buildings = "buildings";
+
+            //Create Layers (order z_index)
 		    this.layers = new Object();
+            this.layers[this.L_NAME.tiles] = new Kinetic.Layer();
+            this.layers[this.L_NAME.buildings] = new Kinetic.Layer();
+
+            //Use to know how many hit region have been load before draw
+            this.loadHitRegion = 0;
 		},
 
         draw: function() {
@@ -18,11 +30,20 @@ define(['./kinetic'], function(){
 
             for (var i in this.layers){
                 this.stage.add(this.layers[i]);
-                //this.layers[i].setZIndex(vector.Y);
             }
+
         },
 
-		putTexture: function(vector, imageObj, objectLinked){
+        clearCanvas: function() {
+            this.stage.clear();
+            for (var i in this.layers){
+                this.layers[i] = new Kinetic.Layer();
+            }
+
+
+        },
+
+		putTexture: function(vector, imageObj, objectLinked, layerName){
             var self = this;
 
             var customImg = new Kinetic.Image({
@@ -35,15 +56,28 @@ define(['./kinetic'], function(){
             customImg = this.manageEvent(customImg);
             objectLinked.image = customImg;
 
+            if(this.layers[layerName] == undefined)
+            {
+                this.layers[layerName] = new Kinetic.Layer();
+            }
+
+            this.loadHitRegion++;
             customImg.createImageHitRegion(function() {
-                self.layers[vector.Y].draw();
+                self.hitRegionLoaded();
             });
 
-            if (this.layers[vector.Y] == undefined){
-                this.layers[vector.Y] = new Kinetic.Layer();
-            }
-            this.layers[vector.Y].add(customImg);
+            this.layers[layerName].add(customImg);
 		},
+
+        hitRegionLoaded: function() {
+            this.loadHitRegion--;
+            if(this.loadHitRegion <= 0)
+            {
+                for (var i in this.layers){
+                    this.layers[i].draw();
+                }
+            }
+        },
 		
 		getMousePos: function(evt) {
 		        var rect = this.canvas.getBoundingClientRect();
@@ -78,7 +112,8 @@ define(['./kinetic'], function(){
             {
                 customImg.on("mouseover", function(){
                     this.objectLinked.mouseOverEvent();
-                    self.layers[customImg.getY()].drawScene(self.layers[customImg.getY()].getCanvas());
+                    //self.layers[customImg.getY()].drawScene(self.layers[customImg.getY()].getCanvas());
+                    self.draw();
                 });
             }
             if(typeof customImg.objectLinked.mouseDownEvent == 'function')
@@ -97,7 +132,8 @@ define(['./kinetic'], function(){
             {
                 customImg.on("mouseout", function(){
                     this.objectLinked.mouseOutEvent();
-                    self.layers[customImg.getY()].drawScene(self.layers[customImg.getY()].getCanvas());
+                    //self.layers[customImg.getY()].drawScene(self.layers[customImg.getY()].getCanvas());
+                    self.draw();
                 });
             }
             if(typeof customImg.objectLinked.mouseEnterEvent == 'function')

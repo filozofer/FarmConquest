@@ -26,6 +26,11 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
                 self.drawMap(resp.worldToDraw);
             });
 
+            $j("#mg_reglages").on('click', function(){
+                //self.canvas.draw();
+                socket.emit('getMapToDraw');
+            });
+
         },
 
         startGame: function() {
@@ -36,6 +41,9 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
         },
 
         drawMap: function(worldToDraw) {
+
+            //Clean Canvas
+            this.canvas.clearCanvas();
 
             var serverWorld = worldToDraw;
             var world = this.app.World;
@@ -56,11 +64,11 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
 
             for(var i=ScreenMinX; i<ScreenMaxX; i++){
 
-                if (serverWorld[i] != 'undefined'){
+                if (serverWorld[i] != undefined){
                     world[i] = new Object();
                     for(var j=ScreenMinY; j<ScreenMaxY; j++){
 
-                        if(serverWorld[i][j] != 'undefined'){
+                        if(serverWorld[i][j] != undefined){
                             var element = serverWorld[i][j];
                             var tileX = element.X;
                             var tileY = element.Y;
@@ -85,7 +93,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
                                     {
                                         case "farm":
                                             if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 18), this.app.Ressources["farm"] , world[i][j]);
+                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 18), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings);
                                             break;
 
                                         default:
@@ -94,7 +102,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
                                 }
                                 else
                                 {
-                                    this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j]);
+                                    this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j], this.canvas.L_NAME.tiles);
                                 }
 
                             }

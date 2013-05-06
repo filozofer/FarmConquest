@@ -24,6 +24,16 @@ GameController = function(socket, db, mongoose){
         position.Y = 0;
         world = putFarm(world, position);
 
+        var position = new Object();
+        position.X = 0;
+        position.Y = 5;
+        //world = putFarm(world, position);
+
+        var position = new Object();
+        position.X = 2;
+        position.Y = 1;
+        //world = putFarm(world, position);
+
         socket.emit('drawMap', {'worldToDraw': world});
     });
 
@@ -43,7 +53,7 @@ GameController = function(socket, db, mongoose){
         farm.locations = new Array();
         for(var i = position.X; i < position.X + 2; i++)
         {
-            for(var j = position.Y; j < position.X + 2; j++)
+            for(var j = position.Y; j < position.Y + 2; j++)
             {
                 var pos = new Object();
                 pos.X = i;
