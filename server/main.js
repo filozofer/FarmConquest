@@ -11,6 +11,7 @@ db = require('./lib/db');
 //Controllers Import
 var UserController = require('./controllers/userController');
 var GameController = require('./controllers/gameController');
+var FarmerController = require('./controllers/farmerController');
 
 LoadServer = cls.Class.extend({
 
@@ -34,6 +35,7 @@ LoadServer = cls.Class.extend({
             //Call Controllers
             new UserController(socket, db, mongoose);
             new GameController(socket, db, mongoose);
+            new FarmerController(socket, db, mongoose);
 
         });
 

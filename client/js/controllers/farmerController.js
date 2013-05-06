@@ -1,6 +1,6 @@
 
 
-define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', '../lib/shortestPath'], function(jQuery, Vector2, FCL, Tile, ShortestPath) {
+define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQuery, Vector2, FCL, Tile) {
 
     jQuery.noConflict();
     var $j = jQuery;
@@ -17,25 +17,28 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', '../lib/shor
             GLOBAL_FARMERCONTROLLER = new Object();
 
             $j(document).on('FARMER-moveFarmer', function(event, tile) {
-                self.moveFarmer(tile);
+                var world = self.app.World;
+
+                //DEFAULT DEPART
+                var start = world[0][0];
+
+                console.log("objectif: " + tile.X +","+tile.Y);
+                console.log("depart: " + start.X +","+start.Y);
+
+                socket.emit('calculatePath', {'world': world, 'start': start, 'finish': tile});
+            });
+
+            socket.on('farmerPath', function(resp){
+                self.moveFarmer(resp.path);
             });
         },
 
-        moveFarmer: function(tile) {
-
-            var world = this.app.World;
-            console.log("objectif: " + tile.X +","+tile.Y);
-
-            //DEFAULT DEPART
-            var start = world[0][0];
-            console.log("depart: " + start.X +","+start.Y);
-
-            var pathManager = new ShortestPath(world, start, tile);
-            var path = pathManager.shortestPath;
-
+        moveFarmer: function(path) {
             for (var i=0; i<path.length; i++){
                 console.log(path[i].X+","+path[i].Y);
             }
+
+
 
             /*
             var centerScreen = new Object();
