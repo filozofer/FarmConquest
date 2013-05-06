@@ -9,12 +9,21 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
     App.prototype = {
 
         initialize: function(){
+
+            //Disable right click default event
+            window.oncontextmenu = function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            };
+
             this.Ressources = new Object();
             this.chargement = 0;
             this.chargementMax = 0;
             this.manageLoadingInterval = undefined;
             this.Config = this.getConfig();
             this.Type = this.generateType();
+            this.World = new Object();
         },
 
         init: function(){

@@ -6,7 +6,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/gameController'], function(jQuery, App, UserController, GameController) {
+define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/gameController', 'controllers/farmerController'], function(jQuery, App, UserController, GameController, FarmerController) {
 
     jQuery(function($) {
 
@@ -19,6 +19,7 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
                 app = new App();
                 userController = new UserController(app);
                 gameController = new GameController(app);
+                farmerController = new FarmerController(app);
 
                 //Call init configurations
                 app.center();
@@ -44,6 +45,7 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
         //Load the Game (canvas part)
         var initGame = function() {
             gameController.initEvents();
+            farmerController.initEvents();
         };
 
         initApp();

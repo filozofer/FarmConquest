@@ -1,4 +1,6 @@
-define(function(){
+define(['jquery'], function(jQuery){
+
+    var $j = jQuery.noConflict();
 
 	var Tile = Class.create();
 	Tile.prototype = {
@@ -7,6 +9,7 @@ define(function(){
 			this.X = X;
 			this.Y = Y;
 			this.image = undefined;
+			this.walkable = true;
 		},
 
 		clickEvent: function(){
@@ -19,6 +22,16 @@ define(function(){
 
 		mouseOutEvent: function(){
 		    this.image.setOpacity(1);
+		},
+
+		rightClickEvent: function(){
+		    if (this.walkable){
+		        console.log("WALKABLE");
+		        $j(document).trigger('FARMER-moveFarmer', [this]);
+		    }
+		    else{
+		        console.log("NOT WALKABLE");
+		    }
 		}
 
     };

@@ -56,12 +56,24 @@ define(['./kinetic'], function(){
         manageEvent: function(customImg) {
             var self = this;
 
-            if(typeof customImg.objectLinked.clickEvent == 'function')
+            customImg.on("click", function(e){
+                if (e.which != 3){
+                    if(typeof customImg.objectLinked.clickEvent == 'function'){
+                        this.objectLinked.clickEvent();
+                    }
+                } else {
+                    if(typeof customImg.objectLinked.rightClickEvent == 'function'){
+                        this.objectLinked.rightClickEvent();
+                    }
+                }
+            });
+
+            /*if(typeof customImg.objectLinked.clickEvent == 'function')
             {
                 customImg.on("click", function(){
                     this.objectLinked.clickEvent();
                 });
-            }
+            }*/
             if(typeof customImg.objectLinked.mouseOverEvent == 'function')
             {
                 customImg.on("mouseover", function(){

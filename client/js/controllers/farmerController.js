@@ -1,45 +1,43 @@
 
 
-define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQuery, Vector2, FCL, Tile) {
+define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', '../lib/shortestPath'], function(jQuery, Vector2, FCL, Tile, ShortestPath) {
 
     jQuery.noConflict();
     var $j = jQuery;
-    var GameController = Class.create();
-    GameController.prototype = {
+    var FarmerController = Class.create();
+    FarmerController.prototype = {
 
         initialize: function(app){
-            this.canvas = undefined;
             this.app = app;
         },
 
         initEvents: function(){
 
             var self = this;
-            GLOBAL_GAMECONTROLLER = new Object();
+            GLOBAL_FARMERCONTROLLER = new Object();
 
-            $j(document).on('startGame', function() {
-                self.startGame();
+            $j(document).on('FARMER-moveFarmer', function(event, tile) {
+                self.moveFarmer(tile);
             });
-
-            //Get map to draw from server
-            socket.on('drawMap', function(resp){
-                self.drawMap(resp.worldToDraw);
-            });
-
         },
 
-        startGame: function() {
-            //Draw Game Canvas
-            this.canvas = new FCL("section_canvas", 980, 440);
-            socket.emit('getMapToDraw');
+        moveFarmer: function(tile) {
 
-        },
-
-        drawMap: function(worldToDraw) {
-
-            var serverWorld = worldToDraw;
             var world = this.app.World;
+            console.log("objectif: " + tile.X +","+tile.Y);
 
+            //DEFAULT DEPART
+            var start = world[0][0];
+            console.log("depart: " + start.X +","+start.Y);
+
+            var pathManager = new ShortestPath(world, start, tile);
+            var path = pathManager.shortestPath;
+
+            for (var i=0; i<path.length; i++){
+                console.log(path[i].X+","+path[i].Y);
+            }
+
+            /*
             var centerScreen = new Object();
             centerScreen.X = this.canvas.stage.attrs.width/2;
             centerScreen.Y = this.canvas.stage.attrs.height/2;
@@ -65,7 +63,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
                             var tileX = element.X;
                             var tileY = element.Y;
                             world[i][j] = new Tile(tileX, tileY);
-                            world[i][j].contentTile = element.contentTile;
 
                             var tile = world[i][j];
                             tile.XPx = centerScreen.X - ((tile.Y - tileCenter.Y) * (tileWidth/2)) +((tile.X - tileCenter.X) * (tileWidth/2)) - (tileWidth/2);
@@ -77,38 +74,20 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
                                 tile.YPx >= -tileHeight &&
                                 tile.YPx <= this.canvas.stage.attrs.height + tileHeight)
                             {
-
-                                //Check contentTile not empty
-                                if(tile.contentTile != undefined)
-                                {
-                                    switch(tile.contentTile.type)
-                                    {
-                                        case "farm":
-                                            if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 18), this.app.Ressources["farm"] , world[i][j]);
-                                            break;
-
-                                        default:
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j]);
-                                }
-
+                                this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j]);
                             }
                         }
                     }
                 }
             }
-            this.app.World = world;
+
             this.canvas.draw();
+            */
         }
 
 
     };
 
-    return GameController;
+    return FarmerController;
 
 });
