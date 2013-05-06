@@ -11,7 +11,6 @@ define(['./kinetic'], function(){
 		         });
 
 		    this.layers = new Object();
-
 		},
 
         draw: function() {
@@ -19,6 +18,7 @@ define(['./kinetic'], function(){
 
             for (var i in this.layers){
                 this.stage.add(this.layers[i]);
+                //this.layers[i].setZIndex(vector.Y);
             }
         },
 
@@ -35,7 +35,9 @@ define(['./kinetic'], function(){
             customImg = this.manageEvent(customImg);
             objectLinked.image = customImg;
 
-            //customImg.createImageHitRegion();
+            customImg.createImageHitRegion(function() {
+                self.layers[vector.Y].draw();
+            });
 
             if (this.layers[vector.Y] == undefined){
                 this.layers[vector.Y] = new Kinetic.Layer();

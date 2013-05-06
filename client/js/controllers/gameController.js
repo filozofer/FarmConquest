@@ -65,6 +65,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
                             var tileX = element.X;
                             var tileY = element.Y;
                             world[i][j] = new Tile(tileX, tileY);
+                            world[i][j].contentTile = element.contentTile;
 
                             var tile = world[i][j];
                             tile.XPx = centerScreen.X - ((tile.Y - tileCenter.Y) * (tileWidth/2)) +((tile.X - tileCenter.X) * (tileWidth/2)) - (tileWidth/2);
@@ -76,7 +77,26 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
                                 tile.YPx >= -tileHeight &&
                                 tile.YPx <= this.canvas.stage.attrs.height + tileHeight)
                             {
-                                this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j]);
+
+                                //Check contentTile not empty
+                                if(tile.contentTile != undefined)
+                                {
+                                    switch(tile.contentTile.type)
+                                    {
+                                        case "farm":
+                                            if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
+                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 18), this.app.Ressources["farm"] , world[i][j]);
+                                            break;
+
+                                        default:
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j]);
+                                }
+
                             }
                         }
                     }

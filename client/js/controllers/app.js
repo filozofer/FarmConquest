@@ -85,6 +85,7 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             this.addRessource("tileTest", self.Type.IMAGE, "tileTest.png");
             this.addRessource("tileSet", self.Type.IMAGE, "tileSet.png");
             this.addRessource("farmer", self.Type.IMAGE, "farmer.png");
+            this.addRessource("farm", self.Type.IMAGE, "farm.png");
 
             this.chargementMax = this.chargement;
 
