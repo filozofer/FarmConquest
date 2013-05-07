@@ -35,6 +35,7 @@ GameController = function(socket, db, mongoose){
         //world = putFarm(world, position);
 
         socket.emit('drawMap', {'worldToDraw': world});
+
     });
 
     function putFarm(world, position) {
@@ -63,7 +64,7 @@ GameController = function(socket, db, mongoose){
         }
 
         //Add farm in the world
-        for(var i in farm.locations)
+        for(var i=0; i<farm.locations.length; i++)
         {
             var pos = farm.locations[i];
             if(world[pos.X] != undefined && world[pos.X][pos.Y] != undefined)

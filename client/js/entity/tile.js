@@ -26,7 +26,6 @@ define(['jquery'], function(jQuery){
 
 		rightClickEvent: function(){
 		    if (this.walkable){
-		        console.log("WALKABLE");
 		        $j(document).trigger('FARMER-moveFarmer', [this]);
 		    }
 		    else{

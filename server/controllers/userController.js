@@ -23,6 +23,7 @@ UserController = function(socket, db, mongoose){
 
             if(user != null) {
                 socket.sessions.user = user;
+                socket.sessions.loadFarmerOnce = false;
                 loginState = true;
             } else {
                errorsMessages.push("bad_login");

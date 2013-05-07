@@ -1,6 +1,6 @@
 
 
-define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQuery, Vector2, FCL, Tile) {
+define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerController'], function(jQuery, Vector2, FCL, Tile, FarmerController) {
 
     jQuery.noConflict();
     var $j = jQuery;
@@ -10,11 +10,14 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
         initialize: function(app){
             this.canvas = undefined;
             this.app = app;
+            //this.farmerController = undefined;
         },
 
         initEvents: function(){
 
             var self = this;
+
+
             GLOBAL_GAMECONTROLLER = new Object();
 
             $j(document).on('startGame', function() {
@@ -37,7 +40,8 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
             //Draw Game Canvas
             this.canvas = new FCL("section_canvas", 980, 440);
             socket.emit('getMapToDraw');
-
+            //this.farmerController = new FarmerController(this.app, this.canvas);
+            //this.farmerController.initEvents();
         },
 
         drawMap: function(worldToDraw) {
@@ -111,7 +115,16 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile'], function(jQ
                 }
             }
             this.app.World = world;
+
+
             this.canvas.draw();
+            this.refreshFarmerController();
+        },
+
+        refreshFarmerController: function(){
+            //REFRESH FARMERCONTROLLER PARAMETERS WHEN WORLD LOADED
+            $j(document).trigger('FARMER-canvasLoaded', [this.app, this.canvas]);
+            socket.emit('getFarmer');
         }
 
 

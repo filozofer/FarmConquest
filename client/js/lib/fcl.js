@@ -1,4 +1,4 @@
-define(['./kinetic'], function(){
+define(['./kinetic', './tweenlite'], function(){
 
 	var FCL = Class.create();
 	FCL.prototype = {
@@ -15,11 +15,13 @@ define(['./kinetic'], function(){
             this.L_NAME = new Object();
             this.L_NAME.tiles = "tiles";
             this.L_NAME.buildings = "buildings";
+            this.L_NAME.players = "players";
 
             //Create Layers (order z_index)
 		    this.layers = new Object();
             this.layers[this.L_NAME.tiles] = new Kinetic.Layer();
             this.layers[this.L_NAME.buildings] = new Kinetic.Layer();
+            this.layers[this.L_NAME.players] = new Kinetic.Layer();
 
             //Use to know how many hit region have been load before draw
             this.loadHitRegion = 0;
@@ -67,6 +69,58 @@ define(['./kinetic'], function(){
             });
 
             this.layers[layerName].add(customImg);
+		},
+
+		moveTexture: function(vectorPx, vector, image, objectLinked, layerName){
+            var self = this;
+
+            objectLinked.X = vector.X;
+            objectLinked.Y = vector.Y;
+            objectLinked.XPx = vectorPx.X;
+            objectLinked.YPx = vectorPx.Y;
+            objectLinked.image = image;
+
+            TweenLite.to(image, 0.5, {
+                        setX: vectorPx.X,
+                        setY: vectorPx.Y,
+                        onUpdate: function() {
+                          image.getLayer().draw();
+                        }
+                      });
+		},
+
+		moveTextureAlongPath: function(path, farmerImage, farmer, layerName, speed, isFarmer){
+            var self = this;
+            var newXPx = path[0].XPx;
+            var newYPx = undefined;
+
+            if(isFarmer){
+                newYPx = path[0].YPx - (farmerImage.attrs.image.height / 2);
+            }
+            else{
+                newYPx = path[0].YPx;
+            }
+
+           TweenLite.to(farmerImage, speed, {
+                  setX: newXPx,
+                  setY: newYPx,
+                  ease: Linear.easeNone,
+                  onUpdate: function() {
+                    farmerImage.getLayer().draw();
+                  },
+                  onComplete: function() {
+
+                    farmer.X = path[0].X;
+                    farmer.Y = path[0].Y;
+                    farmer.XPx = newXPx;
+                    farmer.YPx = newYPx;
+                    farmer.image = farmerImage;
+                    path.shift();
+                    if (path.length > 0){
+                        self.moveTextureAlongPath(path, farmerImage, farmer, layerName, speed, isFarmer);
+                    }
+                  }
+                });
 		},
 
         hitRegionLoaded: function() {

@@ -19,7 +19,7 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
                 app = new App();
                 userController = new UserController(app);
                 gameController = new GameController(app);
-                farmerController = new FarmerController(app);
+                farmerController = new FarmerController();
 
                 //Call init configurations
                 app.center();
