@@ -17,7 +17,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
 
             var self = this;
 
-
             GLOBAL_GAMECONTROLLER = new Object();
 
             $j(document).on('startGame', function() {
@@ -30,9 +29,13 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             });
 
             $j("#mg_reglages").on('click', function(){
-                //self.canvas.draw();
                 socket.emit('getMapToDraw');
             });
+
+            socket.on('drawElement', function(resp){
+               self.drawElement(resp);
+            });
+
 
         },
 
@@ -45,9 +48,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
         },
 
         drawMap: function(worldToDraw) {
-
-            //Clean Canvas
-            this.canvas.clearCanvas();
 
             var serverWorld = worldToDraw;
             var world = this.app.World;
@@ -66,6 +66,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             var tileWidth = this.app.Config.tileWidth;
             var tileHeight = this.app.Config.tileHeight;
 
+            var countCurrentTile = 1;
             for(var i=ScreenMinX; i<ScreenMaxX; i++){
 
                 if (serverWorld[i] != undefined){
@@ -97,7 +98,11 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                                     {
                                         case "farm":
                                             if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 18), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings);
+                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 18), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                            break;
+
+                                        case "seed":
+                                                this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["seedTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
                                             break;
 
                                         default:
@@ -106,9 +111,10 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                                 }
                                 else
                                 {
-                                    this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j], this.canvas.L_NAME.tiles);
+                                    this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
                                 }
 
+                                countCurrentTile++;
                             }
                         }
                     }
@@ -116,8 +122,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             }
             this.app.World = world;
 
-
-            this.canvas.draw();
             this.refreshFarmerController();
         },
 
@@ -125,9 +129,14 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             //REFRESH FARMERCONTROLLER PARAMETERS WHEN WORLD LOADED
             $j(document).trigger('FARMER-canvasLoaded', [this.app, this.canvas]);
             socket.emit('getFarmer');
+        },
+
+        drawElement: function(resp) {
+            var tile = new Tile(resp.element.X, resp.element.Y);
+            tile.contentTile = resp.element;
+            tile.walkable = false;
+            this.canvas.changeTexture(tile);
         }
-
-
     };
 
     return GameController;

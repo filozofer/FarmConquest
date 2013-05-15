@@ -13,7 +13,8 @@ define(['jquery'], function(jQuery){
 		},
 
 		clickEvent: function(){
-			alert("(" + this.X + "." + this.Y + ")");
+			//alert("(" + this.X + "." + this.Y + ")");
+            socket.emit("plantTest", { X: this.X, Y: this.Y});
 		},
 
 		mouseOverEvent: function(){

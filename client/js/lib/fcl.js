@@ -1,15 +1,17 @@
-define(['./kinetic', './tweenlite'], function(){
+define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
 
 	var FCL = Class.create();
 	FCL.prototype = {
 		initialize: function(idContainer, x, y){
+
+            var self = this;
 
             //Stage Kinnetic
 			this.stage = new Kinetic.Stage({
 		           container: idContainer,
 		           width: x,
 		           height: y
-		         });
+		    });
 
             //Layers Names
             this.L_NAME = new Object();
@@ -23,9 +25,11 @@ define(['./kinetic', './tweenlite'], function(){
             this.layers[this.L_NAME.buildings] = new Kinetic.Layer();
             this.layers[this.L_NAME.players] = new Kinetic.Layer();
 
-            //Use to know how many hit region have been load before draw
-            this.loadHitRegion = 0;
-		},
+            this.test = null;
+
+            this.drawLoopInterval = window.setInterval(function(){ self.draw(); }, 100);
+
+        },
 
         draw: function() {
             this.stage.clear();
@@ -41,11 +45,9 @@ define(['./kinetic', './tweenlite'], function(){
             for (var i in this.layers){
                 this.layers[i] = new Kinetic.Layer();
             }
-
-
         },
 
-		putTexture: function(vector, imageObj, objectLinked, layerName){
+		putTexture: function(vector, imageObj, objectLinked, layerName, zIndex){
             var self = this;
 
             var customImg = new Kinetic.Image({
@@ -69,7 +71,23 @@ define(['./kinetic', './tweenlite'], function(){
             });
 
             this.layers[layerName].add(customImg);
+
+            customImg.setZIndex(zIndex);
 		},
+
+        changeTexture: function(element) {
+
+            //Remove old kinnetic image associate to the element to change
+            var elementToRemove = app.World[element.X][element.Y];
+            elementToRemove.image.remove();
+
+            //Change the world with the new element
+            app.World[element.X][element.Y] = element;
+
+            //Add the associate kinnetic texture of the element in the layer
+            this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx), this.getImageFromType(element.contentTile.type) , app.World[element.X][element.Y], this.L_NAME.tiles, elementToRemove.image.getZIndex());
+
+        },
 
 		moveTexture: function(vectorPx, vector, image, objectLinked, layerName){
             var self = this;
@@ -276,6 +294,19 @@ define(['./kinetic', './tweenlite'], function(){
             }
 
             return customImg;
+        },
+
+        getImageFromType: function(type) {
+            switch(type)
+            {
+                case "seed":
+                    return app.Ressources["seedTest"];
+                    break;
+
+                default:
+                    return app.Ressources["tileTest"];
+                    break;
+            }
         }
 		 
     };

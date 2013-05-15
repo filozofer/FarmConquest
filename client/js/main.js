@@ -10,7 +10,8 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
 
     jQuery(function($) {
 
-        var app, userController, gameController;
+        app = undefined;
+        var userController, gameController;
 
         //Load the App (html part)
         var initApp = function() {

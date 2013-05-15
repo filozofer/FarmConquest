@@ -24,15 +24,8 @@ GameController = function(socket, db, mongoose){
         position.Y = 0;
         world = putFarm(world, position);
 
-        var position = new Object();
-        position.X = 0;
-        position.Y = 5;
-        //world = putFarm(world, position);
-
-        var position = new Object();
-        position.X = 2;
-        position.Y = 1;
-        //world = putFarm(world, position);
+        //Temp stock world
+        socket.sessions.World = world;
 
         socket.emit('drawMap', {'worldToDraw': world});
 
@@ -87,6 +80,22 @@ GameController = function(socket, db, mongoose){
             return world;
         }
     }
+
+    socket.on('plantTest', function(request) {
+        var world = socket.sessions.World;
+
+        if(world[request.X] != undefined && world[request.X][request.Y] != undefined)
+        {
+            var seed = new Object();
+            seed.X = request.X;
+            seed.Y = request.Y;
+            seed.type = "seed";
+            seed.owner = socket.sessions.user;
+            world[request.X][request.Y].contentTile = seed;
+            socket.emit('drawElement', { element: seed });
+        }
+
+    });
 
 };
 
