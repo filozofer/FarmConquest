@@ -1,11 +1,9 @@
-
 //Config Server
-var cls = require("./lib/class");
+
 var http = require('http');
 var io = require('socket.io').listen(1337);
 mongoose = require('mongoose');
 db = require('./lib/db');
-
 
 
 //Controllers Import
@@ -13,11 +11,15 @@ var UserController = require('./controllers/userController');
 var GameController = require('./controllers/gameController');
 var FarmerController = require('./controllers/farmerController');
 
-LoadServer = cls.Class.extend({
+function LoadServer(){};
+LoadServer.prototype = {
 
     init: function() {
         //The server is launch line 5 (require socket.io and listen)
         console.log('Server Start...');
+        var Map = require('./models/map.js');
+        var map = new Map();
+        map.print();
     },
 
     callModels: function(){
@@ -25,7 +27,6 @@ LoadServer = cls.Class.extend({
     },
 
     callControllers: function(){
-
         //Case connection received
         io.sockets.on('connection', function(socket){
 
@@ -38,9 +39,8 @@ LoadServer = cls.Class.extend({
             new FarmerController(socket, db, mongoose);
 
         });
-
     }
 
-});
+}
 
 module.exports = LoadServer;
