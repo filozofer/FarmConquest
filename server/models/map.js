@@ -38,7 +38,7 @@ var Map = function(side){
 
 Map.prototype = {
 
-       print : function(){
+    print : function(){
         var i,j;
         for(i=this.minX;i<=Math.abs(this.minX);i++){
             for(j=this.minY;j<=Math.abs(this.minY);j++){
