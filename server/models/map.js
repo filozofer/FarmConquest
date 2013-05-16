@@ -118,7 +118,6 @@ Map.prototype = {
                     break;
             }
         }
-        console.log(tile);
         return tile;
     }
 
