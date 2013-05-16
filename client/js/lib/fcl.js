@@ -13,6 +13,8 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
 		           height: y
 		    });
 
+            this.stage = this.manageEvent(this.stage);
+
             //Layers Names
             this.L_NAME = new Object();
             this.L_NAME.tiles = "tiles";
@@ -27,7 +29,7 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
 
             this.test = null;
 
-            this.drawLoopInterval = window.setInterval(function(){ self.draw(); }, 100);
+            this.drawLoopInterval = window.setInterval(function(){ self.draw(); }, 1000 / 40);
 
         },
 
@@ -57,7 +59,7 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
             });
 
             customImg.objectLinked = objectLinked;
-            customImg = this.manageEvent(customImg);
+            //customImg = this.manageEvent(customImg);
             objectLinked.image = customImg;
 
             if(this.layers[layerName] == undefined)
@@ -65,10 +67,10 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
                 this.layers[layerName] = new Kinetic.Layer();
             }
 
-            this.loadHitRegion++;
+            /*this.loadHitRegion++;
             customImg.createImageHitRegion(function() {
                 self.hitRegionLoaded();
-            });
+            });*/
 
             this.layers[layerName].add(customImg);
 
@@ -124,7 +126,7 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
                   setY: newYPx,
                   ease: Linear.easeNone,
                   onUpdate: function() {
-                    farmerImage.getLayer().draw();
+                    //farmerImage.getLayer().draw();
                   },
                   onComplete: function() {
 
@@ -150,150 +152,65 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
                 }
             }
         },
-		
-		getMousePos: function(evt) {
-		        var rect = this.canvas.getBoundingClientRect();
-		        return {
-		          x: evt.clientX - rect.left,
-		          y: evt.clientY - rect.top
-		        };
-		 },
 
-        manageEvent: function(customImg) {
+        getTileAtPosition: function(positionClick) {
+
+            //Get tile coord from mouse position
+            var X0 = positionClick.x - this.stage.attrs.width / 2;
+            var Y0 = positionClick.y - this.stage.attrs.height / 2;
+            var X = Y0 + (X0 / 2);
+            var Y = Y0 - (X0 / 2);
+            var Xiso = Math.round(X / app.Config.tileHeight) + app.World.center.X;
+            var Yiso = Math.round(Y / app.Config.tileHeight) + app.World.center.Y;
+
+            //Return selected tile
+            return app.World[Xiso][Yiso];
+        },
+
+        manageEvent: function(stageK) {
             var self = this;
 
-            customImg.on("click", function(e){
+            stageK.on("click", function(e){
+                var positionClick = self.stage.getMousePosition();
+                var tile = self.getTileAtPosition(positionClick);
+
                 if (e.which != 3){
-                    if(typeof customImg.objectLinked.clickEvent == 'function'){
-                        this.objectLinked.clickEvent();
+                    if(typeof tile.clickEvent == 'function'){
+                        tile.clickEvent();
                     }
+
                 } else {
-                    if(typeof customImg.objectLinked.rightClickEvent == 'function'){
-                        this.objectLinked.rightClickEvent();
+                    if(typeof tile.rightClickEvent == 'function'){
+                        tile.rightClickEvent();
                     }
                 }
             });
 
-            /*if(typeof customImg.objectLinked.clickEvent == 'function')
-            {
-                customImg.on("click", function(){
-                    this.objectLinked.clickEvent();
-                });
-            }*/
-            if(typeof customImg.objectLinked.mouseOverEvent == 'function')
-            {
-                customImg.on("mouseover", function(){
-                    this.objectLinked.mouseOverEvent();
-                    //self.layers[customImg.getY()].drawScene(self.layers[customImg.getY()].getCanvas());
-                    self.draw();
-                });
-            }
-            if(typeof customImg.objectLinked.mouseDownEvent == 'function')
-            {
-                customImg.on("mousedown", function(){
-                    this.objectLinked.mouseDownEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.mouseUpEvent == 'function')
-            {
-                customImg.on("mouseup", function(){
-                    this.objectLinked.mouseUpEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.mouseOutEvent == 'function')
-            {
-                customImg.on("mouseout", function(){
-                    this.objectLinked.mouseOutEvent();
-                    //self.layers[customImg.getY()].drawScene(self.layers[customImg.getY()].getCanvas());
-                    self.draw();
-                });
-            }
-            if(typeof customImg.objectLinked.mouseEnterEvent == 'function')
-            {
-                customImg.on("mouseenter", function(){
-                    this.objectLinked.mouseEnterEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.mouseLeaveEvent == 'function')
-            {
-                customImg.on("mouseleave", function(){
-                    this.objectLinked.mouseLeaveEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.mouseMoveEvent == 'function')
-            {
-                customImg.on("mousemove", function(){
-                    this.objectLinked.mouseMoveEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.doubleClickEvent == 'function')
-            {
-                customImg.on("dblclick", function(){
-                    this.objectLinked.doubleClickEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.touchStartEvent == 'function')
-            {
-                customImg.on("touchstart", function(){
-                    this.objectLinked.touchStartEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.touchEndEvent == 'function')
-            {
-                customImg.on("touchend", function(){
-                    this.objectLinked.touchEndEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.touchMoveEvent == 'function')
-            {
-                customImg.on("touchmove", function(){
-                    this.objectLinked.touchMoveEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.tapEvent == 'function')
-            {
-                customImg.on("tap", function(){
-                    this.objectLinked.tapEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.doubleTapEvent == 'function')
-            {
-                customImg.on("dbltap", function(){
-                    this.objectLinked.doubleTapEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.dragStartEvent == 'function')
-            {
-                customImg.on("dragstart", function(){
-                    this.objectLinked.dragStartEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.dragMoveEvent == 'function')
-            {
-                customImg.on("dragmove", function(){
-                    this.objectLinked.dragMoveEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.dragEndEvent == 'function')
-            {
-                customImg.on("dragend", function(){
-                    this.objectLinked.dragEndEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.drawEvent == 'function')
-            {
-                customImg.on("draw", function(){
-                    this.objectLinked.drawEvent();
-                });
-            }
-            if(typeof customImg.objectLinked.beforeDrawEvent == 'function')
-            {
-                customImg.on("beforeDraw", function(){
-                    this.objectLinked.beforeDrawEvent();
-                });
-            }
+            stageK.on("mousemove", function(e){
+                var positionClick = self.stage.getMousePosition();
+                var tile = self.getTileAtPosition(positionClick);
 
-            return customImg;
+                if(self.stage.currentTile == undefined)
+                {
+                    self.stage.currentTile = tile;
+                    if(typeof self.stage.currentTile.mouseOverEvent == 'function'){
+                        self.stage.currentTile.mouseOverEvent();
+                    }
+                }
+                else if(self.stage.currentTile.X != tile.X || self.stage.currentTile.Y != tile.Y)
+                {
+                    if(typeof self.stage.currentTile.mouseOutEvent == 'function'){
+                        self.stage.currentTile.mouseOutEvent();
+                    }
+                    self.stage.currentTile = tile;
+                    if(typeof self.stage.currentTile.mouseOverEvent == 'function'){
+                        self.stage.currentTile.mouseOverEvent();
+                    }
+                }
+
+            });
+
+            return stageK;
         },
 
         getImageFromType: function(type) {

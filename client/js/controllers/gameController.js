@@ -51,12 +51,13 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
 
             var serverWorld = worldToDraw;
             var world = this.app.World;
+            world.center = serverWorld.center;
 
             var centerScreen = new Object();
             centerScreen.X = this.canvas.stage.attrs.width/2;
             centerScreen.Y = this.canvas.stage.attrs.height/2;
             // CENTER = 0,0
-            var tileCenter = new Tile(0,0);
+            var tileCenter = new Tile(world.center.X, world.center.Y);
 
             //var ScreenMinX = tileCenter.X - (centerScreen.X / 40);
             var ScreenMinX = -13;

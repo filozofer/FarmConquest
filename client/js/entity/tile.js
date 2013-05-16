@@ -18,11 +18,27 @@ define(['jquery'], function(jQuery){
 		},
 
 		mouseOverEvent: function(){
-		    this.image.setOpacity(0.5);
+            if(this.image != undefined)
+            {
+                this.image.setOpacity(0.5);
+            }
+            else
+            {
+                var mainPos = this.contentTile.mainPos;
+                app.World[mainPos.X][mainPos.Y].image.setOpacity(0.5);
+            }
 		},
 
 		mouseOutEvent: function(){
-		    this.image.setOpacity(1);
+            if(this.image != undefined)
+            {
+                this.image.setOpacity(1);
+            }
+            else
+            {
+                var mainPos = this.contentTile.mainPos;
+                app.World[mainPos.X][mainPos.Y].image.setOpacity(1);
+            }
 		},
 
 		rightClickEvent: function(){

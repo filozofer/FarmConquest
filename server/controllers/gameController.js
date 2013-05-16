@@ -18,6 +18,10 @@ GameController = function(socket, db, mongoose){
                 world[i][j].Y = j;
             }
         }
+        var center = new Object();
+        center.X = 0;
+        center.Y = 0;
+        world.center = center;
 
         var position = new Object();
         position.X = 0;
