@@ -27,6 +27,11 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
             this.layers[this.L_NAME.buildings] = new Kinetic.Layer();
             this.layers[this.L_NAME.players] = new Kinetic.Layer();
 
+            //Add each layers in stage
+            for (var i in this.layers){
+                this.stage.add(this.layers[i]);
+            }
+
             this.test = null;
 
             this.drawLoopInterval = window.setInterval(function(){ self.draw(); }, 1000 / 40);
@@ -34,10 +39,9 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
         },
 
         draw: function() {
-            this.stage.clear();
 
             for (var i in this.layers){
-                this.stage.add(this.layers[i]);
+                this.layers[i].draw();
             }
 
         },
@@ -87,7 +91,7 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
             app.World[element.X][element.Y] = element;
 
             //Add the associate kinnetic texture of the element in the layer
-            this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx), this.getImageFromType(element.contentTile.type) , app.World[element.X][element.Y], this.L_NAME.tiles, elementToRemove.image.getZIndex());
+            this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx - 20), this.getImageFromType(element.contentTile.type) , app.World[element.X][element.Y], this.L_NAME.tiles, elementToRemove.image.getZIndex());
 
         },
 

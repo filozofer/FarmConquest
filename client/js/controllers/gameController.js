@@ -43,8 +43,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             //Draw Game Canvas
             this.canvas = new FCL("section_canvas", 980, 440);
             socket.emit('getMapToDraw');
-            //this.farmerController = new FarmerController(this.app, this.canvas);
-            //this.farmerController.initEvents();
         },
 
         drawMap: function(worldToDraw) {
@@ -99,11 +97,11 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                                     {
                                         case "farm":
                                             if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 18), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 80), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
                                             break;
 
                                         case "seed":
-                                                this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["seedTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
+                                                this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx - 20), this.app.Ressources["seedTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
                                             break;
 
                                         default:
