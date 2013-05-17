@@ -79,47 +79,49 @@
 
         <section id="container">
 
-            <section id="section_canvas"></section>
+            <section id="section_gameContainer">
+                <section id="section_canvas"></section>
 
-            <section id="game_menu_box">
-                <img src="img/gameMenu/buttonMenuReglages.png" alt="Options" id="mg_reglages" />
+                <section id="game_menu_box">
+                    <img src="img/gameMenu/buttonMenuReglages.png" alt="Options" id="mg_reglages" />
 
-                <div id="mg_map_minimize"></div>
+                    <div id="mg_infos_tile"></div>
 
-                <span class="mg_span_infos" id="mg_nom_joueur">Name</span>
-                <span class="mg_span_infos" id="mg_money_joueur">XXX $</span>
-                <span class="mg_span_infos" id="mg_autres_joueur"></span>
 
-                <table id="mg_bag">
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </table>
-                <img src="img/gameMenu/buttonMenu1.png" alt="Arrosoir" id="mg_arrosoir" />
-                <img src="img/gameMenu/buttonMenu2.png" alt="Engrais" id="mg_engrais" />
-                <img src="img/gameMenu/buttonMenu3.png" alt="Alliance" id="mg_alliance" />
-                <img src="img/gameMenu/buttonMenu4.png" alt="Map" id="mg_map" />
+                    <img src="img/gameMenu/playerIco.png" alt="treasureIco" id="mg_joueur_ico" width="25"/>
+                    <span id="mg_nom_joueur">Madmax</span>
+                    <img src="img/gameMenu/treasure.png" alt="treasureIco" id="mg_treasure_ico" width="30"/>
+                    <span id="mg_money_joueur">1235 $</span>
 
-                <img src="img/gameMenu/arrow_up.png" alt="Alliance" id="mg_arrowUp" />
-                <img src="img/gameMenu/arrow_bottom.png" alt="Map" id="mg_arrowBot" />
-                <ul id="mg_infoList">
-                    <li class="impair">Infos test 1</li>
-                    <li class="pair">Infos test 2</li>
-                    <li class="impair">Infos test 3</li>
-                    <li class="pair">Infos test 4</li>
-                </ul>
+                    <table id="mg_bag">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                    <img src="img/gameMenu/buttonMenu1.png" alt="Arrosoir" id="mg_arrosoir" />
+                    <img src="img/gameMenu/buttonMenu2.png" alt="Engrais" id="mg_engrais" />
+                    <img src="img/gameMenu/buttonMenu3.png" alt="Alliance" id="mg_alliance" />
+                    <img src="img/gameMenu/buttonMenu4.png" alt="Map" id="mg_map" />
 
+                    <div id="mg_notifications_area">
+
+                        <ul id="mg_infoList">
+
+                        </ul>
+                    </div>
+                </section>
             </section>
-
         </section>
 
         <script type="text/javascript" src="http://localhost:1337/socket.io/socket.io.js"></script>
