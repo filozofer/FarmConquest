@@ -81,7 +81,8 @@ header {
     font-size: 20px;
     text-align: center;
     z-index: 2;
-    background-color: white;
+    /*background-color: white;*/
+    background: transparent url("../img/main/loginBackground.png") no-repeat;
     border-radius: 10px;
     border: 2px solid black;
     display: none;
