@@ -48,6 +48,9 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             configuration.tileHeight = 40;
             configuration.tileWidth = 80;
 
+            //FARMER SPRITE
+            configuration.farmerSpriteNbLine = 13;
+
             //MOVE SPEED
             configuration.playerMoveSpeed = 0.2;
 
@@ -95,7 +98,7 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
 
             /* Load Images */
             this.addRessource("tileTest", self.Type.IMAGE, "tileTest.png");
-            this.addRessource("farmer", self.Type.IMAGE, "farmerSimple.png");
+            this.addRessource("farmer", self.Type.IMAGE, "farmerSprite.png");
             this.addRessource("farm", self.Type.IMAGE, "farm.png");
             this.addRessource("seedTest", self.Type.IMAGE, "seedTest.png");
 

@@ -11,6 +11,9 @@ define(['jquery'], function(jQuery){
 			this.image = undefined;
 			this.XPx = undefined;
 			this.YPx = undefined;
+
+			//Sprite orientation
+			this.direction = "";
 		},
 
 		clickEvent: function(){

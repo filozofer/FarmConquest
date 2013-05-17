@@ -42,7 +42,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 self.farmer = new Farmer(resp.position.X, resp.position.Y);
                 self.farmer.XPx = positionPx.X;
                 self.farmer.YPx = positionPx.Y;
-                self.canvas.putTexture(positionPx, farmerImg, self.farmer, self.canvas.L_NAME.players);
+                self.canvas.putFarmerSprite(positionPx, farmerImg, self.farmer, self.canvas.L_NAME.players);
 
                 //TEMP EN ATTENDANT INTERACTION DB
                 socket.sessions.farmer = self.farmer;
