@@ -14,13 +14,13 @@ body {
     /*background-image: url('../img/main/background.jpg');*/
 
     /* Anciens navigateurs */
-    background: #ffffff url("../img/main/gradient-bg.png") repeat-x top;
+    /*background: #ffffff url("../img/main/gradient-bg.png") repeat-x top;
     -o-background-size: 100% 100%;
     -moz-background-size: 100% 100%;
     -webkit-background-size: 100% 100%;
-    background-size: 100% 100%;
+    background-size: 100% 100%;*/
     /* Navigateurs récents */
-    background: -webkit-gradient(
+    /*background: -webkit-gradient(
         linear,
         left top, left bottom,
         from(olivedrab),
@@ -45,7 +45,12 @@ body {
         top,
         olivedrab,
         aliceblue
-    );
+    );*/
+    background: -webkit-radial-gradient( center, circle, darkgrey, black);
+    background:    -moz-radial-gradient( center, circle, darkgrey, black);
+    background:     -ms-radial-gradient( center, circle, darkgrey, black);
+    background:      -o-radial-gradient( center, circle, darkgrey, black);
+    background:         radial-gradient( circle at center, darkgrey, black);
 }
 
 
@@ -53,9 +58,10 @@ header {
     width: 980px;
     height: 75px;
     margin: auto;
-    background-color: white;
+    /* background-color: white; */
     text-align: center;
-    padding-top: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 #img_banner {

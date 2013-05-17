@@ -38,7 +38,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
 
             socket.on('farmerPosition', function(resp){
                 var farmerImg = self.app.Ressources["farmer"];
-                var positionPx = new Vector2(self.app.World[resp.position.X][resp.position.Y].XPx, self.app.World[resp.position.X][resp.position.Y].YPx - (farmerImg.height /2));
+                var positionPx = new Vector2(self.app.World[resp.position.X][resp.position.Y].XPx, self.app.World[resp.position.X][resp.position.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
                 self.farmer = new Farmer(resp.position.X, resp.position.Y);
                 self.farmer.XPx = positionPx.X;
                 self.farmer.YPx = positionPx.Y;

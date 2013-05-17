@@ -52,7 +52,7 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             configuration.farmerSpriteNbLine = 13;
 
             //MOVE SPEED
-            configuration.playerMoveSpeed = 0.2;
+            configuration.playerMoveSpeed = 0.3;
 
             return configuration;
         },

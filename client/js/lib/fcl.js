@@ -108,7 +108,7 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
 		    var farmerSprite = new Kinetic.Sprite({
 		        image: imageObj,
                 x: vector.X,
-                y: vector.Y + imageObj.height/2,
+                y: vector.Y,
                 animation: 'stopSW',
                 animations: animations,
                 frameRate: 7,
@@ -252,6 +252,12 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
 
                     if (path.length == 1){
                         farmerImage.stop();
+                        var stopAnimation = 'stop'+farmer.direction;
+                        farmerImage.setAnimation(stopAnimation);
+                        farmerImage.afterFrame(0.1, function(){
+                            farmerImage.stop();
+                        });
+                        farmer.direction = "";
                     }
                     path.shift();
                     if (path.length > 0){
