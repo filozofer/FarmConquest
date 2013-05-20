@@ -32,6 +32,15 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 socket.emit('calculatePath', {'world': world, 'start': start, 'finish': tile});
             });
 
+            $j(document).on('FARMER-updatePosition', function(event, xToMove, yToMove){
+                var newXPx = self.farmer.XPx + xToMove;
+                var newYPx = self.farmer.YPx + yToMove;
+                self.farmer.XPx = newXPx;
+                self.farmer.YPx = newYPx;
+                self.farmer.image.setX(newXPx);
+                self.farmer.image.setY(newYPx);
+            });
+
             socket.on('farmerPath', function(resp){
                 self.moveFarmer(resp.path);
             });

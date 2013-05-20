@@ -58,10 +58,10 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             var tileCenter = new Tile(world.center.X, world.center.Y);
 
             //var ScreenMinX = tileCenter.X - (centerScreen.X / 40);
-            var ScreenMinX = -13;
-            var ScreenMaxX = 14;
-            var ScreenMinY = -13;
-            var ScreenMaxY = 14;
+            var ScreenMinX = this.app.Config.screenMinX;
+            var ScreenMaxX = this.app.Config.screenMaxX;
+            var ScreenMinY = this.app.Config.screenMinY;
+            var ScreenMaxY = this.app.Config.screenMaxY;
             var tileWidth = this.app.Config.tileWidth;
             var tileHeight = this.app.Config.tileHeight;
 
@@ -83,6 +83,11 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                             tile.XPx = centerScreen.X - ((tile.Y - tileCenter.Y) * (tileWidth/2)) +((tile.X - tileCenter.X) * (tileWidth/2)) - (tileWidth/2);
                             tile.YPx = centerScreen.Y + ((tile.Y - tileCenter.Y) * (tileHeight/2)) +((tile.X - tileCenter.X) * (tileHeight/2)) - (tileHeight/2);
                             world[i][j] = tile;
+
+                            if (tile.X == world.center.X && tile.Y == world.center.Y){
+                                world.center.XPx = tile.XPx;
+                                world.center.YPx = tile.YPx;
+                            }
 
                             if(tile.XPx >= -tileWidth &&
                                 tile.XPx <= this.canvas.stage.attrs.width + tileWidth &&

@@ -1,5 +1,7 @@
-define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
+define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vector2){
 
+    jQuery.noConflict();
+    var $j = jQuery;
 	var FCL = Class.create();
 	FCL.prototype = {
 		initialize: function(idContainer, x, y){
@@ -26,9 +28,12 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
             this.layers[this.L_NAME.tiles] = new Kinetic.Layer();
             this.layers[this.L_NAME.buildings] = new Kinetic.Layer();
             this.layers[this.L_NAME.players] = new Kinetic.Layer();
+            this.layerGroup = new Kinetic.Group();
+
 
             //Add each layers in stage
             for (var i in this.layers){
+                this.layerGroup.add(this.layers[i]);
                 this.stage.add(this.layers[i]);
             }
 
@@ -258,6 +263,20 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
                             farmerImage.stop();
                         });
                         farmer.direction = "";
+
+                        //UPDATE MAP DISPLAY
+                        if ((self.stage.attrs.width - app.Config.tileWidth) <= newXPx){
+                            self.stage.fire("dragMapToRight");
+                        }
+                        if (app.Config.tileWidth >= newXPx){
+                            self.stage.fire("dragMapToLeft");
+                        }
+                        if ((self.stage.attrs.height - app.Config.tileHeight) <= (newYPx + ((farmerImage.attrs.image.height / app.Config.farmerSpriteNbLine) / 2))){
+                            self.stage.fire("dragMapToBottom");
+                        }
+                        if (app.Config.tileHeight >= newYPx){
+                            self.stage.fire("dragMapToTop");
+                        }
                     }
                     path.shift();
                     if (path.length > 0){
@@ -297,10 +316,11 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
             stageK.on("click", function(e){
                 var positionClick = self.stage.getMousePosition();
                 var tile = self.getTileAtPosition(positionClick);
-
+                console.log(positionClick.x + " - " + positionClick.y);
                 if (e.which != 3){
                     if(typeof tile.clickEvent == 'function'){
                         tile.clickEvent();
+                        //this.fire("dragMapToRight");
                     }
 
                 } else {
@@ -334,7 +354,69 @@ define(['./vector2', './kinetic', './tweenlite'], function(Vector2){
 
             });
 
+            stageK.on("dragMapToRight", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = -(app.Config.tileWidth)*7;
+                var yToMove = 0;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToLeft", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = (app.Config.tileWidth)*7;
+                var yToMove = 0;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToTop", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = 0;
+                var yToMove = (app.Config.tileHeight)*7;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToBottom", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = 0;
+                var yToMove = -(app.Config.tileHeight)*7;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
             return stageK;
+        },
+
+        updateWorldTilesPx: function(xToMove, yToMove){
+            var ScreenMinX = app.Config.screenMinX;
+            var ScreenMaxX = app.Config.screenMaxX;
+            var ScreenMinY = app.Config.screenMinY;
+            var ScreenMaxY = app.Config.screenMaxY;
+            //Old Center
+            var oldCenter = app.World.center;
+            for(var i=ScreenMinX; i<ScreenMaxX; i++){
+                for (var j=ScreenMinY; j<ScreenMaxY; j++){
+                    var newXPx = app.World[i][j].XPx + xToMove;
+                    var newYPx = app.World[i][j].YPx + yToMove;
+                    app.World[i][j].XPx = newXPx;
+                    app.World[i][j].YPx = newYPx;
+                    if (app.World[i][j].image != undefined){
+                        var newX = app.World[i][j].image.getX() + xToMove;
+                        var newY = app.World[i][j].image.getY() + yToMove;
+                        app.World[i][j].image.setX(newX);
+                        app.World[i][j].image.setY(newY);
+                    }
+                    if (newXPx == oldCenter.XPx && newYPx == oldCenter.YPx){
+                        app.World.center.X = i;
+                        app.World.center.Y = j;
+                        app.World.center.XPx = newXPx;
+                        app.World.center.YPx = newYPx;
+                    }
+
+                }
+            }
+
+            //UPDATE FARMER POSITION
+            $j(document).trigger('FARMER-updatePosition', [xToMove, yToMove]);
+
         },
 
         getImageFromType: function(type) {

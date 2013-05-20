@@ -55,13 +55,12 @@ body {
 
 
 header {
-    width: 980px;
-    height: 75px;
+    width: auto;
+    height: auto;
     margin: auto;
     /* background-color: white; */
     text-align: center;
     padding-top: 10px;
-    padding-bottom: 10px;
 }
 
 #img_banner {
@@ -76,7 +75,7 @@ header {
     height: 450px;
     min-width: 960px;
     margin: auto;
-    margin-top: 30px;
+    margin-top: 10px;
     padding-top: 150px;
     font-size: 20px;
     text-align: center;
@@ -113,7 +112,7 @@ header {
     width: 980px;
     height: 600px;
     margin: auto;
-    margin-top: 30px;
+    margin-top: 10px;
     z-index: 3;
     background-color: gray;
     border: 2px solid black;

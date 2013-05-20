@@ -23,8 +23,10 @@ define(['jquery'], function(jQuery){
             }
             else
             {
-                var mainPos = this.contentTile.mainPos;
-                app.World[mainPos.X][mainPos.Y].image.setOpacity(0.5);
+                if (this.contentTile != undefined){
+                    var mainPos = this.contentTile.mainPos;
+                    app.World[mainPos.X][mainPos.Y].image.setOpacity(0.5);
+                }
             }
 		},
 
@@ -35,8 +37,10 @@ define(['jquery'], function(jQuery){
             }
             else
             {
-                var mainPos = this.contentTile.mainPos;
-                app.World[mainPos.X][mainPos.Y].image.setOpacity(1);
+                if (this.contentTile != undefined){
+                    var mainPos = this.contentTile.mainPos;
+                    app.World[mainPos.X][mainPos.Y].image.setOpacity(1);
+                }
             }
 		},
 

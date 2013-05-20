@@ -48,6 +48,12 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             configuration.tileHeight = 40;
             configuration.tileWidth = 80;
 
+            //WORLD SCREEN SIZE
+            configuration.screenMinX = -13;
+            configuration.screenMaxX = 14;
+            configuration.screenMinY = -13;
+            configuration.screenMaxY = 14;
+
             //FARMER SPRITE
             configuration.farmerSpriteNbLine = 13;
 
