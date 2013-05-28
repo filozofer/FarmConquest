@@ -28,10 +28,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 self.drawMap(resp.worldToDraw);
             });
 
-            $j("#mg_reglages").on('click', function(){
-                socket.emit('getMapToDraw');
-            });
-
             socket.on('drawElement', function(resp){
                self.drawElement(resp);
             });
