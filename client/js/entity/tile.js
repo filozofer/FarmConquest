@@ -9,7 +9,9 @@ define(['jquery'], function(jQuery){
 			this.X = X;
 			this.Y = Y;
 			this.image = undefined;
+            this.contentTile = undefined;
 			this.walkable = true;
+            this.owner = undefined;
 		},
 
 		clickEvent: function(){
@@ -28,6 +30,8 @@ define(['jquery'], function(jQuery){
                     app.World[mainPos.X][mainPos.Y].image.setOpacity(0.5);
                 }
             }
+
+            $j(document).trigger('TILE-mouseOver', {X: this.X, Y: this.Y});
 		},
 
 		mouseOutEvent: function(){
@@ -51,7 +55,31 @@ define(['jquery'], function(jQuery){
 		    else{
 		        console.log("NOT WALKABLE");
 		    }
-		}
+		},
+
+        setContentTile: function(contentTile){
+            if(contentTile == undefined)
+                return null;
+
+            this.contentTile = contentTile;
+
+            if(this.contentTile.owner != undefined)
+                this.owner = this.contentTile.owner;
+
+            switch(contentTile.type)
+            {
+                case "farm":
+                    this.walkable = false;
+                    break;
+
+                case "seed":
+                    this.walkable = true;
+                    break;
+
+                default:
+                    break;
+            }
+        }
 
     };
 

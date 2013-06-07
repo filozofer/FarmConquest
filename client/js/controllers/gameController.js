@@ -32,6 +32,9 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                self.drawElement(resp);
             });
 
+            $j(document).on('TILE-mouseOver', function(e, tile) {
+                self.changeNotifTileZone(tile);
+            });
 
         },
 
@@ -73,7 +76,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                             var tileX = element.X;
                             var tileY = element.Y;
                             world[i][j] = new Tile(tileX, tileY);
-                            world[i][j].contentTile = element.contentTile;
+                            world[i][j].setContentTile(element.contentTile);
 
                             var tile = world[i][j];
                             tile.XPx = centerScreen.X - ((tile.Y - tileCenter.Y) * (tileWidth/2)) +((tile.X - tileCenter.X) * (tileWidth/2)) - (tileWidth/2);
@@ -98,7 +101,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                                     {
                                         case "farm":
                                             if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 80), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2 + 5, tile.YPx - 100), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
                                             break;
 
                                         case "seed":
@@ -133,9 +136,58 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
 
         drawElement: function(resp) {
             var tile = new Tile(resp.element.X, resp.element.Y);
-            tile.contentTile = resp.element;
-            tile.walkable = false;
+            tile.setContentTile(resp.element);
             this.canvas.changeTexture(tile);
+        },
+
+        changeNotifTileZone: function(tile){
+
+            var tileBoard = this.app.World[tile.X][tile.Y];
+
+            //Name //Description
+            if(tileBoard.contentTile != undefined)
+            {
+                $j("#tile_name_content").html(tileBoard.contentTile.name);
+                $j("#tile_infos_content").html(tileBoard.contentTile.description);
+            }
+            else
+            {
+                $j("#tile_name_content").html("Terre");
+                $j("#tile_infos_content").html("");
+            }
+
+            //Image
+            if(tileBoard.image != undefined)
+            {
+                $j("#tile_image").attr("src", tileBoard.image.attrs.image.src);
+            }
+            else if(tileBoard.contentTile != undefined && tileBoard.contentTile.mainPos != undefined) //Case building
+            {
+                $j("#tile_image").attr("src", this.app.World[tileBoard.contentTile.mainPos.X][tileBoard.contentTile.mainPos.Y].image.attrs.image.src);
+            }
+
+            //Owner
+            if(tileBoard.owner != undefined)
+            {
+                $j("#tile_owner").html(tileBoard.owner.username);
+            }
+            else
+            {
+                $j("#tile_owner").html("Neutre");
+            }
+
+            //Humidity
+            if(tileBoard.humidity != undefined)
+                $j("#tile_humidity_level").html(tileBoard.humidity + " / 10");
+            else
+                $j("#tile_humidity_level").html("0 / 10");
+
+            //Fertility
+            if(tileBoard.fertility != undefined)
+                $j("#tile_fertility_level").html(tileBoard.fertility + " / 10");
+            else
+                $j("#tile_fertility_level").html("0 / 10");
+
         }
     };
 

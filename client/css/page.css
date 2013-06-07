@@ -300,6 +300,61 @@ header {
     /*background-color: #d3d3d3;*/
 }
 
+#mg_infos_tile {
+    color: white;
+}
+
+/* Notifif tile zon */
+
+#tile_name_content {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: inline-block;
+    text-align: center;
+    width: 95px;
+}
+
+#tile_infos_content {
+    position: absolute;
+    top: 5px;
+    left: 140px;
+    font-size: 10px;
+}
+
+#tile_owner {
+    position: absolute;
+    top: 20px;
+    left: 140px;
+}
+
+#tile_image_span {
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    display: inline-block;
+    text-align: center;
+    width: 95px;
+}
+
+#tile_image {
+    margin: auto;
+}
+
+#tile_humidity_span {
+    position: absolute;
+    top: 45px;
+    left: 135px;
+}
+
+#tile_fertility_span {
+    position: absolute;
+    top: 80px;
+    left: 135px;
+}
+
+
+
 
 
 

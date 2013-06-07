@@ -43,6 +43,8 @@ GameController = function(socket, db, mongoose){
         var farm = new Object();
         farm.type = "farm";
         farm.mainPos = position;
+        farm.name = "Ferme";
+        farm.description = "Bâtiment principal";
 
         //Set Owner
         farm.owner = socket.sessions.user;
@@ -95,6 +97,8 @@ GameController = function(socket, db, mongoose){
             seed.Y = request.Y;
             seed.type = "seed";
             seed.owner = socket.sessions.user;
+            seed.name = "Avoine";
+            seed.description = "Niv. 1";
             world[request.X][request.Y].contentTile = seed;
             socket.emit('drawElement', { element: seed });
         }
