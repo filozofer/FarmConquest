@@ -1,15 +1,21 @@
+var mongoose    = require("mongoose"),
+    db          = require('../lib/db');
+db();
+
 //=================================================
 // Map
 //
 // Represent the map
 //=================================================
 
-//load the Tile object
+// load the Tile object
 var Tile = require('./tile.js');
 
+// class constructor
 var Map = function(side){
+
     if(typeof(side)=="undefined"){
-        side=15;
+        side=5;
     }
     this.side = side;
     this.nbTiles = Math.pow(this.side,2);
@@ -28,14 +34,30 @@ var Map = function(side){
     this.currentIteration = 0;
     this.maxIteration = 1;
     this.incrementMaxIteration = 0;
-    //we populate the table of tile
-    var i;
-    for(i=0;i<this.nbTiles;i++){
-        this.addTile(this.getNextTile());
-        this.currentNbOfTiles++;
+
+    // get the existing map
+    // by getting its farmers
+
+    var nbFarmers = this.numberOfFarms();
+    if ( nbFarmers > 0 )
+    {
+        // TODO
+        // the map exist
+        // we load it
+    }
+    else
+    {
+        // we add a the first farmer to the map
+        //we populate the table of tile
+        var i;
+        for(i=0;i<this.nbTiles;i++){
+            this.addTile(this.getNextTile());
+            this.currentNbOfTiles++;
+        }
     }
 };
 
+// class methods
 Map.prototype = {
 
     print : function(){
@@ -93,7 +115,7 @@ Map.prototype = {
     },
 
     getNextTile : function(){
-        tile = new Tile();
+        var tile = new Tile();
         if( this.currentNbOfTiles > 0)
         {
             lastTile = this.lastInsertedTile;
@@ -119,10 +141,24 @@ Map.prototype = {
             }
         }
         return tile;
-    }
+    },
 
+    // add a new farm
+    addFarm : function(){
+        console.log(this.numberOfFarms());
+    },
+
+    // get the next farm position to insert
+    getNextFarmPosition : function(){
+
+    },
+
+    // return the number of farms created on the map
+    numberOfFarms : function(){
+        return 0;
+    }
 };
 
-//export the object to make it accessible via the require function
+// export the object to make it accessible via the require function
 module.exports = Map;
 

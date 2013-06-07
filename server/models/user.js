@@ -1,12 +1,12 @@
+var mongoose    = require("mongoose"),
+    Schema      = mongoose.Schema;
 
+//=================================================
+// class:       User
+// description: Represent User of the application
+//              (account for player)
+//=================================================
 
-var mongoose = require("mongoose");
-Schema = mongoose.Schema;
-
-/*
-    class: User
-    description: represent User of the application (account for player)
- */
 var User = new Schema({
     username : String,
     mail: String,

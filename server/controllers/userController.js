@@ -6,6 +6,8 @@ UserController = function(socket, db, mongoose){
 
     //Models
     var User = mongoose.model('User');
+    var MapController = require('./MapController');
+    var mapController = new MapController(socket, db, mongoose);
 
     socket.on('login', function(userLogin){
 
@@ -64,6 +66,11 @@ UserController = function(socket, db, mongoose){
             db();
             newUser.save(function(err){ if (err) { throw err; } mongoose.connection.close();});
             socket.sessions.user = newUser;
+
+            // we add a new farmer
+            // and a new farm
+            mapController.addFarmer(newUser, "Toto");
+            //mapController.addFarm();
         }
 
         socket.emit('register_resp', {'registerState': registerState, 'errorsMessages': errors});
