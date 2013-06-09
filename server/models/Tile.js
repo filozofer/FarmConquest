@@ -7,31 +7,17 @@ var mongoose    = require("mongoose"),
 //=================================================
 
 var Tile = new Schema({
-    x : Number,
-    y : Number,
-    owner : [{ type : Schema.ObjectId, ref : "Farmer"}],
-    content : String
+    X : Number,
+    Y : Number,
+    owner : [{ type : Schema.Types.ObjectId, ref : 'Farmer'}],
+    contentTile : [{ type : Schema.Types.ObjectId, ref : 'ContentTile'}]
 });
 
-Tile.methods.create = function(x,y,farmer,content){
-    // set the default values
-    if (typeof(x)=="undefined"){
-        x=0;
-    }
-    if (typeof(y)=="undefined"){
-        y=0;
-    }
-    if (typeof(owner)=="undefined"){
-        owner=null;
-    }
-    if (typeof(content)=="undefined"){
-        content=null;
-    }
-
-    this.x = x;
-    this.y = y;
-    this.owner = owner;
-    this.content = content;
+Tile.methods.create = function(){
+    this.X = null;
+    this.Y = null;
+    this.owner = null;
+    this.contentTile = null;
 }
 
 Tile.methods.print = function(){

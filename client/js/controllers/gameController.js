@@ -25,7 +25,8 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
 
             //Get map to draw from server
             socket.on('drawMap', function(resp){
-                self.drawMap(resp.worldToDraw);
+                self.drawMap(resp.worldToDraw, resp.dimension);
+                self.refreshFarmerController();
             });
 
             socket.on('drawElement', function(resp){
@@ -36,6 +37,12 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 self.changeNotifTileZone(tile);
             });
 
+            $j(document).on('GAME-updateDisplayedMap', function() {
+                self.canvas.clearCanvas();
+                self.drawMapTexture();
+                // CALL SERVER TO LOAD NEW MAP TO DISPLAYED FROM NEW POSITION
+            });
+
         },
 
         startGame: function() {
@@ -44,7 +51,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             socket.emit('getMapToDraw');
         },
 
-        drawMap: function(worldToDraw) {
+        drawMap: function(worldToDraw, dimension) {
 
             var serverWorld = worldToDraw;
             var world = this.app.World;
@@ -57,16 +64,29 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             var tileCenter = new Tile(world.center.X, world.center.Y);
 
             //var ScreenMinX = tileCenter.X - (centerScreen.X / 40);
+
+            /*
             var ScreenMinX = this.app.Config.screenMinX;
             var ScreenMaxX = this.app.Config.screenMaxX;
             var ScreenMinY = this.app.Config.screenMinY;
             var ScreenMaxY = this.app.Config.screenMaxY;
+            */
+
+            var ScreenMinX = dimension.minX;
+            var ScreenMaxX = dimension.maxX;
+            var ScreenMinY = dimension.minY;
+            var ScreenMaxY = dimension.maxY;
+
+            this.app.Config.screenMinX = ScreenMinX;
+            this.app.Config.screenMaxX = ScreenMaxX;
+            this.app.Config.screenMinY = ScreenMinY;
+            this.app.Config.screenMaxY = ScreenMaxY;
+
             var tileWidth = this.app.Config.tileWidth;
             var tileHeight = this.app.Config.tileHeight;
 
-            var countCurrentTile = 1;
-            for(var i=ScreenMinX; i<ScreenMaxX; i++){
 
+            for(var i=ScreenMinX; i<ScreenMaxX; i++){
                 if (serverWorld[i] != undefined){
                     world[i] = new Object();
                     for(var j=ScreenMinY; j<ScreenMaxY; j++){
@@ -87,45 +107,56 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                                 world.center.XPx = tile.XPx;
                                 world.center.YPx = tile.YPx;
                             }
-
-                            if(tile.XPx >= -tileWidth &&
-                                tile.XPx <= this.canvas.stage.attrs.width + tileWidth &&
-                                tile.YPx >= -tileHeight &&
-                                tile.YPx <= this.canvas.stage.attrs.height + tileHeight)
-                            {
-
-                                //Check contentTile not empty
-                                if(tile.contentTile != undefined)
-                                {
-                                    switch(tile.contentTile.type)
-                                    {
-                                        case "farm":
-                                            if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2 + 5, tile.YPx - 100), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
-                                            break;
-
-                                        case "seed":
-                                                this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx - 20), this.app.Ressources["seedTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
-                                            break;
-
-                                        default:
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
-                                }
-
-                                countCurrentTile++;
-                            }
                         }
                     }
                 }
             }
             this.app.World = world;
 
-            this.refreshFarmerController();
+            this.drawMapTexture();
+        },
+
+        drawMapTexture: function(){
+            var tileWidth = this.app.Config.tileWidth;
+            var tileHeight = this.app.Config.tileHeight;
+            var world = this.app.World;
+            var countCurrentTile = 1;
+            for (var i=this.app.Config.screenMinX; i<this.app.Config.screenMaxX; i++){
+                for (var j=this.app.Config.screenMinY; j<this.app.Config.screenMaxY; j++){
+                    var tile = world[i][j];
+                    if(tile.XPx >= -tileWidth &&
+                            tile.XPx <= this.canvas.stage.attrs.width + tileWidth &&
+                            tile.YPx >= -tileHeight &&
+                            tile.YPx <= this.canvas.stage.attrs.height + tileHeight)
+                        {
+
+                            //Check contentTile not empty
+                            if(tile.contentTile != undefined)
+                            {
+                                switch(tile.contentTile.type)
+                                {
+                                    case "farm":
+                                        if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
+                                            this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2 + 5, tile.YPx - 100), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                        break;
+
+                                    case "seed":
+                                            this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx - 20), this.app.Ressources["seedTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
+                                        break;
+
+                                    default:
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
+                            }
+
+                            countCurrentTile++;
+                        }
+                }
+            }
         },
 
         refreshFarmerController: function(){

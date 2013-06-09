@@ -6,8 +6,14 @@ UserController = function(socket, db, mongoose){
 
     //Models
     var User = mongoose.model('User');
-    var MapController = require('./MapController');
-    var mapController = new MapController(socket, db, mongoose);
+    var databaseController = null;
+
+    //server-side event listener
+    var EventEmitter = require('events').EventEmitter;
+
+    process.on('initDatabaseController', function(controller){
+        databaseController = controller;
+    });
 
     socket.on('login', function(userLogin){
 
@@ -19,7 +25,6 @@ UserController = function(socket, db, mongoose){
         var errorsMessages = new Array();
 
         //Find in Db
-        db();
         User.findOne({ username : userL.username, password : userL.password },function (err, user) {
             if (err){throw(err);}
 
@@ -27,14 +32,14 @@ UserController = function(socket, db, mongoose){
                 socket.sessions.user = user;
                 socket.sessions.loadFarmerOnce = false;
                 loginState = true;
+                console.log(user.username + " logged in !");
             } else {
                errorsMessages.push("bad_login");
             }
-            mongoose.connection.close();
 
             //Send response
             socket.emit('login_resp', {'loginState': loginState, 'errorsMessages': errorsMessages});
-        })
+        });
     });
 
     socket.on('register', function(userRegister){
@@ -63,18 +68,16 @@ UserController = function(socket, db, mongoose){
 
         if(errors.length == 0) {
             registerState = true;
-            db();
-            newUser.save(function(err){ if (err) { throw err; } mongoose.connection.close();});
+
+            newUser.save(function(err){ if (err) { throw err; } });
             socket.sessions.user = newUser;
 
-            // we add a new farmer
-            // and a new farm
-            mapController.addFarmer(newUser, "Toto");
-            //mapController.addFarm();
+            // LAUNCH EVENT TO CREATE FARMER IN FARMERCONTROLLER
+            process.emit('addFarmer', newUser);
+
         }
 
         socket.emit('register_resp', {'registerState': registerState, 'errorsMessages': errors});
-        mongoose.connection.close();
     });
 
 

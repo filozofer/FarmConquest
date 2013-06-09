@@ -39,6 +39,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 self.farmer.YPx = newYPx;
                 self.farmer.image.setX(newXPx);
                 self.farmer.image.setY(newYPx);
+                self.canvas.putFarmerSprite(new Vector2(newXPx, newYPx), self.farmer.image.attrs.image, self.farmer, self.canvas.L_NAME.players);
             });
 
             socket.on('farmerPath', function(resp){

@@ -54,6 +54,9 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             configuration.screenMinY = -13;
             configuration.screenMaxY = 14;
 
+            configuration.tileToDragHorizontally = 10;
+            configuration.tileToDragVertically = 11;
+
             //FARMER SPRITE
             configuration.farmerSpriteNbLine = 13;
 

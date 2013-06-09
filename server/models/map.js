@@ -1,6 +1,5 @@
 var mongoose    = require("mongoose"),
     db          = require('../lib/db');
-db();
 
 //=================================================
 // Map

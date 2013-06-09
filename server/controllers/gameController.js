@@ -10,9 +10,18 @@ GameController = function(socket, db, mongoose){
 
         //TEMP - WORLD GENERATION
         var world = new Object();
-        for(var i = -25; i<25; i++){
+
+        var worldDimension = new Object();
+
+        //TEMP
+        worldDimension.minX = -36;
+        worldDimension.minY = -36;
+        worldDimension.maxX = 36;
+        worldDimension.maxY = 36;
+
+        for(var i = worldDimension.minX; i<worldDimension.maxX; i++){
             world[i] = new Object();
-            for (var j=-25; j<25; j++){
+            for (var j=worldDimension.minY; j<worldDimension.maxY; j++){
                 world[i][j] = new Object();
                 world[i][j].X = i;
                 world[i][j].Y = j;
@@ -31,7 +40,7 @@ GameController = function(socket, db, mongoose){
         //Temp stock world
         socket.sessions.World = world;
 
-        socket.emit('drawMap', {'worldToDraw': world});
+        socket.emit('drawMap', {'worldToDraw': world, 'dimension': worldDimension});
 
     });
 

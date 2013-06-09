@@ -9,10 +9,10 @@ var mongoose    = require("mongoose"),
 
 
 var FarmerSchema = new Schema({
-    user : [{ type : Schema.ObjectId, ref : "User"}],
+    user : [{ type : Schema.Types.ObjectId, ref : 'User'}],
     name : String,
-    farmPosition : [{ type : Schema.ObjectId, ref : "Tile"}],
-    position : [{ type : Schema.ObjectId, ref : "Tile"}]
+    farmPosition : [{ type : Schema.Types.ObjectId, ref : 'Tile'}],
+    position : [{ type : Schema.Types.ObjectId, ref : 'Tile'}]
 });
 
 // class constructor
