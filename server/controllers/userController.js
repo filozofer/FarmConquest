@@ -6,14 +6,6 @@ UserController = function(socket, db, mongoose){
 
     //Models
     var User = mongoose.model('User');
-    var databaseController = null;
-
-    //server-side event listener
-    var EventEmitter = require('events').EventEmitter;
-
-    process.on('initDatabaseController', function(controller){
-        databaseController = controller;
-    });
 
     socket.on('login', function(userLogin){
 
@@ -39,6 +31,8 @@ UserController = function(socket, db, mongoose){
 
             //Send response
             socket.emit('login_resp', {'loginState': loginState, 'errorsMessages': errorsMessages});
+
+            socket.controllers.worldController.sendWorldToClient(user);
         });
     });
 
@@ -66,18 +60,23 @@ UserController = function(socket, db, mongoose){
         //TODO
         //User Exist
 
+
         if(errors.length == 0) {
             registerState = true;
+            socket.emit('register_resp', {'registerState': registerState, 'errorsMessages': errors});
 
-            newUser.save(function(err){ if (err) { throw err; } });
-            socket.sessions.user = newUser;
+            newUser.save(function(err){
+                if (err) { throw err; }
 
-            // LAUNCH EVENT TO CREATE FARMER IN FARMERCONTROLLER
-            process.emit('addFarmer', newUser);
-
+                socket.sessions.user = newUser;
+                socket.controllers.worldController.addNewPlayer(newUser);
+            });
+        }
+        else
+        {
+            socket.emit('register_resp', {'registerState': registerState, 'errorsMessages': errors});
         }
 
-        socket.emit('register_resp', {'registerState': registerState, 'errorsMessages': errors});
     });
 
 

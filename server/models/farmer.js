@@ -9,21 +9,29 @@ var mongoose    = require("mongoose"),
 
 
 var FarmerSchema = new Schema({
-    user : [{ type : Schema.Types.ObjectId, ref : 'User'}],
-    name : String,
-    farmPosition : [{ type : Schema.Types.ObjectId, ref : 'Tile'}],
-    position : [{ type : Schema.Types.ObjectId, ref : 'Tile'}]
+    user : { type : Schema.Types.ObjectId, ref : 'User'},
+    name : String
 });
 
 // class constructor
-FarmerSchema.methods.create = function(user, name, farmPosition, position){
+FarmerSchema.methods.create = function(user, name){
     this.user = user;
     this.name = name;
-    // the farm covers 4 Tiles in a square shape
-    // the farm position represents the top left corner of the square
-    this.farmPosition = farmPosition;
-    // the farmer position, represents 1 Tile
-    this.position = position;
+}
+
+FarmerSchema.methods.getAsObject = function(){
+
+    var object = new Object();
+    object._id = this._id;
+
+    if(this.user != null && typeof(this.user._bsontype) == "undefined")
+    {
+        object.user = this.user.getAsObject();
+    }
+
+    object.name = this.name;
+
+    return object;
 }
 
 mongoose.model('Farmer', FarmerSchema);

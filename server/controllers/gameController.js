@@ -114,6 +114,64 @@ GameController = function(socket, db, mongoose){
 
     });
 
+
+    socket.on('worldInitTest', function(request){
+        //Init the world
+
+        G.World = new Object();
+
+        var Tile = mongoose.model("Tile");
+
+        //Get all tiles in bdd
+        Tile.find({}).exec(function(err, tiles){
+
+            for(var i = 0; i < tiles.length; i++)
+            {
+                addTileToTheWorld(tiles[i]);
+            }
+
+        });
+
+    });
+
+    function addTileToTheWorld(tileSend){
+
+        var Tile = mongoose.model("Tile");
+        var User = mongoose.model("User");
+        var ContentTile = mongoose.model("ContentTile");
+
+        var tileTo = tileSend.toObject();
+        var tileAsObject = tileSend.getAsObject();
+
+        if(tileTo.owner != null && typeof(tileTo.owner._bsontype) == "string")
+        {
+            User.findById(tileTo.owner).select('username').exec(function(err, user){
+                tileAsObject.owner = user.getAsObject();
+
+                if(tileTo.contentTile != null && typeof(tileTo.contentTile._bsontype) == "string")
+                {
+                    ContentTile.findById(tileTo.contentTile).populate("owner locations mainPos").exec(function(err, contentTileDB){
+                        tileAsObject.contentTile = contentTileDB.getAsObject();
+
+                        if(G.World[tileTo.X] == undefined){ G.World[tileTo.X] = new Object(); }
+                        G.World[tileTo.X][tileTo.Y] = tileAsObject;
+                    });
+                }
+                else
+                {
+                    if(G.World[tileTo.X] == undefined){ G.World[tileTo.X] = new Object(); }
+                    G.World[tileTo.X][tileTo.Y] = tileAsObject;
+                }
+            });
+        }
+        else
+        {
+            if(G.World[tileTo.X] == undefined){ G.World[tileTo.X] = new Object(); }
+            G.World[tileTo.X][tileTo.Y] = tileAsObject;
+        }
+
+    }
+
 };
 
 module.exports = GameController;

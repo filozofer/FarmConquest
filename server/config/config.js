@@ -4,7 +4,7 @@
 
 Configuration = function(){
 
-    this.farmSize = 15;
+    this.farmSize = 20;
 
     //Tile content types
 

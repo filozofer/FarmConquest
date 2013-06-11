@@ -9,8 +9,8 @@ var mongoose    = require("mongoose"),
 var Tile = new Schema({
     X : Number,
     Y : Number,
-    owner : [{ type : Schema.Types.ObjectId, ref : 'Farmer'}],
-    contentTile : [{ type : Schema.Types.ObjectId, ref : 'ContentTile'}]
+    owner : { type : Schema.Types.ObjectId, ref : 'Farmer'},
+    contentTile : { type : Schema.Types.ObjectId, ref : 'ContentTile'}
 });
 
 Tile.methods.create = function(){
@@ -22,6 +22,26 @@ Tile.methods.create = function(){
 
 Tile.methods.print = function(){
     console.log("["+this.x+","+this.y+"]");
+}
+
+Tile.methods.getAsObject = function(){
+
+    var object = new Object();
+    object._id = this._id;
+    object.X = this.X;
+    object.Y = this.Y;
+
+    if(this.owner != null && typeof(this.owner._bsontype) == "undefined")
+    {
+        object.owner = this.owner.getAsObject();
+    }
+
+    if(this.contentTile != null && typeof(this.contentTile._bsontype) == "undefined")
+    {
+        object.contentTile = this.contentTile.getAsObject();
+    }
+
+    return object;
 }
 
 mongoose.model('Tile',Tile);

@@ -15,7 +15,10 @@ define(['jquery'], function(jQuery){
 		},
 
 		clickEvent: function(){
-            socket.emit("plantTest", { X: this.X, Y: this.Y});
+            //socket.emit("plantTest", { X: this.X, Y: this.Y});
+            if (this.walkable){
+                $j(document).trigger('FARMER-moveFarmer', [this]);
+            }
 		},
 
 		mouseOverEvent: function(){
@@ -51,9 +54,6 @@ define(['jquery'], function(jQuery){
 		rightClickEvent: function(){
 		    if (this.walkable){
 		        $j(document).trigger('FARMER-moveFarmer', [this]);
-		    }
-		    else{
-		        console.log("NOT WALKABLE");
 		    }
 		},
 

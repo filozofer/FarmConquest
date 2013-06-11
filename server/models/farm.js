@@ -9,19 +9,20 @@ var mongoose    = require("mongoose"),
 
 
 var FarmSchema = new Schema({
-    owner : [{ type : Schema.Types.ObjectId, ref : 'User'}],
-    farmPosition : [{ type : Schema.Types.ObjectId, ref : 'Tile'}],
-    position : [{ type : Schema.Types.ObjectId, ref : 'Tile'}]
+    owner : { type : Schema.ObjectId, ref : 'User'},
+    mainPos : { type : Schema.ObjectId, ref : 'Tile'},
+    locations : [{ type : Schema.ObjectId, ref : 'Tile'}],
+    type : String,
+    name : String,
+    description : String
+
 });
 
 // class constructor
 FarmSchema.methods.create = function(){
-    this.owner = null,
-    // the farm covers 4 Tiles in a square shape
-    // the farm position represents the top left corner of the square
-    this.farmPosition = undefined;
-    // the farmer position, represents 1 Tile
-    this.position = undefined;
+    this.type = "farm";
+    this.name = "Ferme";
+    this.description = "Bâtiment principal";
 }
 
 mongoose.model('Farm', FarmSchema);

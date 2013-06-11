@@ -25,6 +25,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
 
             //Get map to draw from server
             socket.on('drawMap', function(resp){
+                $j("#section_loadingMap").hide();
                 self.drawMap(resp.worldToDraw, resp.dimension);
                 self.refreshFarmerController();
             });
@@ -48,7 +49,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
         startGame: function() {
             //Draw Game Canvas
             this.canvas = new FCL("section_canvas", 980, 440);
-            socket.emit('getMapToDraw');
         },
 
         drawMap: function(worldToDraw, dimension) {
@@ -63,15 +63,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             // CENTER = 0,0
             var tileCenter = new Tile(world.center.X, world.center.Y);
 
-            //var ScreenMinX = tileCenter.X - (centerScreen.X / 40);
-
-            /*
-            var ScreenMinX = this.app.Config.screenMinX;
-            var ScreenMaxX = this.app.Config.screenMaxX;
-            var ScreenMinY = this.app.Config.screenMinY;
-            var ScreenMaxY = this.app.Config.screenMaxY;
-            */
-
             var ScreenMinX = dimension.minX;
             var ScreenMaxX = dimension.maxX;
             var ScreenMinY = dimension.minY;
@@ -85,7 +76,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             var tileWidth = this.app.Config.tileWidth;
             var tileHeight = this.app.Config.tileHeight;
 
-
             for(var i=ScreenMinX; i<ScreenMaxX; i++){
                 if (serverWorld[i] != undefined){
                     world[i] = new Object();
@@ -97,6 +87,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                             var tileY = element.Y;
                             world[i][j] = new Tile(tileX, tileY);
                             world[i][j].setContentTile(element.contentTile);
+                            world[i][j].owner = element.owner;
 
                             var tile = world[i][j];
                             tile.XPx = centerScreen.X - ((tile.Y - tileCenter.Y) * (tileWidth/2)) +((tile.X - tileCenter.X) * (tileWidth/2)) - (tileWidth/2);
@@ -123,38 +114,44 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             var countCurrentTile = 1;
             for (var i=this.app.Config.screenMinX; i<this.app.Config.screenMaxX; i++){
                 for (var j=this.app.Config.screenMinY; j<this.app.Config.screenMaxY; j++){
-                    var tile = world[i][j];
-                    if(tile.XPx >= -tileWidth &&
-                            tile.XPx <= this.canvas.stage.attrs.width + tileWidth &&
-                            tile.YPx >= -tileHeight &&
-                            tile.YPx <= this.canvas.stage.attrs.height + tileHeight)
+                    if(world[i] != undefined)
+                    {
+                        var tile = world[i][j];
+                        if(tile != undefined)
                         {
-
-                            //Check contentTile not empty
-                            if(tile.contentTile != undefined)
+                            if(tile.XPx >= -tileWidth &&
+                                tile.XPx <= this.canvas.stage.attrs.width + tileWidth &&
+                                tile.YPx >= -tileHeight &&
+                                tile.YPx <= this.canvas.stage.attrs.height + tileHeight)
                             {
-                                switch(tile.contentTile.type)
+
+                                //Check contentTile not empty
+                                if(tile.contentTile != undefined)
                                 {
-                                    case "farm":
-                                        if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                            this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2 + 5, tile.YPx - 100), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
-                                        break;
+                                    switch(tile.contentTile.type)
+                                    {
+                                        case "farm":
+                                            if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
+                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2 + 5, tile.YPx - 100), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                            break;
 
-                                    case "seed":
+                                        case "seed":
                                             this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx - 20), this.app.Ressources["seedTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
-                                        break;
+                                            break;
 
-                                    default:
-                                        break;
+                                        default:
+                                            break;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
-                            }
+                                else
+                                {
+                                    this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
+                                }
 
-                            countCurrentTile++;
+                                countCurrentTile++;
+                            }
                         }
+                    }
                 }
             }
         },

@@ -143,6 +143,7 @@ header {
 
 #section_gameContainer {
     height: 600px;
+    position: absolute;
     -moz-box-shadow: 0px 0px 10px 5px #FFFFFF;
     -webkit-box-shadow: 0px 0px 10px 5px #FFFFFF;
     -o-box-shadow: 0px 0px 10px 5px #FFFFFF;
@@ -304,7 +305,7 @@ header {
     color: white;
 }
 
-/* Notifif tile zon */
+/* Notifif tile zone */
 
 #tile_name_content {
     position: absolute;
@@ -353,13 +354,78 @@ header {
     left: 135px;
 }
 
+/* Loading map Section*/
+
+#section_loadingMap {
+    width: 980px;
+    height: 440px;
+    background-color: black;
+    position: absolute;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    font-size: 24px;
+
+}
+
+#section_loadingMap_span {
+    display: block;
+    padding-top: 210px;
+}
 
 
+/* Game Main Board */
 
+#game_main_board {
+    display:none; /* TODO DELETE HERE */
+    width: 815px;
+    height: 420px;
+    background-image: url('../img/gameMenu/background2.PNG');
+    position: absolute;
+    z-index: 2;
+    top: 10px;
+    left: 80px;
+    border: 2px solid black;
+}
 
+#mb_header {
+    width: 100%;
+    height: 20px;
+    background-color: rgba(0,0,0, 0.5);
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    color: #ffffff;
+}
 
+#mb_tabs_section {
+    float:left;
+}
 
+.mb_tabs {
+    width: 80px;
+    height: 80px;
+    border-top: 0.5px solid black;
+    border-bottom: 0.5px solid black;
+    border-right: 2px solid black;
+}
 
+#mb_tab_mainBoard {background-color: blue;}
+#mb_tab_buy {background-color: red;}
+#mb_tab_sell {background-color: green;}
+#mb_tab_fights {background-color: yellow;}
+#mb_tab_achievments {background-color: purple;}
+
+#mb_board_section {
+    padding-left: 80px;
+}
+
+.mb_board_page {
+    position: absolute;
+    width: 735px;
+    height: 400px;
+    background-color: gray;
+}
 
 
 

@@ -431,28 +431,31 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             var ScreenMaxX = app.Config.screenMaxX;
             var ScreenMinY = app.Config.screenMinY;
             var ScreenMaxY = app.Config.screenMaxY;
+
             //Old Center
             var oldCenter = app.World.center;
             for(var i=ScreenMinX; i<ScreenMaxX; i++){
                 for (var j=ScreenMinY; j<ScreenMaxY; j++){
-                    var newXPx = app.World[i][j].XPx + xToMove;
-                    var newYPx = app.World[i][j].YPx + yToMove;
-                    app.World[i][j].XPx = newXPx;
-                    app.World[i][j].YPx = newYPx;
-                    if (app.World[i][j].image != undefined){
-                        var newX = app.World[i][j].image.getX() + xToMove;
-                        var newY = app.World[i][j].image.getY() + yToMove;
-                        app.World[i][j].image.setX(newX);
-                        app.World[i][j].image.setY(newY);
+                    if(app.World[i] != undefined && app.World[i][j] != undefined)
+                    {
+                        var newXPx = app.World[i][j].XPx + xToMove;
+                        var newYPx = app.World[i][j].YPx + yToMove;
+                        app.World[i][j].XPx = newXPx;
+                        app.World[i][j].YPx = newYPx;
+                        if (app.World[i][j].image != undefined){
+                            var newX = app.World[i][j].image.getX() + xToMove;
+                            var newY = app.World[i][j].image.getY() + yToMove;
+                            app.World[i][j].image.setX(newX);
+                            app.World[i][j].image.setY(newY);
+                        }
+                        if (newXPx == oldCenter.XPx && newYPx == oldCenter.YPx){
+                            console.log("NEW CENTER = " + i + " - " +j);
+                            app.World.center.X = i;
+                            app.World.center.Y = j;
+                            app.World.center.XPx = newXPx;
+                            app.World.center.YPx = newYPx;
+                        }
                     }
-                    if (newXPx == oldCenter.XPx && newYPx == oldCenter.YPx){
-                        console.log("NEW CENTER = " + i + " - " +j);
-                        app.World.center.X = i;
-                        app.World.center.Y = j;
-                        app.World.center.XPx = newXPx;
-                        app.World.center.YPx = newYPx;
-                    }
-
                 }
             }
 

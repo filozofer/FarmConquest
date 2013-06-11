@@ -32,6 +32,17 @@ User.methods.speak = function (){
     console.log("I am " + this.username + " !");
 }
 
+User.methods.getAsObject = function(){
+
+    var object = new Object();
+    object._id = this._id;
+    object.username = this.username;
+    object.password = this.password;
+    object.mail = this.mail;
+    object.dateOfCreation = this.dateOfCreation;
+    return object;
+}
+
 mongoose.model('User', User);
 
 
