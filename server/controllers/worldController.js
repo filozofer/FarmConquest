@@ -314,10 +314,10 @@ WorldController = function(socket, db, mongoose){
 
                                             contentTile.save(function(err, contentTileDBs){
                                                 ContentTile.findById(contentTileDBs._id).populate("owner locations mainPos").exec(function(err, contentTileDB){
-                                                    Tile.update({X: loc1.X, Y: loc1.Y}, { contentTile: contentTileDB }, null, function(err){
-                                                        Tile.update({X: loc2.X, Y: loc2.Y}, { contentTile: contentTileDB }, null, function(err){
-                                                            Tile.update({X: loc3.X, Y: loc3.Y}, { contentTile: contentTileDB }, null, function(err){
-                                                                Tile.update({X: loc4.X, Y: loc4.Y}, { contentTile: contentTileDB }, null, function(err){
+                                                    Tile.update({X: loc1.X, Y: loc1.Y}, { contentTile: contentTileDB, walkable: false }, null, function(err){
+                                                        Tile.update({X: loc2.X, Y: loc2.Y}, { contentTile: contentTileDB, walkable: false }, null, function(err){
+                                                            Tile.update({X: loc3.X, Y: loc3.Y}, { contentTile: contentTileDB, walkable: false }, null, function(err){
+                                                                Tile.update({X: loc4.X, Y: loc4.Y}, { contentTile: contentTileDB, walkable: false }, null, function(err){
                                                                     Tile.findOne({X: l1.X, Y: l1.Y}).populate("contentTile.mainPos").exec(function(err, loca1){
                                                                         Tile.findOne({X: l2.X, Y: l2.Y}).populate("contentTile.mainPos").exec(function(err, loca2){
                                                                             Tile.findOne({X: l3.X, Y: l3.Y}).populate("contentTile.mainPos").exec(function(err, loca3){
@@ -336,11 +336,6 @@ WorldController = function(socket, db, mongoose){
                                                                                     var t4 = loca4.getAsObject();
                                                                                     t4.owner = user.getAsObject();
                                                                                     t4.contentTile = contentTileAsObject;
-
-                                                                                    t1.walkable = false;
-                                                                                    t2.walkable = false;
-                                                                                    t3.walkable = false;
-                                                                                    t4.walkable = false;
 
                                                                                     G.World[t1.X][t1.Y] = t1;
                                                                                     G.World[t2.X][t2.Y] = t2;
