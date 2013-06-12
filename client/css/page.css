@@ -7,6 +7,7 @@ html {
 }
 
 body {
+    cursor: url(http://cur.cursors-4u.net/games/gam-3/gam257.cur), progress !important;
     width: 100%;
     height: 100%;
     margin: 0;
@@ -240,28 +241,46 @@ header {
     background-color: rgba(0,0,0, 0.5);
 }
 
-#mg_arrosoir {
+#btn_arroser,
+#mg_arroser {
     position: absolute;
     top: 5px;
     left: 700px;
+    cursor: url(http://cur.cursors-4u.net/games/gam-3/gam257.cur), progress !important;
 }
 
-#mg_engrais {
+#btn_arroser:hover,
+#btn_fertiliser:hover,
+#btn_alliance:hover,
+#btn_attaque:hover{
+    box-shadow: 0px 0px 2pt 2pt black;
+}
+#btn_arroser.active, #btn_fertiliser.active, #btn_alliance.active, #btn_attaque.active {
+    box-shadow: 0px 0px 2pt 3pt black;
+}
+
+#btn_fertiliser,
+#mg_fertiliser {
     position: absolute;
     top: 5px;
     left: 760px;
+    cursor: url(http://cur.cursors-4u.net/games/gam-3/gam257.cur), progress !important;
 }
 
+#btn_alliance,
 #mg_teleport {
     position: absolute;
     top: 5px;
     left: 820px;
+    cursor: url(http://cur.cursors-4u.net/games/gam-3/gam257.cur), progress !important;
 }
 
-#mg_map {
+#btn_attaque,
+#mg_fight {
     position: absolute;
     top: 5px;
     left: 880px;
+    cursor: url(http://cur.cursors-4u.net/games/gam-3/gam257.cur), progress !important;
 }
 
 #mg_notifications_area {
