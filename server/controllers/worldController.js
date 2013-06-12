@@ -78,6 +78,8 @@ WorldController = function(socket, db, mongoose){
                     }
 
                 });
+
+                console.log('World Loaded !');
             }
         });
     };
@@ -226,6 +228,7 @@ WorldController = function(socket, db, mongoose){
                 newFarmTile.Y = j;
                 newFarmTile.owner = user;
                 newFarmTile.contentTile = null;
+                newFarmTile.setRandomStats();
 
                 //If middle of the farm territory, add building main Farm
                 if(i == (x+8) && j == (y+8))

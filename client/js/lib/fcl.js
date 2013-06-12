@@ -190,8 +190,35 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             return frames_tab;
         },
 
+        opacityToTile: function(tile, opacity) {
+            if(tile.image != undefined)
+            {
+                var opacity = (opacity) ? 0.5 : 1;
+                tile.image.setOpacity(opacity);
+            }
+        },
+
 		moveTextureAlongPath: function(path, farmerImage, farmer, layerName, speed, isFarmer){
             var self = this;
+
+            //Determine if farmer walk behind building
+            if(farmer.cleanTile != undefined)
+            {
+                self.opacityToTile(farmer.cleanTile, false);
+                farmer.cleanTile = undefined;
+                socket.sessions.tilesMissOpacity = undefined;
+                farmer.behindBuiding = false;
+            }
+            for(var i = 0; i < app.TileBehindBuilding.length; i++)
+            {
+                if(path[0].X == app.TileBehindBuilding[i].X && path[0].Y == app.TileBehindBuilding[i].Y)
+                {
+                    socket.sessions.tilesMissOpacity = app.TileBehindBuilding[i].locations;
+                    self.opacityToTile(app.TileBehindBuilding[i].tileA, true);
+                    farmer.cleanTile = app.TileBehindBuilding[i].tileA;
+                    farmer.behindBuiding = true;
+                }
+            }
 
             //Determine polar directions
 
@@ -299,16 +326,6 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                 });
 		},
 
-        hitRegionLoaded: function() {
-            this.loadHitRegion--;
-            if(this.loadHitRegion <= 0)
-            {
-                for (var i in this.layers){
-                    this.layers[i].draw();
-                }
-            }
-        },
-
         getTileAtPosition: function(positionClick) {
 
             //Get tile coord from mouse position
@@ -329,7 +346,6 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             stageK.on("click", function(e){
                 var positionClick = self.stage.getMousePosition();
                 var tile = self.getTileAtPosition(positionClick);
-                console.log(positionClick.x + " - " + positionClick.y);
                 if (e.which != 3){
                     if(typeof tile.clickEvent == 'function'){
                         tile.clickEvent();
@@ -346,6 +362,28 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             stageK.on("mousemove", function(e){
                 var positionClick = self.stage.getMousePosition();
                 var tile = self.getTileAtPosition(positionClick);
+
+                //Clean old position of mouse (opacity)
+                if(socket.sessions.tileClean != undefined && (socket.sessions.tileClean.tA.X != tile.X || socket.sessions.tileClean.tA.Y != tile.Y))
+                {
+                    //If farmer not behind building
+                    if(!socket.sessions.farmer.behindBuiding)
+                    {
+                        self.opacityToTile(socket.sessions.tileClean.tileToClean, false);
+                        socket.sessions.tileClean = undefined;
+                        socket.sessions.tilesMissOpacityMouse = undefined;
+                    }
+                }
+                //Detect if mouse on tile behind a building
+                for(var i = 0; i < app.TileBehindBuilding.length; i++)
+                {
+                    if(tile.X == app.TileBehindBuilding[i].X && tile.Y == app.TileBehindBuilding[i].Y)
+                    {
+                        socket.sessions.tilesMissOpacityMouse = app.TileBehindBuilding[i].locations;
+                        self.opacityToTile(app.TileBehindBuilding[i].tileA, true);
+                        socket.sessions.tileClean = {tA: tile, tileToClean: app.TileBehindBuilding[i].tileA};
+                    }
+                }
 
                 if(self.stage.currentTile == undefined)
                 {

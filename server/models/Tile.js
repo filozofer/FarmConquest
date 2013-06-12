@@ -9,6 +9,8 @@ var mongoose    = require("mongoose"),
 var Tile = new Schema({
     X : Number,
     Y : Number,
+    humidity: Number,
+    fertility: Number,
     owner : { type : Schema.Types.ObjectId, ref : 'Farmer'},
     contentTile : { type : Schema.Types.ObjectId, ref : 'ContentTile'}
 });
@@ -16,6 +18,8 @@ var Tile = new Schema({
 Tile.methods.create = function(){
     this.X = null;
     this.Y = null;
+    this.humidity = null;
+    this.fertility = null;
     this.owner = null;
     this.contentTile = null;
 }
@@ -24,12 +28,19 @@ Tile.methods.print = function(){
     console.log("["+this.x+","+this.y+"]");
 }
 
+Tile.methods.setRandomStats = function(){
+    this.humidity = Math.floor(Math.random()*(8-4+1)+4);
+    this.fertility = Math.floor(Math.random()*(8-4+1)+4);
+}
+
 Tile.methods.getAsObject = function(){
 
     var object = new Object();
     object._id = this._id;
     object.X = this.X;
     object.Y = this.Y;
+    object.humidity = this.humidity;
+    object.fertility = this.fertility;
 
     if(this.owner != null && typeof(this.owner._bsontype) == "undefined")
     {
@@ -45,40 +56,3 @@ Tile.methods.getAsObject = function(){
 }
 
 mongoose.model('Tile',Tile);
-
-/*
-// class constructor
-var Tile = function(x,y,owner,content){
-    // set the default values
-    if (typeof(x)=="undefined"){
-        x=0;
-    }
-    if (typeof(y)=="undefined"){
-        y=0;
-    }
-    if (typeof(owner)=="undefined"){
-        owner=null;
-    }
-    if (typeof(content)=="undefined"){
-        content=null;
-    }
-    // x and y coordinates
-    this.x = x;
-    this.y = y;
-
-    // the farmer who owns the tile
-    this.owner = owner;
-    // the content of the tile (building, farming, ...)
-    this.content = content;
-};
-
-// class methods
-Tile.prototype = {
-    print : function(){
-        return "["+this.x+","+this.y+"]"
-    }
-};
-
-// export the object to make it accessible via the require function
-module.exports = Tile;
-*/

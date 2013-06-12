@@ -24,6 +24,7 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             this.Config = this.getConfig();
             this.Type = this.generateType();
             this.World = new Object();
+            this.TileBehindBuilding = new Array();
         },
 
         init: function(){
