@@ -6,6 +6,7 @@ TchatController = function(socket, db, mongoose){
     var self = this;
 
     socket.on('newMessage', function(resp){
+        console.log("Position : " + socket.sessions.farmer.X + "/" + socket.sessions.farmer.Y);
         io.sockets.emit('tchatMessage', {
             message: resp.message,
             username: resp.username

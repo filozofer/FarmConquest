@@ -10,13 +10,17 @@ var mongoose    = require("mongoose"),
 
 var FarmerSchema = new Schema({
     user : { type : Schema.Types.ObjectId, ref : 'User'},
-    name : String
+    name : String,
+    X: Number,
+    Y: Number
 });
 
 // class constructor
 FarmerSchema.methods.create = function(user, name){
     this.user = user;
     this.name = name;
+    this.X = null;
+    this.Y = null;
 }
 
 FarmerSchema.methods.getAsObject = function(){
@@ -30,6 +34,8 @@ FarmerSchema.methods.getAsObject = function(){
     }
 
     object.name = this.name;
+    object.X = this.X;
+    object.Y = this.Y;
 
     return object;
 }
