@@ -171,10 +171,10 @@ WorldController = function(socket, db, mongoose){
             }
             else{
                 //Ici on fait les 4 tests de voisinage
-                up = (G.World[caseUL.X] != undefined && G.World[caseUL.X][caseUL.Y - 1] != undefined) ? true : false;
-                left = (G.World[caseUL.X - 1] != undefined && G.World[caseUL.X - 1][caseUL.Y] != undefined) ? true : false;
-                right = (G.World[caseBR.X + 1] != undefined && G.World[caseBR.X + 1][caseBR.Y] != undefined) ? true : false;
-                bottom = (G.World[caseBR.X] != undefined && G.World[caseBR.X][caseBR.Y + 1] != undefined) ? true : false;
+                up      = (G.World[caseUL.X] != undefined && G.World[caseUL.X][caseUL.Y - 1] != undefined) ? true : false;
+                left    = (G.World[caseUL.X - 1] != undefined && G.World[caseUL.X - 1][caseUL.Y] != undefined) ? true : false;
+                right   = (G.World[caseBR.X + 1] != undefined && G.World[caseBR.X + 1][caseBR.Y] != undefined) ? true : false;
+                bottom  = (G.World[caseBR.X] != undefined && G.World[caseBR.X][caseBR.Y + 1] != undefined) ? true : false;
 
 
                 //En fonction des voisins on en déduis la position de la prochaine et on demande donc une
@@ -218,6 +218,8 @@ WorldController = function(socket, db, mongoose){
         farm.locations = new Array();
         var locationsTemp = new Array();
 
+
+        var offset = config.farmSize/2-2;
         //Generate tiles
         for (var i = 0 + x; i < config.farmSize + x; i++)
         {
@@ -231,19 +233,19 @@ WorldController = function(socket, db, mongoose){
                 newFarmTile.setRandomStats();
 
                 //If middle of the farm territory, add building main Farm
-                if(i == (x+8) && j == (y+8))
+                if(i == (x+offset) && j == (y+offset))
                 {
                     farm.mainPos = new Tile();
-                    farm.mainPos.X = x+8;
-                    farm.mainPos.Y = y+8;
+                    farm.mainPos.X = x+offset;
+                    farm.mainPos.Y = y+offset;
 
                     for(var k = 0; k < 2; k++)
                     {
                         for(var l = 0; l < 2; l++)
                         {
                             var farmLoc = new Tile();
-                            farmLoc.X = x+8+k;
-                            farmLoc.Y = y+8+l;
+                            farmLoc.X = x+offset+k;
+                            farmLoc.Y = y+offset+l;
                             locationsTemp.push(farmLoc);
                         }
                     }
@@ -380,9 +382,10 @@ WorldController = function(socket, db, mongoose){
                 var mainPos = farm.mainPos;
 
                 var world = new Object();
-                for(var i = mainPos.X - 8 - config.farmSize; i < mainPos.X - 8 + config.farmSize + config.farmSize; i++)
+                var offset = config.farmSize/2 -2;
+                for(var i = mainPos.X - offset - config.farmSize; i < mainPos.X - offset + config.farmSize + config.farmSize; i++)
                 {
-                    for(var j = mainPos.Y - 8 - config.farmSize; j < mainPos.Y - 8 + config.farmSize + config.farmSize; j++)
+                    for(var j = mainPos.Y - offset - config.farmSize; j < mainPos.Y - offset + config.farmSize + config.farmSize; j++)
                     {
                         if(G.World[i] != undefined && G.World[i][j] != undefined)
                         {
@@ -399,10 +402,10 @@ WorldController = function(socket, db, mongoose){
 
                 //World dimensions
                 var worldDimension = new Object();
-                worldDimension.minX = mainPos.X - 8 - config.farmSize;
-                worldDimension.minY = mainPos.Y - 8 - config.farmSize;
-                worldDimension.maxX = mainPos.X - 8 + config.farmSize + config.farmSize;
-                worldDimension.maxY = mainPos.Y - 8 + config.farmSize + config.farmSize;
+                worldDimension.minX = mainPos.X - offset - config.farmSize;
+                worldDimension.minY = mainPos.Y - offset - config.farmSize;
+                worldDimension.maxX = mainPos.X - offset + config.farmSize + config.farmSize;
+                worldDimension.maxY = mainPos.Y - offset + config.farmSize + config.farmSize;
 
                 //Send to client
                 socket.emit('drawMap', {'worldToDraw': world, 'dimension': worldDimension});
