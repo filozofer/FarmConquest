@@ -1,4 +1,4 @@
-ShortestPath = function(world, start, finish){
+ShortestPath = function(world, start, finish, goToWork){
 
 	Array.prototype.disorder= function(){
     	var i, temp, L= this.length, A= this.concat();
@@ -30,6 +30,7 @@ ShortestPath = function(world, start, finish){
      this.caseBas = new Object();
      this.caseGauche = new Object();
      this.caseHaut = new Object();
+     this.goToWork = goToWork;
 
      this.calculatePath = function(){
          var self = this;
@@ -83,7 +84,12 @@ ShortestPath = function(world, start, finish){
 
          if(this.shortestPath.length != 0){
          		//console.log("PATH FOUND");
+            if ( this.goToWork == true ) {
+                this.shortestPath.pop();
+            }
          }
+
+
      }
 
     this.verifyCase = function (caseToCheck){
