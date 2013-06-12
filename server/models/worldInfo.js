@@ -6,7 +6,8 @@ var WorldInfoSchema = new Schema({
     lastFarmUpLeftX : Number,
     lastFarmUpLeftY : Number,
     lastFarmBottomRightX : Number,
-    lastFarmBottomRightY : Number
+    lastFarmBottomRightY : Number,
+    infoToUse : Number
 });
 
 // class constructor
