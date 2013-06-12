@@ -13,12 +13,14 @@ io.set('log level', 1);
 var UserController      = require('./controllers/userController');
 var GameController      = require('./controllers/gameController');
 var FarmerController    = require('./controllers/farmerController');
-var WorldController = require('./controllers/worldController');
-var TchatController = require('./controllers/tchatController');
+var WorldController     = require('./controllers/worldController');
+var TchatController     = require('./controllers/tchatController');
+var FarmingController   = require('./controllers/farmingController');
 
 /* GLOBAL */
 G = new Object();
 G.World = undefined;
+
 
 function LoadServer(){};
 LoadServer.prototype = {
@@ -61,6 +63,7 @@ LoadServer.prototype = {
             socket.controllers.farmerController = new FarmerController(socket, db, mongoose);
             socket.controllers.worldController = new WorldController(socket, db, mongoose);
             socket.controllers.tchatController = new TchatController(socket, db, mongoose);
+            socket.controllers.farmingController = new FarmingController(socket, db, mongoose);
         });
     }
 

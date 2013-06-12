@@ -7,10 +7,12 @@
 
 FarmingController = function(socket, db, mongoose){
 
-    socket.on('doFarmingAction', function(){
-        console.log(socket.sessions.selectedActionIndex);
+    var farmingActions = ["arrosage","fertilisation"];
+
+    socket.on('doFarmingAction', function(selectedFarmingAction){
+        console.log(farmingActions[selectedFarmingAction]);
     });
 
-}
+};
 
 module.exports = FarmingController;
