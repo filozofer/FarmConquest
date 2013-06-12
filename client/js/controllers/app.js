@@ -25,6 +25,9 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             this.Type = this.generateType();
             this.World = new Object();
             this.TileBehindBuilding = new Array();
+
+            // liste des actions disponibles via les 4 boutons à droite du menu
+            this.actions = ["arrosage", "fertilisation", "alliance", "attaque"];
         },
 
         init: function(){
