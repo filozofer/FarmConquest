@@ -48,8 +48,23 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
 
             socket.on('farmerPosition', function(resp){
                 var farmerImg = self.app.Ressources["farmer"];
-                var positionPx = new Vector2(self.app.World[resp.position.X][resp.position.Y].XPx, self.app.World[resp.position.X][resp.position.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
-                self.farmer = new Farmer(resp.position.X, resp.position.Y);
+
+                //Get possible empty tile around the farm
+                var possibleTiles = new Array();
+                for(var i = resp.X; i <= resp.X + 2; i++)
+                {
+                    for(var j = resp.Y; j <= resp.Y + 2; j++)
+                    {
+                        if(app.World[i] != undefined && app.World[i][j] != undefined && app.World[i][j].contentTile == undefined)
+                        {
+                            possibleTiles.push(app.World[i][j]);
+                        }
+                    }
+                }
+                var tile = self.getRandomInArray(possibleTiles);
+
+                var positionPx = new Vector2(self.app.World[tile.X][tile.Y].XPx, self.app.World[tile.X][tile.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
+                self.farmer = new Farmer(tile.X, tile.Y);
                 self.farmer.XPx = positionPx.X;
                 self.farmer.YPx = positionPx.Y;
                 self.canvas.putFarmerSprite(positionPx, farmerImg, self.farmer, self.canvas.L_NAME.players);
@@ -61,6 +76,11 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
         moveFarmer: function(path) {
             var isFarmer = true;
             this.canvas.moveTextureAlongPath(path, this.farmer.image, this.farmer, this.canvas.L_NAME.players, this.app.Config.playerMoveSpeed, isFarmer);
+        },
+
+        getRandomInArray: function(arrayR){
+            var random = Math.floor((Math.random()*arrayR.length));
+            return arrayR[random];
         }
 
 
