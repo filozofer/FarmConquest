@@ -12,7 +12,8 @@ var FarmerSchema = new Schema({
     user : { type : Schema.Types.ObjectId, ref : 'User'},
     name : String,
     X: Number,
-    Y: Number
+    Y: Number,
+    money : Number
 });
 
 // class constructor
@@ -21,6 +22,7 @@ FarmerSchema.methods.create = function(user, name){
     this.name = name;
     this.X = null;
     this.Y = null;
+    this.money = null;
 }
 
 FarmerSchema.methods.getAsObject = function(){
@@ -36,6 +38,7 @@ FarmerSchema.methods.getAsObject = function(){
     object.name = this.name;
     object.X = this.X;
     object.Y = this.Y;
+    object.money = this.money;
 
     return object;
 }
