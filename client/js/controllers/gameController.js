@@ -98,8 +98,16 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             });
 
             $j("#mg_teleport").on('click', function(){
+                //If the farmer don't walk we send a request for teleport to the server
+                if(!socket.sessions.farmer.isWalking)
+                {
+                    socket.emit('getFarmPositionForTeleport');
+                }
+            });
 
-               /* socket.emit('getFarmerPositionForTeleport');
+            socket.on('farmPositionForTeleport', function(resp){
+                var farmerImg = self.app.Ressources["farmer"];
+
                 //Get possible empty tile around the farm
                 var possibleTiles = new Array();
                 for(var i = resp.X; i <= resp.X + 2; i++)
@@ -115,12 +123,14 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 var tile = self.getRandomInArray(possibleTiles);
 
                 var positionPx = new Vector2(self.app.World[tile.X][tile.Y].XPx, self.app.World[tile.X][tile.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
-                self.farmer = new Farmer(tile.X, tile.Y);
-                self.farmer.XPx = positionPx.X;
-                self.farmer.YPx = positionPx.Y;
-                self.canvas.putFarmerSprite(positionPx, farmerImg, self.farmer, self.canvas.L_NAME.players);
+                socket.sessions.farmer.X = tile.X;
+                socket.sessions.farmer.Y = tile.Y;
+                socket.sessions.farmer.XPx = positionPx.X;
+                socket.sessions.farmer.YPx = positionPx.Y;
+                self.canvas.removeFarmerSprite(socket.sessions.farmer);
+                self.canvas.putFarmerSprite(positionPx, farmerImg, socket.sessions.farmer, self.canvas.L_NAME.players);
 
-                socket.sessions.farmer = self.farmer;*/
+                self.canvas.stage.fire("dragMapToFarm");
             });
         },
 
@@ -296,6 +306,11 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             else
                 $j("#tile_fertility_level").html("0 / 10");
 
+        },
+
+        getRandomInArray: function(arrayR){
+            var random = Math.floor((Math.random()*arrayR.length));
+            return arrayR[random];
         }
 
     };

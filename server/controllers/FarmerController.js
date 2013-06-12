@@ -18,15 +18,11 @@ FarmerController = function(socket, db, mongoose){
         }
     });
 
-    socket.on('getFarmerPositionForTeleport', function(){
-        /*if(!socket.sessions.loadFarmerOnce){
-            //GET FARM POSITION
-            Farm.findOne({owner: socket.sessions.user._id }).populate("mainPos").exec(function(err, farm){
-                var farmObject = farm.toObject();
-                socket.emit('farmForTeleportPosition', {X:farmObject.mainPos.X, Y: farmObject.mainPos.Y});
-                socket.sessions.loadFarmerOnce = true;
-            });
-        }*/
+    socket.on('getFarmPositionForTeleport', function(){
+        Farm.findOne({owner: socket.sessions.user._id }).populate("mainPos").exec(function(err, farm){
+            var farmObject = farm.toObject();
+            socket.emit('farmPositionForTeleport', {X:farmObject.mainPos.X, Y: farmObject.mainPos.Y});
+        });
     });
 
     socket.on('calculatePath', function(resp){
