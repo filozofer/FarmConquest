@@ -19,8 +19,15 @@ define(['jquery'], function(jQuery){
 		clickEvent: function(){
             //socket.emit("plantTest", { X: this.X, Y: this.Y});
             if (this.walkable){
-                $j(document).trigger('FARMER-moveFarmer', [this]);
+                //si une action est sélectionnée
+                var goToWork = false;
+                if ( socket.sessions.selectedActionIndex != undefined) {
+                   goToWork = true;
+                }
+
+                $j(document).trigger('FARMER-moveFarmer', {'tile':this, 'goToWork':goToWork});
             }
+
 		},
 
 		mouseOverEvent: function(){
