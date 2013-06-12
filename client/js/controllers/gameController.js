@@ -88,6 +88,8 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                             world[i][j] = new Tile(tileX, tileY);
                             world[i][j].setContentTile(element.contentTile);
                             world[i][j].owner = element.owner;
+                            world[i][j].humidity = element.humidity;
+                            world[i][j].fertility = element.fertility;
 
                             var tile = world[i][j];
                             tile.XPx = centerScreen.X - ((tile.Y - tileCenter.Y) * (tileWidth/2)) +((tile.X - tileCenter.X) * (tileWidth/2)) - (tileWidth/2);

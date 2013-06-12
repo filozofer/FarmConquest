@@ -12,6 +12,8 @@ define(['jquery'], function(jQuery){
             this.contentTile = undefined;
 			this.walkable = true;
             this.owner = undefined;
+            this.humidity = undefined;
+            this.fertility = undefined;
 		},
 
 		clickEvent: function(){
@@ -38,15 +40,33 @@ define(['jquery'], function(jQuery){
 		},
 
 		mouseOutEvent: function(){
-            if(this.image != undefined)
+            var opacityToSet = true;
+
+            //Case farmer behind building
+            if(socket.sessions.tilesMissOpacity != undefined)
             {
-                this.image.setOpacity(1);
+                var tiles = socket.sessions.tilesMissOpacity;
+                for(var i = 0; i < tiles.length; i++)
+                {
+                    if(this.X == tiles[i].X && this.Y == tiles[i].Y)
+                    {
+                        opacityToSet = false;
+                    }
+                }
             }
-            else
+
+            if(opacityToSet)
             {
-                if (this.contentTile != undefined){
-                    var mainPos = this.contentTile.mainPos;
-                    app.World[mainPos.X][mainPos.Y].image.setOpacity(1);
+                if(this.image != undefined)
+                {
+                    this.image.setOpacity(1);
+                }
+                else
+                {
+                    if (this.contentTile != undefined){
+                        var mainPos = this.contentTile.mainPos;
+                        app.World[mainPos.X][mainPos.Y].image.setOpacity(1);
+                    }
                 }
             }
 		},
@@ -70,6 +90,20 @@ define(['jquery'], function(jQuery){
             {
                 case "farm":
                     this.walkable = false;
+
+                    if(this.contentTile.mainPos.X == this.X && this.contentTile.mainPos.Y == this.Y)
+                    {
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y-1, tileA: this, locations: this.contentTile.locations}); // -1, -1
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y, tileA: this, locations: this.contentTile.locations});   // -1, 0
+                        app.TileBehindBuilding.push({X: this.X-2, Y: this.Y, tileA: this, locations: this.contentTile.locations});   // -2, 0
+                        app.TileBehindBuilding.push({X: this.X-2, Y: this.Y-1, tileA: this, locations: this.contentTile.locations}); // -2, -1
+                        app.TileBehindBuilding.push({X: this.X-2, Y: this.Y-2, tileA: this, locations: this.contentTile.locations}); // -2, -2
+                        app.TileBehindBuilding.push({X: this.X-3, Y: this.Y-2, tileA: this, locations: this.contentTile.locations}); // -3, -2
+                        app.TileBehindBuilding.push({X: this.X-2, Y: this.Y-3, tileA: this, locations: this.contentTile.locations}); // -2, -3
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y-2, tileA: this, locations: this.contentTile.locations}); // -1, -2
+                        app.TileBehindBuilding.push({X: this.X, Y: this.Y-1, tileA: this, locations: this.contentTile.locations});   //  0, -1
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y+1, tileA: this, locations: this.contentTile.locations}); // -1, 1
+                    }
                     break;
 
                 case "seed":

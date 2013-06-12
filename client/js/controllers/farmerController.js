@@ -54,7 +54,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 self.farmer.YPx = positionPx.Y;
                 self.canvas.putFarmerSprite(positionPx, farmerImg, self.farmer, self.canvas.L_NAME.players);
 
-                //TEMP EN ATTENDANT INTERACTION DB
                 socket.sessions.farmer = self.farmer;
             });
         },
