@@ -6,25 +6,27 @@
  * To change this template use File | Settings | File Templates.
  */
 
-define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/gameController', 'controllers/farmerController'], function(jQuery, App, UserController, GameController, FarmerController) {
+define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/gameController', 'controllers/farmerController', 'controllers/farmingController'], function(jQuery, App, UserController, GameController, FarmerController, FarmingController) {
 
     jQuery(function($) {
 
         app = undefined;
-        var userController, gameController;
+        var userController, gameController, farmerController, farmingController;
 
         //Load the App (html part)
         var initApp = function() {
 
-                //Load Controllers
                 app = new App();
+                socket = app.init();
+
+                //Load Controllers
                 userController = new UserController(app);
                 gameController = new GameController(app);
                 farmerController = new FarmerController();
+                farmingController = new FarmingController();
 
                 //Call init configurations
                 app.center();
-                socket = app.init();
                 app.loadRessources();
 
                 var first = true;
@@ -47,6 +49,7 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
         var initGame = function() {
             gameController.initEvents();
             farmerController.initEvents();
+            farmingController.initEvents();
         };
 
         initApp();
