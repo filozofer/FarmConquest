@@ -27,11 +27,15 @@ FarmerController = function(socket, db, mongoose){
 
     socket.on('calculatePath', function(resp){
 
+
         var world = resp.world;
         var start = resp.start;
         var finish = resp.finish;
+        var goToWork = resp.goToWork;
 
-        var pathManager = new ShortestPath(world, start, finish);
+        //TEMP - WORLD GENERATION
+        var pathManager = new ShortestPath(world, start, finish, goToWork);
+
         var path = pathManager.shortestPath;
 
         socket.emit('farmerPath', {'path': path});
