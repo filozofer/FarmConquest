@@ -137,6 +137,10 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             farmerSprite.setZIndex(zIndex);
 		},
 
+        removeFarmerSprite: function(farmer){
+            farmer.image.remove();
+        },
+
         changeTexture: function(element) {
 
             //Remove old kinnetic image associate to the element to change
@@ -200,6 +204,9 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
 
 		moveTextureAlongPath: function(path, farmerImage, farmer, layerName, speed, isFarmer){
             var self = this;
+
+            //Farmer is walking
+            farmer.isWalking = true;
 
             //Determine if farmer walk behind building
             if(farmer.cleanTile != undefined)
@@ -322,6 +329,10 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                     if (path.length > 0){
                         self.moveTextureAlongPath(path, farmerImage, farmer, layerName, speed, isFarmer);
                     }
+                    else {
+                        farmer.isWalking = false;
+                    }
+
                   }
                 });
 		},
@@ -405,6 +416,15 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
 
             });
 
+            $j("#section_canvas").on("mouseout", function(e){
+                if(self.stage.currentTile != undefined)
+                {
+                    if(typeof self.stage.currentTile.mouseOutEvent == 'function'){
+                        self.stage.currentTile.mouseOutEvent();
+                    }
+                }
+            });
+
             stageK.on("dragMapToRight", function(){
                 // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
                 var xToMove = -(app.Config.tileWidth)*app.Config.tileToDragHorizontally;
@@ -461,6 +481,17 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                 self.updateWorldTilesPx(xToMove, yToMove);
             });
 
+            stageK.on("dragMapToFarm", function(){
+                if(socket.sessions.positionMap != undefined)
+                {
+                    var xTest = socket.sessions.positionMap.X;
+                    var yTest = socket.sessions.positionMap.Y;
+                    var xToMove = - socket.sessions.positionMap.X;
+                    var yToMove = - socket.sessions.positionMap.Y;
+                    self.updateWorldTilesPx(xToMove, yToMove);
+                }
+            });
+
             return stageK;
         },
 
@@ -469,6 +500,17 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             var ScreenMaxX = app.Config.screenMaxX;
             var ScreenMinY = app.Config.screenMinY;
             var ScreenMaxY = app.Config.screenMaxY;
+
+            //Keep position reminder
+            if(socket.sessions.positionMap == undefined)
+            {
+                socket.sessions.positionMap = {X: xToMove, Y: yToMove};
+            }
+            else
+            {
+                socket.sessions.positionMap.X += xToMove;
+                socket.sessions.positionMap.Y += yToMove;
+            }
 
             //Old Center
             var oldCenter = app.World.center;

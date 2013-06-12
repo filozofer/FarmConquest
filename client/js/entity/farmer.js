@@ -12,6 +12,7 @@ define(['jquery'], function(jQuery){
 			this.XPx = undefined;
 			this.YPx = undefined;
             this.behindBuiding = false;
+            this.isWalking = false;
 
 			//Sprite orientation
 			this.direction = "";

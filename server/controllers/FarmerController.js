@@ -5,30 +5,24 @@ var ShortestPath = require("../lib/shortestPath");
 
 FarmerController = function(socket, db, mongoose){
 
-    var self = this;
+    var Farm = mongoose.model("Farm");
 
-    this.getFarmer = function(user){
-        var result = null;
-        self.FarmerModel.findOne({ name : user.username },function (err, farmer) {
-            if (err){throw(err);}
-
-            if(farmer != null) {
-                result = farmer
-            }
-        });
-        return result;
-    }
-
-    //Models
-    socket.on('getFarmer', function(){
+    socket.on('getFarmerPosition', function(){
         if(!socket.sessions.loadFarmerOnce){
-            //GET FARMER POSITION
-            var farmerPosition = new Object();
-            farmerPosition.X = 3;
-            farmerPosition.Y = 5;
-            socket.emit('farmerPosition', {'position': farmerPosition});
-            socket.sessions.loadFarmerOnce = true;
+            //GET FARM POSITION
+            Farm.findOne({owner: socket.sessions.user._id }).populate("mainPos").exec(function(err, farm){
+                var farmObject = farm.toObject();
+                socket.emit('farmerPosition', {X:farmObject.mainPos.X, Y: farmObject.mainPos.Y});
+                socket.sessions.loadFarmerOnce = true;
+            });
         }
+    });
+
+    socket.on('getFarmPositionForTeleport', function(){
+        Farm.findOne({owner: socket.sessions.user._id }).populate("mainPos").exec(function(err, farm){
+            var farmObject = farm.toObject();
+            socket.emit('farmPositionForTeleport', {X:farmObject.mainPos.X, Y: farmObject.mainPos.Y});
+        });
     });
 
     socket.on('calculatePath', function(resp){
@@ -37,7 +31,6 @@ FarmerController = function(socket, db, mongoose){
         var start = resp.start;
         var finish = resp.finish;
 
-        //TEMP - WORLD GENERATION
         var pathManager = new ShortestPath(world, start, finish);
         var path = pathManager.shortestPath;
 

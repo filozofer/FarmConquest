@@ -79,7 +79,7 @@ define(['jquery', '../entity/user'], function(jQuery, User) {
                 });
 
                 //Add User in session
-                socket.sessions["currentUser"] = this.userTryToLog;
+                socket.sessions.currentUser = this.userTryToLog;
 
                 //Call gameController
                 $j(document).trigger('startGame');
@@ -115,7 +115,7 @@ define(['jquery', '../entity/user'], function(jQuery, User) {
                 });
 
                 //Add User in session
-                socket.sessions["currentUser"] = this.userTryToLog;
+                socket.sessions.currentUser = this.userTryToLog;
 
                 //Call gameController
                 $j(document).trigger('startGame');

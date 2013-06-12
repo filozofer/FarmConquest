@@ -5,6 +5,9 @@ var http        = require('http'),
     mongoose    = require('mongoose'),
     db          = require('./lib/db');
 
+//Change log level
+io.set('log level', 1);
+
 
 //Controllers Import
 var UserController      = require('./controllers/userController');
