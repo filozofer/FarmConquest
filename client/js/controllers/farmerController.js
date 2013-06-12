@@ -45,25 +45,10 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
 
             socket.on('farmerPath', function(resp){
                 self.moveFarmer(resp.path);
-                //console.log(resp);
             });
 
-            socket.on('farmerPosition', function(resp){
+            socket.on('farmerPosition', function(tile){
                 var farmerImg = self.app.Ressources["farmer"];
-
-                //Get possible empty tile around the farm
-                var possibleTiles = new Array();
-                for(var i = resp.X; i <= resp.X + 2; i++)
-                {
-                    for(var j = resp.Y; j <= resp.Y + 2; j++)
-                    {
-                        if(app.World[i] != undefined && app.World[i][j] != undefined && app.World[i][j].contentTile == undefined)
-                        {
-                            possibleTiles.push(app.World[i][j]);
-                        }
-                    }
-                }
-                var tile = self.getRandomInArray(possibleTiles);
 
                 var positionPx = new Vector2(self.app.World[tile.X][tile.Y].XPx, self.app.World[tile.X][tile.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
                 self.farmer = new Farmer(tile.X, tile.Y);
@@ -77,7 +62,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
 
         moveFarmer: function(path) {
             var isFarmer = true;
-            console.log(path);
             this.canvas.moveTextureAlongPath(path, this.farmer.image, this.farmer, this.canvas.L_NAME.players, this.app.Config.playerMoveSpeed, isFarmer);
 
             // si elle existe, on traite l'action sélectionnée

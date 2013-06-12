@@ -208,15 +208,6 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             //Farmer is walking
             farmer.isWalking = true;
 
-            //Determine if farmer walk behind building
-            if(farmer.cleanTile != undefined)
-            {
-                self.opacityToTile(farmer.cleanTile, false);
-                farmer.cleanTile = undefined;
-                socket.sessions.tilesMissOpacity = undefined;
-                farmer.behindBuiding = false;
-            }
-
             if( path.length > 0 ) {
 
                 //Determine if farmer walk behind building
@@ -388,191 +379,191 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                     var positionClick = self.stage.getMousePosition();
                     var tile = self.getTileAtPosition(positionClick);
 
-                    //Clean old position of mouse (opacity)
-                    if(socket.sessions.tileClean != undefined && (socket.sessions.tileClean.tA.X != tile.X || socket.sessions.tileClean.tA.Y != tile.Y))
-                    {
-                        //If farmer not behind building
-                        if(!socket.sessions.farmer.behindBuiding)
-                        {
-                            self.opacityToTile(socket.sessions.tileClean.tileToClean, false);
-                            socket.sessions.tileClean = undefined;
-                            socket.sessions.tilesMissOpacityMouse = undefined;
-                        }
-                    }
-                    //Detect if mouse on tile behind a building
-                    for(var i = 0; i < app.TileBehindBuilding.length; i++)
-                    {
-                        if(tile.X == app.TileBehindBuilding[i].X && tile.Y == app.TileBehindBuilding[i].Y)
-                        {
-                            socket.sessions.tilesMissOpacityMouse = app.TileBehindBuilding[i].locations;
-                            self.opacityToTile(app.TileBehindBuilding[i].tileA, true);
-                            socket.sessions.tileClean = {tA: tile, tileToClean: app.TileBehindBuilding[i].tileA};
-                        }
-                    }
-
-                    if(self.stage.currentTile == undefined)
-                    {
-                        self.stage.currentTile = tile;
-                        if(typeof self.stage.currentTile.mouseOverEvent == 'function'){
-                            self.stage.currentTile.mouseOverEvent();
-                        }
-                    }
-                    else if(self.stage.currentTile.X != tile.X || self.stage.currentTile.Y != tile.Y)
-                    {
-                        if(typeof self.stage.currentTile.mouseOutEvent == 'function'){
-                            self.stage.currentTile.mouseOutEvent();
-                        }
-                        self.stage.currentTile = tile;
-                        if(typeof self.stage.currentTile.mouseOverEvent == 'function'){
-                            self.stage.currentTile.mouseOverEvent();
-                        }
-                    }
-
-                });
-
-                $j("#section_canvas").on("mouseout", function(e){
-                    if(self.stage.currentTile != undefined)
-                    {
-                        if(typeof self.stage.currentTile.mouseOutEvent == 'function'){
-                            self.stage.currentTile.mouseOutEvent();
-                        }
-                    }
-                });
-
-                stageK.on("dragMapToRight", function(){
-                    // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
-                    var xToMove = -(app.Config.tileWidth)*app.Config.tileToDragHorizontally;
-                    var yToMove = 0;
-                    self.updateWorldTilesPx(xToMove, yToMove);
-                });
-
-                stageK.on("dragMapToLeft", function(){
-                    // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
-                    var xToMove = (app.Config.tileWidth)*app.Config.tileToDragHorizontally;
-                    var yToMove = 0;
-                    self.updateWorldTilesPx(xToMove, yToMove);
-                });
-
-                stageK.on("dragMapToTop", function(){
-                    // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
-                    var xToMove = 0;
-                    var yToMove = (app.Config.tileHeight)*app.Config.tileToDragVertically;
-                    self.updateWorldTilesPx(xToMove, yToMove);
-                });
-
-                stageK.on("dragMapToBottom", function(){
-                    // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
-                    var xToMove = 0;
-                    var yToMove = -(app.Config.tileHeight)*app.Config.tileToDragVertically;
-                    self.updateWorldTilesPx(xToMove, yToMove);
-                });
-
-                stageK.on("dragMapToBottomLeft", function(){
-                    // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
-                    var xToMove = (app.Config.tileWidth)*app.Config.tileToDragHorizontally;
-                    var yToMove = -(app.Config.tileHeight)*app.Config.tileToDragVertically;
-                    self.updateWorldTilesPx(xToMove, yToMove);
-                });
-
-                stageK.on("dragMapToBottomRight", function(){
-                    // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
-                    var xToMove = -(app.Config.tileWidth)*app.Config.tileToDragHorizontally;
-                    var yToMove = -(app.Config.tileHeight)*app.Config.tileToDragVertically;
-                    self.updateWorldTilesPx(xToMove, yToMove);
-                });
-
-                stageK.on("dragMapToTopLeft", function(){
-                    // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
-                    var xToMove = (app.Config.tileWidth)*app.Config.tileToDragHorizontally;
-                    var yToMove = (app.Config.tileHeight)*app.Config.tileToDragVertically;
-                    self.updateWorldTilesPx(xToMove, yToMove);
-                });
-
-                stageK.on("dragMapToTopRight", function(){
-                    // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
-                    var xToMove = -(app.Config.tileWidth)*app.Config.tileToDragHorizontally;
-                    var yToMove = (app.Config.tileHeight)*app.Config.tileToDragVertically;
-                    self.updateWorldTilesPx(xToMove, yToMove);
-                });
-
-                stageK.on("dragMapToFarm", function(){
-                    if(socket.sessions.positionMap != undefined)
-                    {
-                        var xTest = socket.sessions.positionMap.X;
-                        var yTest = socket.sessions.positionMap.Y;
-                        var xToMove = - socket.sessions.positionMap.X;
-                        var yToMove = - socket.sessions.positionMap.Y;
-                        self.updateWorldTilesPx(xToMove, yToMove);
-                    }
-                });
-
-                return stageK;
-            },
-
-            updateWorldTilesPx: function(xToMove, yToMove){
-                var ScreenMinX = app.Config.screenMinX;
-                var ScreenMaxX = app.Config.screenMaxX;
-                var ScreenMinY = app.Config.screenMinY;
-                var ScreenMaxY = app.Config.screenMaxY;
-
-                //Keep position reminder
-                if(socket.sessions.positionMap == undefined)
+                //Clean old position of mouse (opacity)
+                if(socket.sessions.tileClean != undefined && (socket.sessions.tileClean.tA.X != tile.X || socket.sessions.tileClean.tA.Y != tile.Y))
                 {
-                    socket.sessions.positionMap = {X: xToMove, Y: yToMove};
+                    //If farmer not behind building
+                    if(!socket.sessions.farmer.behindBuiding)
+                    {
+                        self.opacityToTile(socket.sessions.tileClean.tileToClean, false);
+                        socket.sessions.tileClean = undefined;
+                        socket.sessions.tilesMissOpacityMouse = undefined;
+                    }
                 }
-                else
+                //Detect if mouse on tile behind a building
+                for(var i = 0; i < app.TileBehindBuilding.length; i++)
                 {
-                    socket.sessions.positionMap.X += xToMove;
-                    socket.sessions.positionMap.Y += yToMove;
-                }
-
-                //Old Center
-                var oldCenter = app.World.center;
-                for(var i=ScreenMinX; i<ScreenMaxX; i++){
-                    for (var j=ScreenMinY; j<ScreenMaxY; j++){
-                        if(app.World[i] != undefined && app.World[i][j] != undefined)
-                        {
-                            var newXPx = app.World[i][j].XPx + xToMove;
-                            var newYPx = app.World[i][j].YPx + yToMove;
-                            app.World[i][j].XPx = newXPx;
-                            app.World[i][j].YPx = newYPx;
-                            if (app.World[i][j].image != undefined){
-                                var newX = app.World[i][j].image.getX() + xToMove;
-                                var newY = app.World[i][j].image.getY() + yToMove;
-                                app.World[i][j].image.setX(newX);
-                                app.World[i][j].image.setY(newY);
-                            }
-                            if (newXPx == oldCenter.XPx && newYPx == oldCenter.YPx){
-                                console.log("NEW CENTER = " + i + " - " +j);
-                                app.World.center.X = i;
-                                app.World.center.Y = j;
-                                app.World.center.XPx = newXPx;
-                                app.World.center.YPx = newYPx;
-                            }
-                        }
+                    if(tile.X == app.TileBehindBuilding[i].X && tile.Y == app.TileBehindBuilding[i].Y)
+                    {
+                        socket.sessions.tilesMissOpacityMouse = app.TileBehindBuilding[i].locations;
+                        self.opacityToTile(app.TileBehindBuilding[i].tileA, true);
+                        socket.sessions.tileClean = {tA: tile, tileToClean: app.TileBehindBuilding[i].tileA};
                     }
                 }
 
-                //UPDATE FARMER POSITION
-                $j(document).trigger('GAME-updateDisplayedMap', [app.World]);
-                $j(document).trigger('FARMER-updatePosition', [xToMove, yToMove]);
-            },
-
-            getImageFromType: function(type) {
-                switch(type)
+                if(self.stage.currentTile == undefined)
                 {
-                    case "seed":
-                        return app.Ressources["seedTest"];
-                        break;
+                    self.stage.currentTile = tile;
+                    if(typeof self.stage.currentTile.mouseOverEvent == 'function'){
+                        self.stage.currentTile.mouseOverEvent();
+                    }
+                }
+                else if(self.stage.currentTile.X != tile.X || self.stage.currentTile.Y != tile.Y)
+                {
+                    if(typeof self.stage.currentTile.mouseOutEvent == 'function'){
+                        self.stage.currentTile.mouseOutEvent();
+                    }
+                    self.stage.currentTile = tile;
+                    if(typeof self.stage.currentTile.mouseOverEvent == 'function'){
+                        self.stage.currentTile.mouseOverEvent();
+                    }
+                }
 
-                    default:
-                        return app.Ressources["tileTest"];
-                        break;
+            });
+
+            $j("#section_canvas").on("mouseout", function(e){
+                if(self.stage.currentTile != undefined)
+                {
+                    if(typeof self.stage.currentTile.mouseOutEvent == 'function'){
+                        self.stage.currentTile.mouseOutEvent();
+                    }
+                }
+            });
+
+            stageK.on("dragMapToRight", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = -(app.Config.tileWidth)*app.Config.tileToDragHorizontally;
+                var yToMove = 0;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToLeft", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = (app.Config.tileWidth)*app.Config.tileToDragHorizontally;
+                var yToMove = 0;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToTop", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = 0;
+                var yToMove = (app.Config.tileHeight)*app.Config.tileToDragVertically;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToBottom", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = 0;
+                var yToMove = -(app.Config.tileHeight)*app.Config.tileToDragVertically;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToBottomLeft", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = (app.Config.tileWidth)*app.Config.tileToDragHorizontally;
+                var yToMove = -(app.Config.tileHeight)*app.Config.tileToDragVertically;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToBottomRight", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = -(app.Config.tileWidth)*app.Config.tileToDragHorizontally;
+                var yToMove = -(app.Config.tileHeight)*app.Config.tileToDragVertically;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToTopLeft", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = (app.Config.tileWidth)*app.Config.tileToDragHorizontally;
+                var yToMove = (app.Config.tileHeight)*app.Config.tileToDragVertically;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToTopRight", function(){
+                // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
+                var xToMove = -(app.Config.tileWidth)*app.Config.tileToDragHorizontally;
+                var yToMove = (app.Config.tileHeight)*app.Config.tileToDragVertically;
+                self.updateWorldTilesPx(xToMove, yToMove);
+            });
+
+            stageK.on("dragMapToFarm", function(){
+                if(socket.sessions.positionMap != undefined)
+                {
+                    var xTest = socket.sessions.positionMap.X;
+                    var yTest = socket.sessions.positionMap.Y;
+                    var xToMove = - socket.sessions.positionMap.X;
+                    var yToMove = - socket.sessions.positionMap.Y;
+                    self.updateWorldTilesPx(xToMove, yToMove);
+                }
+            });
+
+            return stageK;
+        },
+
+        updateWorldTilesPx: function(xToMove, yToMove){
+            var ScreenMinX = app.Config.screenMinX;
+            var ScreenMaxX = app.Config.screenMaxX;
+            var ScreenMinY = app.Config.screenMinY;
+            var ScreenMaxY = app.Config.screenMaxY;
+
+            //Keep position reminder
+            if(socket.sessions.positionMap == undefined)
+            {
+                socket.sessions.positionMap = {X: xToMove, Y: yToMove};
+            }
+            else
+            {
+                socket.sessions.positionMap.X += xToMove;
+                socket.sessions.positionMap.Y += yToMove;
+            }
+
+            //Old Center
+            var oldCenter = app.World.center;
+            for(var i=ScreenMinX; i<ScreenMaxX; i++){
+                for (var j=ScreenMinY; j<ScreenMaxY; j++){
+                    if(app.World[i] != undefined && app.World[i][j] != undefined)
+                    {
+                        var newXPx = app.World[i][j].XPx + xToMove;
+                        var newYPx = app.World[i][j].YPx + yToMove;
+                        app.World[i][j].XPx = newXPx;
+                        app.World[i][j].YPx = newYPx;
+                        if (app.World[i][j].image != undefined){
+                            var newX = app.World[i][j].image.getX() + xToMove;
+                            var newY = app.World[i][j].image.getY() + yToMove;
+                            app.World[i][j].image.setX(newX);
+                            app.World[i][j].image.setY(newY);
+                        }
+                        if (newXPx == oldCenter.XPx && newYPx == oldCenter.YPx){
+                            console.log("NEW CENTER = " + i + " - " +j);
+                            app.World.center.X = i;
+                            app.World.center.Y = j;
+                            app.World.center.XPx = newXPx;
+                            app.World.center.YPx = newYPx;
+                        }
+                    }
                 }
             }
 
-        };
+            //UPDATE FARMER POSITION
+            $j(document).trigger('GAME-updateDisplayedMap', [app.World]);
+            $j(document).trigger('FARMER-updatePosition', [xToMove, yToMove]);
+        },
 
+        getImageFromType: function(type) {
+            switch(type)
+            {
+                case "seed":
+                    return app.Ressources["seedTest"];
+                    break;
 
+                default:
+                    return app.Ressources["tileTest"];
+                    break;
+            }
+        }
+		 
+    };
+
+	
     return FCL;
 });

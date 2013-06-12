@@ -12,7 +12,8 @@ var Tile = new Schema({
     humidity: Number,
     fertility: Number,
     owner : { type : Schema.Types.ObjectId, ref : 'Farmer'},
-    contentTile : { type : Schema.Types.ObjectId, ref : 'ContentTile'}
+    contentTile : { type : Schema.Types.ObjectId, ref : 'ContentTile'},
+    walkable: Boolean
 });
 
 Tile.methods.create = function(){
@@ -22,6 +23,7 @@ Tile.methods.create = function(){
     this.fertility = null;
     this.owner = null;
     this.contentTile = null;
+    this.walkable = null;
 }
 
 Tile.methods.print = function(){
@@ -41,6 +43,7 @@ Tile.methods.getAsObject = function(){
     object.Y = this.Y;
     object.humidity = this.humidity;
     object.fertility = this.fertility;
+    object.walkable = this.walkable;
 
     if(this.owner != null && typeof(this.owner._bsontype) == "undefined")
     {

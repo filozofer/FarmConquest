@@ -231,6 +231,7 @@ WorldController = function(socket, db, mongoose){
                 newFarmTile.owner = user;
                 newFarmTile.contentTile = null;
                 newFarmTile.setRandomStats();
+                newFarmTile.walkable = true;
 
                 //If middle of the farm territory, add building main Farm
                 if(i == (x+offset) && j == (y+offset))
@@ -335,6 +336,11 @@ WorldController = function(socket, db, mongoose){
                                                                                     var t4 = loca4.getAsObject();
                                                                                     t4.owner = user.getAsObject();
                                                                                     t4.contentTile = contentTileAsObject;
+
+                                                                                    t1.walkable = false;
+                                                                                    t2.walkable = false;
+                                                                                    t3.walkable = false;
+                                                                                    t4.walkable = false;
 
                                                                                     G.World[t1.X][t1.Y] = t1;
                                                                                     G.World[t2.X][t2.Y] = t2;
