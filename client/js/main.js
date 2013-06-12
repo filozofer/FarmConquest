@@ -6,12 +6,12 @@
  * To change this template use File | Settings | File Templates.
  */
 
-define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/gameController', 'controllers/farmerController', 'controllers/farmingController'], function(jQuery, App, UserController, GameController, FarmerController, FarmingController) {
+define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/gameController', 'controllers/farmerController', 'controllers/farmingController', 'controllers/tchatController'], function(jQuery, App, UserController, GameController, FarmerController, FarmingController, TchatController) {
 
     jQuery(function($) {
 
         app = undefined;
-        var userController, gameController, farmerController, farmingController;
+        var userController, gameController, farmerController, farmingController, tchatController;
 
         //Load the App (html part)
         var initApp = function() {
@@ -24,6 +24,7 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
                 gameController = new GameController(app);
                 farmerController = new FarmerController();
                 farmingController = new FarmingController();
+                tchatController = new TchatController();
 
                 //Call init configurations
                 app.center();
@@ -50,6 +51,7 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
             gameController.initEvents();
             farmerController.initEvents();
             farmingController.initEvents();
+            tchatController.initEvents();
         };
 
         initApp();

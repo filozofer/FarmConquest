@@ -30,6 +30,8 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 //DEFAULT DEPART : FARMER POSITION
                 var start = socket.sessions.farmer;
 
+                console.log(obj);
+
                 socket.emit('calculatePath', {'world': world, 'start': start, 'finish': obj.tile, 'goToWork' : obj.goToWork});
             });
 

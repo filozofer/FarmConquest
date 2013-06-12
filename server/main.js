@@ -1,11 +1,11 @@
 //Config Server
 var EventEmitter = require('events').EventEmitter;
 var http        = require('http'),
-    io          = require('socket.io').listen(1337),
     mongoose    = require('mongoose'),
     db          = require('./lib/db');
 
 //Change log level
+io = require('socket.io').listen(1337);
 io.set('log level', 1);
 
 
@@ -14,11 +14,11 @@ var UserController      = require('./controllers/userController');
 var GameController      = require('./controllers/gameController');
 var FarmerController    = require('./controllers/farmerController');
 var WorldController = require('./controllers/worldController');
+var TchatController = require('./controllers/tchatController');
 
 /* GLOBAL */
 G = new Object();
 G.World = undefined;
-
 
 function LoadServer(){};
 LoadServer.prototype = {
@@ -60,6 +60,7 @@ LoadServer.prototype = {
             socket.controllers.gameController = new GameController(socket, db, mongoose);
             socket.controllers.farmerController = new FarmerController(socket, db, mongoose);
             socket.controllers.worldController = new WorldController(socket, db, mongoose);
+            socket.controllers.tchatController = new TchatController(socket, db, mongoose);
         });
     }
 

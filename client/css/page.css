@@ -291,6 +291,39 @@ header {
     top: 64px;
     position: absolute;
     left: 676px;
+    overflow: auto;
+    overflow-x: hidden;
+    word-wrap: break-word;
+}
+
+.chatMessage {
+    color: white;
+}
+
+.chatUser {
+    color: yellow;
+}
+
+.chatContent {
+    margin-left: 2%;
+}
+
+#new_message {
+    background-color: transparent;
+    border-color: transparent;
+    width: 98%;
+    margin-top: -3px;
+    color: white;
+}
+
+#mg_new_message {
+    border-radius: 10px;
+    background-color: rgba(0,0,0, 0.5);
+    width: 98%;
+    height: 25px;
+    top: -32px;
+    position: absolute;
+    left: 10px;
 }
 
 #mg_arrowUp {
@@ -307,8 +340,9 @@ header {
 
 #mg_infoList {
     position: absolute;
-    top: 70px;
-    left: 700px;
+    top: 0px;
+    left: 0px;
+    width: 100%;
     list-style-type: none;
 }
 
