@@ -21,6 +21,9 @@ var FarmingController   = require('./controllers/farmingController');
 G = new Object();
 G.World = undefined;
 
+//userSockets = {};
+userSockets = new Array();
+
 
 function LoadServer(){};
 LoadServer.prototype = {
@@ -55,6 +58,9 @@ LoadServer.prototype = {
 
             //Initialize sessions
             socket.sessions = new Object();
+
+            var socketId = userSockets.push(socket);
+            socket.sessions.socketId = socketId;
 
             //Call Controllers
             socket.controllers = new Object();

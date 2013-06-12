@@ -6,11 +6,13 @@ TchatController = function(socket, db, mongoose){
     var self = this;
 
     socket.on('newMessage', function(resp){
-        console.log("Position : " + socket.sessions.farmer.X + "/" + socket.sessions.farmer.Y);
-        io.sockets.emit('tchatMessage', {
-            message: resp.message,
-            username: resp.username
-        });
+        var socketToUse = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
+        for (var i=0; i<socketToUse.length; i++){
+            socketToUse[i].emit('tchatMessage', {
+                message: resp.message,
+                username: resp.username
+            });
+        }
     });
 
     var getSocketByFarmerPosition = function(X, Y){
