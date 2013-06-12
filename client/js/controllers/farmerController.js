@@ -23,13 +23,14 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 self.app = app;
             });
 
-            $j(document).on('FARMER-moveFarmer', function(event, tile) {
+            $j(document).on('FARMER-moveFarmer', function(event, obj) {
+
                 var world = self.app.World;
 
                 //DEFAULT DEPART : FARMER POSITION
                 var start = socket.sessions.farmer;
 
-                socket.emit('calculatePath', {'world': world, 'start': start, 'finish': tile});
+                socket.emit('calculatePath', {'world': world, 'start': start, 'finish': obj.tile, 'goToWork' : obj.goToWork});
             });
 
             $j(document).on('FARMER-updatePosition', function(event, xToMove, yToMove){
@@ -44,6 +45,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
 
             socket.on('farmerPath', function(resp){
                 self.moveFarmer(resp.path);
+                //console.log(resp);
             });
 
             socket.on('farmerPosition', function(resp){
@@ -75,14 +77,29 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
 
         moveFarmer: function(path) {
             var isFarmer = true;
+            console.log(path);
             this.canvas.moveTextureAlongPath(path, this.farmer.image, this.farmer, this.canvas.L_NAME.players, this.app.Config.playerMoveSpeed, isFarmer);
+
+            // si elle existe, on traite l'action sélectionnée
+            if ( socket.sessions.selectedActionIndex != undefined ) {
+                console.log("Traitement de l'action");
+                switch(socket.sessions.selectedActionIndex) {
+                    // Farming actions
+                    case '0':
+                    case '1':
+                        socket.emit('doFarmingAction');
+                        break;
+                    default:
+                        console.log("Aucun traitement.");
+                        break;
+                }
+            }
         },
 
         getRandomInArray: function(arrayR){
             var random = Math.floor((Math.random()*arrayR.length));
             return arrayR[random];
         }
-
 
     };
 
