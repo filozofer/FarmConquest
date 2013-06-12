@@ -21,8 +21,10 @@ define(['jquery'], function(jQuery){
             if (this.walkable){
                 //si une action est sélectionnée
                 var goToWork = false;
-                if ( socket.sessions.selectedActionIndex != undefined) {
+                if ( socket.sessions.selectedActionIndex != undefined ) {
                    goToWork = true;
+                   // we save in session the tile clicked
+                   socket.sessions.selectedActionTile = this;
                 }
 
                 $j(document).trigger('FARMER-moveFarmer', {'tile':this, 'goToWork':goToWork});
