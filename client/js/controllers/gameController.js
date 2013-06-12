@@ -44,6 +44,59 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 // CALL SERVER TO LOAD NEW MAP TO DISPLAYED FROM NEW POSITION
             });
 
+            this.tilesModifyEye = undefined;
+            $j(document).on('mouseenter mouseleave', "#mg_eye_owner", function(ev){
+
+                var mouse_is_inside = ev.type === 'mouseenter';
+
+                if(mouse_is_inside)
+                    $j("#mg_eye_owner").attr('src', "img/gameMenu/buttonEyeOwnerRed.png");
+                else
+                    $j("#mg_eye_owner").attr('src', "img/gameMenu/buttonEyeOwner.png");
+
+                var username = socket.sessions.currentUser.username;
+                self.tilesModifyEye = new Array();
+                var screenMinX = self.app.Config.screenMinX;
+                var screenMaxX = self.app.Config.screenMaxX;
+                var screenMinY = self.app.Config.screenMinY;
+                var screenMaxY = self.app.Config.screenMaxY;
+                //Get tiles not own by the current player
+                for(var i = screenMinX; i < screenMaxX; i++)
+                {
+                    for(var j = screenMinY; j < screenMaxY; j++)
+                    {
+                        if(app.World[i] != undefined && app.World[i][j] != undefined)
+                        {
+                            if(app.World[i][j].owner != undefined && app.World[i][j].owner.username != username)
+                            {
+                                self.tilesModifyEye.push(app.World[i][j]);
+                            }
+                        }
+                    }
+                }
+
+                //For each tiles change opacity
+                var opacityChange = (mouse_is_inside) ? -0.7 : +0.7;
+                for(var i = 0; i < self.tilesModifyEye.length; i++)
+                {
+                    if(self.tilesModifyEye[i].image != undefined)
+                    {
+                        self.tilesModifyEye[i].image.setOpacity(self.tilesModifyEye[i].image.getOpacity() + opacityChange);
+                    }
+                    else
+                    {
+                        if (self.tilesModifyEye[i].contentTile != undefined){
+                            var mainPos = self.tilesModifyEye[i].contentTile.mainPos;
+                            if(app.World[mainPos.X][mainPos.Y].image != undefined)
+                            {
+                                app.World[mainPos.X][mainPos.Y].image.setOpacity(app.World[mainPos.X][mainPos.Y].image.getOpacity() + opacityChange);
+                            }
+                        }
+                    }
+                }
+
+            });
+
         },
 
         startGame: function() {
@@ -219,6 +272,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 $j("#tile_fertility_level").html("0 / 10");
 
         }
+
     };
 
     return GameController;

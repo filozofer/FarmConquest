@@ -168,6 +168,12 @@ header {
     left: 0px;
 }
 
+#mg_eye_owner {
+    position: absolute;
+    top: 35px;
+    left: 0px;
+}
+
 #mg_infos_tile {
     position: absolute;
     top: 42px;

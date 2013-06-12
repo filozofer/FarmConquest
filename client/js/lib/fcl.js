@@ -405,6 +405,15 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
 
             });
 
+            $j("#section_canvas").on("mouseout", function(e){
+                if(self.stage.currentTile != undefined)
+                {
+                    if(typeof self.stage.currentTile.mouseOutEvent == 'function'){
+                        self.stage.currentTile.mouseOutEvent();
+                    }
+                }
+            });
+
             stageK.on("dragMapToRight", function(){
                 // HAVE TO BE A MULTIPLE OF TILE'S WIDTH OR HEIGHT
                 var xToMove = -(app.Config.tileWidth)*app.Config.tileToDragHorizontally;
