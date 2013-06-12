@@ -25,14 +25,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
 
             $j(document).on('FARMER-moveFarmer', function(event, obj) {
 
-                var world = self.app.World;
-
-                //DEFAULT DEPART : FARMER POSITION
-                var start = socket.sessions.farmer;
-
-                console.log(obj);
-
-                socket.emit('calculatePath', {'world': world, 'start': start, 'finish': obj.tile, 'goToWork' : obj.goToWork});
+                socket.emit('calculatePath', {'finish': obj.tile, 'goToWork' : obj.goToWork});
             });
 
             $j(document).on('FARMER-updatePosition', function(event, xToMove, yToMove){

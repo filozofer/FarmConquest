@@ -269,14 +269,13 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                     }
                 }
 
-                var newXPx = path[0].XPx;
+                var newXPx = app.World[path[0].X][path[0].Y].XPx;
                 var newYPx = undefined;
-
                 if(isFarmer){
-                    newYPx = path[0].YPx - ((farmerImage.attrs.image.height / app.Config.farmerSpriteNbLine) / 2);
+                    newYPx = app.World[path[0].X][path[0].Y].YPx - ((farmerImage.attrs.image.height / app.Config.farmerSpriteNbLine) / 2);
                 }
                 else{
-                    newYPx = path[0].YPx;
+                    newYPx = app.World[path[0].X][path[0].Y].YPx;
                 }
 
                 TweenLite.to(farmerImage, speed, {
@@ -292,6 +291,8 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                         farmer.XPx = newXPx;
                         farmer.YPx = newYPx;
                         farmer.image = farmerImage;
+
+                        socket.emit('updateFarmerPositionOnMove', {X: farmer.X, Y: farmer.Y});
 
                         if (path.length == 1){
                             farmerImage.stop();
@@ -342,7 +343,7 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
 
             },
 
-            getTileAtPosition: function(positionClick) {
+        getTileAtPosition: function(positionClick) {
 
                 //Get tile coord from mouse position
                 var X0 = positionClick.x - this.stage.attrs.width / 2;
@@ -356,10 +357,10 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                 return app.World[Xiso][Yiso];
             },
 
-            manageEvent: function(stageK) {
-                var self = this;
+        manageEvent: function(stageK) {
+            var self = this;
 
-                stageK.on("click", function(e){
+            stageK.on("click", function(e){
                     var positionClick = self.stage.getMousePosition();
                     var tile = self.getTileAtPosition(positionClick);
                     if (e.which != 3){
@@ -375,7 +376,7 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                     }
                 });
 
-                stageK.on("mousemove", function(e){
+            stageK.on("mousemove", function(e){
                     var positionClick = self.stage.getMousePosition();
                     var tile = self.getTileAtPosition(positionClick);
 

@@ -71,25 +71,35 @@ FarmerController = function(socket, db, mongoose){
                 socket.sessions.farmer = farmer.getAsObject();
                 //Send to client
                 socket.emit('farmPositionForTeleport', {X: tile.X, Y: tile.Y});
-                socket.sessions.loadFarmerOnce = true;
             });
         });
     });
 
     socket.on('calculatePath', function(resp){
 
-
-        var world = resp.world;
-        var start = resp.start;
         var finish = resp.finish;
         var goToWork = resp.goToWork;
 
-        //TEMP - WORLD GENERATION
-        var pathManager = new ShortestPath(world, start, finish, goToWork);
+        var pathManager = new ShortestPath(G.World, socket.sessions.farmer, finish, goToWork);
 
         var path = pathManager.shortestPath;
-
+        socket.sessions.pathMove = path;
         socket.emit('farmerPath', {'path': path});
+    });
+
+    socket.on('updateFarmerPositionOnMove', function(tile){
+
+        if(socket.sessions.pathMove != undefined && socket.sessions.pathMove.length > 0)
+        {
+            if(tile.X == socket.sessions.pathMove[0].X && tile.Y == socket.sessions.pathMove[0].Y)
+            {
+                socket.sessions.pathMove.shift();
+                Farmer.findOneAndUpdate({name: socket.sessions.user.username}, {X: tile.X, Y: tile.Y}, function(err, farmer){
+                    //Update farmer in socket sessions
+                    socket.sessions.farmer = farmer.getAsObject();
+                });
+            }
+        }
     });
 
 };
