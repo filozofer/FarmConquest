@@ -311,29 +311,31 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                             });
                             farmer.direction = "";
 
+                            console.log("CLICK POSITION = " + socket.sessions.positionClick.X + "/" + socket.sessions.positionClick.Y);
+
                             //UPDATE MAP DISPLAY
-                            if ((self.stage.attrs.width - app.Config.tileWidth) <= newXPx && app.Config.tileHeight >= newYPx){
+                            if ((app.Config.tileHeight >= socket.sessions.positionClick.Y) && ((self.stage.attrs.width - app.Config.tileWidth) <= socket.sessions.positionClick.X)){
                                 self.stage.fire("dragMapToTopRight");
                             }
-                            else if ((self.stage.attrs.width - app.Config.tileWidth) <= newXPx && (self.stage.attrs.height - app.Config.tileHeight) <= (newYPx + ((farmerImage.attrs.image.height / app.Config.farmerSpriteNbLine) / 2))){
+                            else if (((self.stage.attrs.height - app.Config.tileHeight) <= socket.sessions.positionClick.Y) && ((self.stage.attrs.width - app.Config.tileWidth) <= socket.sessions.positionClick.X)){
                                 self.stage.fire("dragMapToBottomRight");
                             }
-                            else if (app.Config.tileWidth >= newXPx && app.Config.tileHeight >= newYPx){
+                            else if ((app.Config.tileHeight >= socket.sessions.positionClick.Y) && (app.Config.tileWidth >= socket.sessions.positionClick.X)){
                                 self.stage.fire("dragMapToTopLeft");
                             }
-                            else if (app.Config.tileWidth >= newXPx && (self.stage.attrs.height - app.Config.tileHeight) <= (newYPx + ((farmerImage.attrs.image.height / app.Config.farmerSpriteNbLine) / 2))){
+                            else if (((self.stage.attrs.height - app.Config.tileHeight) <= socket.sessions.positionClick.Y) && (app.Config.tileWidth >= socket.sessions.positionClick.X)){
                                 self.stage.fire("dragMapToBottomLeft");
                             }
-                            else if ((self.stage.attrs.width - app.Config.tileWidth) <= newXPx){
+                            else if ((self.stage.attrs.width - app.Config.tileWidth) <= socket.sessions.positionClick.X){
                                 self.stage.fire("dragMapToRight");
                             }
-                            else if (app.Config.tileWidth >= newXPx){
+                            else if (app.Config.tileWidth >= socket.sessions.positionClick.X){
                                 self.stage.fire("dragMapToLeft");
                             }
-                            else if ((self.stage.attrs.height - app.Config.tileHeight) <= (newYPx + ((farmerImage.attrs.image.height / app.Config.farmerSpriteNbLine) / 2))){
+                            else if ((self.stage.attrs.height - app.Config.tileHeight) <= socket.sessions.positionClick.Y){
                                 self.stage.fire("dragMapToBottom");
                             }
-                            else if (app.Config.tileHeight >= newYPx){
+                            else if (app.Config.tileHeight >= socket.sessions.positionClick.Y){
                                 self.stage.fire("dragMapToTop");
                             }
                         }

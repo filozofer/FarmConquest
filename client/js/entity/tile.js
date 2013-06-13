@@ -18,6 +18,7 @@ define(['jquery'], function(jQuery){
 
 		clickEvent: function(){
             //socket.emit("plantTest", { X: this.X, Y: this.Y});
+            console.log("TILE CLICKED: " + this.X + "/" + this.Y + " - " + this.XPx + "/" + this.YPx);
             if (this.walkable){
                 //si une action est sélectionnée
                 var goToWork = false;
@@ -26,8 +27,10 @@ define(['jquery'], function(jQuery){
                    // we save in session the tile clicked
                    socket.sessions.selectedActionTile = this;
                 }
-
-                $j(document).trigger('FARMER-moveFarmer', {'tile':this, 'goToWork':goToWork});
+                socket.sessions.positionClick = {X: this.XPx, Y: this.YPx};
+                if(!(socket.sessions.farmer.X == this.X && socket.sessions.farmer.Y == this.Y)){
+                    $j(document).trigger('FARMER-moveFarmer', {'tile':this, 'goToWork':goToWork});
+                }
             }
             else if(this.contentTile != undefined && this.contentTile.type == "farm" && this.owner != undefined && this.owner.username == socket.sessions.currentUser.username)
             {

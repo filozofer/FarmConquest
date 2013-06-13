@@ -37,6 +37,14 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 self.canvas.putFarmerSprite(new Vector2(newXPx, newYPx), self.farmer.image.attrs.image, self.farmer, self.canvas.L_NAME.players);
             });
 
+            $j(document).on('FARMER-drawFarmer', function() {
+                console.log("FARMER POSITION : " + socket.sessions.farmer.X + "/" + socket.sessions.farmer.Y + " - " + socket.sessions.farmer.XPx + "/" + socket.sessions.farmer.YPx);
+                var farmerImg = self.app.Ressources["farmer"];
+
+                var positionPx = new Vector2(socket.sessions.farmer.XPx, socket.sessions.farmer.YPx);
+                self.canvas.putFarmerSprite(positionPx, farmerImg, socket.sessions.farmer, self.canvas.L_NAME.players);
+            });
+
             socket.on('farmerPath', function(resp){
                 self.moveFarmer(resp.path);
             });

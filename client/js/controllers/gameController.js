@@ -26,8 +26,14 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             //Get map to draw from server
             socket.on('drawMap', function(resp){
                 $j("#section_loadingMap").hide();
+                self.canvas.clearCanvas();
                 self.drawMap(resp.worldToDraw, resp.dimension);
+                self.drawMapTexture();
+                if (resp.isRefresh){
+                    $j(document).trigger('FARMER-drawFarmer');
+                } else {
                 self.refreshFarmerController();
+                }
             });
 
             socket.on('drawElement', function(resp){
@@ -42,6 +48,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 self.canvas.clearCanvas();
                 self.drawMapTexture();
                 // CALL SERVER TO LOAD NEW MAP TO DISPLAYED FROM NEW POSITION
+                socket.emit('changeWorldCenter', app.World.center);
             });
 
             socket.on('farmPositionForTeleport', function(tile){
@@ -178,9 +185,15 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                     }
                 }
             }
+            if (world.center.XPx == undefined){
+                world.center.XPx = this.canvas.stage.attrs.width/2 - this.app.Config.tileWidth/2;
+            }
+            if (world.center.YPx == undefined){
+                world.center.YPx = this.canvas.stage.attrs.height/2 - this.app.Config.tileHeight/2;
+            }
             this.app.World = world;
 
-            this.drawMapTexture();
+            //this.drawMapTexture();
         },
 
         drawMapTexture: function(){

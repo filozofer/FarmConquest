@@ -57,7 +57,7 @@ ShortestPath = function(world, start, finish, goToWork){
          	if (this.world[this.currentSquare.X][this.currentSquare.Y+1] != undefined){
          		this.caseBas = this.world[this.currentSquare.X][this.currentSquare.Y+1];
          	}
-         	if (this.world[this.currentSquare.X-1][this.currentSquare.Y] != undefined){
+         	if (this.world[this.currentSquare.X-1] != undefined){
          		this.caseGauche = this.world[this.currentSquare.X-1][this.currentSquare.Y];
          	}
          	if (this.world[this.currentSquare.X][this.currentSquare.Y-1] != undefined){

@@ -17,6 +17,15 @@ WorldController = function(socket, db, mongoose){
     //Configs
     var self = this;
 
+    /* Events */
+    //SOCKET LISTENER
+    if (socket != null){
+        socket.on('changeWorldCenter', function(newCenter){
+            console.log("New center of client: " + newCenter.X + "/" + newCenter.Y);
+            self.sendWorldAtPosition(newCenter, true);
+        });
+    }
+
     /* Methods */
 
     //Call on player register
@@ -383,37 +392,41 @@ WorldController = function(socket, db, mongoose){
                 //Chunk: 20x20 (farmSize*farmSize)
                 var mainPos = farm.mainPos;
 
-                var world = new Object();
-                var offset = config.farmSize/2 -2;
-                for(var i = mainPos.X - offset - config.farmSize; i < mainPos.X - offset + config.farmSize + config.farmSize; i++)
-                {
-                    for(var j = mainPos.Y - offset - config.farmSize; j < mainPos.Y - offset + config.farmSize + config.farmSize; j++)
-                    {
-                        if(G.World[i] != undefined && G.World[i][j] != undefined)
-                        {
-                            if(world[i] == undefined){world[i] = new Object();}
-                            world[i][j] = G.World[i][j];
-                        }
-                    }
-                }
-
-                //Set Center of the world for display
-                world.center = new Object();
-                world.center.X = mainPos.X;
-                world.center.Y = mainPos.Y;
-
-                //World dimensions
-                var worldDimension = new Object();
-                worldDimension.minX = mainPos.X - offset - config.farmSize;
-                worldDimension.minY = mainPos.Y - offset - config.farmSize;
-                worldDimension.maxX = mainPos.X - offset + config.farmSize + config.farmSize;
-                worldDimension.maxY = mainPos.Y - offset + config.farmSize + config.farmSize;
-
-                //Send to client
-                socket.emit('drawMap', {'worldToDraw': world, 'dimension': worldDimension});
+                self.sendWorldAtPosition(mainPos, false);
             }
         });
 
+    };
+
+    this.sendWorldAtPosition = function(mainPos, isRefresh){
+         var world = new Object();
+         var offset = config.farmSize/2 -2;
+         for(var i = mainPos.X - offset - config.farmSize; i < mainPos.X - offset + config.farmSize + config.farmSize; i++)
+         {
+             for(var j = mainPos.Y - offset - config.farmSize; j < mainPos.Y - offset + config.farmSize + config.farmSize; j++)
+             {
+                 if(G.World[i] != undefined && G.World[i][j] != undefined)
+                 {
+                     if(world[i] == undefined){world[i] = new Object();}
+                     world[i][j] = G.World[i][j];
+                 }
+             }
+         }
+
+         //Set Center of the world for display
+         world.center = new Object();
+         world.center.X = mainPos.X;
+         world.center.Y = mainPos.Y;
+
+         //World dimensions
+         var worldDimension = new Object();
+         worldDimension.minX = mainPos.X - offset - config.farmSize;
+         worldDimension.minY = mainPos.Y - offset - config.farmSize;
+         worldDimension.maxX = mainPos.X - offset + config.farmSize + config.farmSize;
+         worldDimension.maxY = mainPos.Y - offset + config.farmSize + config.farmSize;
+
+         //Send to client
+         socket.emit('drawMap', {'worldToDraw': world, 'dimension': worldDimension, 'isRefresh': isRefresh});
     };
 
 };
