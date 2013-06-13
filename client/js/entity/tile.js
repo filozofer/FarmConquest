@@ -31,7 +31,8 @@ define(['jquery'], function(jQuery){
             }
             else if(this.contentTile != undefined && this.contentTile.type == "farm" && this.owner != undefined && this.owner.username == socket.sessions.currentUser.username)
             {
-                 $j("#game_main_board").fadeIn(500);
+                $j("#game_main_board").fadeIn(500);
+                socket.emit("BOARD-getPage", 1);
             }
 
 		},
