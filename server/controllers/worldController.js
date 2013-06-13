@@ -152,6 +152,8 @@ WorldController = function(socket, db, mongoose){
         farmer.user = user;
         farmer.name = user.username;
         farmer.money = config.initialMoney;
+        farmer.level = 1;
+        farmer.experiences = 0;
         farmer.save(function(err){
             if (err) {throw err;}
         });

@@ -75,6 +75,16 @@ header {
 
 /* GAME */
 
+#div_tooltip {
+    position: fixed;
+    top: -1000px;
+    left: -1000px;
+    height: 20px;
+    font-size: 19px;
+    background-color: rgba(255,255,255,0.3);
+    z-index: 10;
+}
+
 #container {
     width: 980px;
     height: 600px;
@@ -116,6 +126,13 @@ header {
     -o-box-shadow: 0px 0px 10px 5px #FFFFFF;
     box-shadow: 0px 0px 10px 5px #FFFFFF;
     filter:progid:DXImageTransform.Microsoft.Shadow(color=#FFFFFF, Direction=NaN, Strength=10);
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 /* GAME MENU BOX */
@@ -459,6 +476,160 @@ header {
 .mb_page_select {
     display: block;
 }
+
+#mb_board_avatar {
+    border: 2px solid black;
+    border-radius: 55px;
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    position: absolute;
+    top: 0px;
+    left: 35px;
+}
+
+#mb_p1_username {
+    position: absolute;
+    top: 10px;
+    left: 150px;
+    font-size: 24px;
+    color: black;
+    font-weight: bold;
+}
+
+#mb_p1_money {
+    position:  absolute;
+    top: 35px;
+    left: 150px;
+}
+
+#mb_vs_1 {
+    position: absolute;
+    top: 40px;
+    left: 219px;
+ }
+
+#mb_vs_2 {
+    position: absolute;
+    top: 40px;
+    left: 352px;
+}
+
+#mb_vitrine_1 {
+    position: absolute;
+    top: 5px;
+    left: 107px;
+}
+
+#mb_vitrine_2 {
+    position: absolute;
+    top: 5px;
+    left: 299px;
+}
+
+#mb_vitrine_3 {
+    position: absolute;
+    top: 5px;
+    left: 482px;
+}
+
+#mg_vitrine_farmings
+{
+    position: absolute;
+    top: 80px;
+    left: 20px;
+    width: 226px;
+    height: 270px;
+}
+
+#mg_vitrine_buildings
+{
+    position: absolute;
+    top: 80px;
+    left: 266px;
+    width: 113px;
+    height: 270px;
+}
+
+#mg_vitrine_fights
+{
+    position: absolute;
+    top: 80px;
+    left: 399px;
+    width: 226px;
+    height: 270px;
+}
+
+.buy_item_span {
+    float: left;
+    width: 102px;
+    height: 43px;
+    margin-bottom: 10px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.mg_seed_img {
+    width:40px;
+    height:40px;
+    float: left;
+}
+
+.mg_coin {
+    background-image: url("../img/gameBoard/miniCoin.png");
+    width:40px;
+    height:30px;
+    float: left;
+    margin-left: 10px;
+    text-align: center;
+    padding-top: 10px;
+    font-size: 20px;
+}
+
+#mg_seed1 { background:url("../img/Farming/seed_set_clean.png") 0px 0px; }
+#mg_seed2 { background:url("../img/Farming/seed_set_clean.png") -40px 0px; }
+#mg_seed3 { background:url("../img/Farming/seed_set_clean.png") -80px 0px; }
+#mg_seed4 { background:url("../img/Farming/seed_set_clean.png") -120px 0px; }
+#mg_seed5 { background:url("../img/Farming/seed_set_clean.png") -160px 0px; }
+#mg_seed6 { background:url("../img/Farming/seed_set_clean.png") -200px 0px; }
+#mg_seed7 { background:url("../img/Farming/seed_set_clean.png") -240px 0px; }
+#mg_seed8 { background:url("../img/Farming/seed_set_clean.png") -280px 0px; }
+#mg_seed9 { background:url("../img/Farming/seed_set_clean.png") -320px 0px; }
+
+
+.mg_build_img {
+    float: left;
+}
+
+#mg_build1 { background-image: url("../img/gameBoard/grange_petite.png"); width:40px; height:40px; }
+#mg_build2 { background-image: url("../img/gameBoard/grange_moyen.png"); width:45px; height:40px; }
+#mg_build3 { background-image: url("../img/gameBoard/grange_grande.png"); width:50px; height:40px; }
+
+.mg_weapons_img {
+    float: left;
+    width:50px;
+    height:50px;
+}
+
+#mg_weapon1 { background-image: url("../img/gameBoard/marteau.png"); }
+#mg_weapon2 { background-image: url("../img/gameBoard/cailloux.png"); }
+#mg_weapon3 { background-image: url("../img/gameBoard/hache.png"); }
+#mg_weapon4 { background-image: url("../img/gameBoard/poulet.png"); }
+#mg_weapon5 { background-image: url("../img/gameBoard/epee.png"); }
+#mg_weapon6 { background-image: url("../img/gameBoard/nyancat.png"); }
+#mg_weapon7 { background-image: url("../img/gameBoard/ak47.png"); }
+#mg_weapon8 { background-image: url("../img/gameBoard/chien.png"); }
+#mg_weapon9 { background-image: url("../img/gameBoard/lightSaber.png"); }
+#mg_weapon10 { background-image: url("../img/gameBoard/grenade.png"); }
+
+.mb_price_span {
+    text-align: center;
+    padding-top: 12px;
+    margin-left: 2px;
+}
+
+
+
 
 
 

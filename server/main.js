@@ -22,6 +22,10 @@ var BoardController     = require('./controllers/boardController');
 G = new Object();
 G.World = undefined;
 
+
+var Configuration = require('./config/config');
+Config = new Configuration();
+
 //userSockets = {};
 userSockets = new Array();
 

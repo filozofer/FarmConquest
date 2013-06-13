@@ -13,16 +13,20 @@ var FarmerSchema = new Schema({
     name : String,
     X: Number,
     Y: Number,
-    money : Number
+    money : Number,
+    level : Number,
+    experiences : Number
 });
 
-// class constructor
+// class constructor / On l'utilise sa ?
 FarmerSchema.methods.create = function(user, name){
     this.user = user;
     this.name = name;
     this.X = null;
     this.Y = null;
     this.money = null;
+    this.level = null;
+    this.experiences = null;
 }
 
 FarmerSchema.methods.getAsObject = function(){
@@ -39,6 +43,8 @@ FarmerSchema.methods.getAsObject = function(){
     object.X = this.X;
     object.Y = this.Y;
     object.money = this.money;
+    object.level = this.level;
+    object.experiences = this.experiences;
 
     return object;
 }

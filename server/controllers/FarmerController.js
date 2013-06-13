@@ -36,7 +36,7 @@ FarmerController = function(socket, db, mongoose){
                     //Update farmer in socket sessions
                     socket.sessions.farmer = farmer.getAsObject();
                     //Send to client
-                    socket.emit('farmerPosition', {X: tile.X, Y: tile.Y});
+                    socket.emit('farmerPosition', {X: tile.X, Y: tile.Y, farmer: farmer});
                     socket.sessions.loadFarmerOnce = true;
                 });
             });
@@ -106,7 +106,7 @@ FarmerController = function(socket, db, mongoose){
     // pour afficher certaines données coté client
     socket.on('getFarmer', function(){
         Farmer.findOne({user: socket.sessions.user._id }).exec(function(err,farmer){
-            socket.emit("setFarmer", farmer);
+            socket.emit("setFarmer", farmer.getAsObject());
         });
     });
 

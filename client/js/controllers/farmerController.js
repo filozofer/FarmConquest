@@ -54,6 +54,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
 
                 var positionPx = new Vector2(self.app.World[tile.X][tile.Y].XPx, self.app.World[tile.X][tile.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
                 self.farmer = new Farmer(tile.X, tile.Y);
+                self.farmer.createByServer(tile.farmer);
                 self.farmer.XPx = positionPx.X;
                 self.farmer.YPx = positionPx.Y;
                 self.canvas.putFarmerSprite(positionPx, farmerImg, self.farmer, self.canvas.L_NAME.players);

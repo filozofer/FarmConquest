@@ -82,6 +82,8 @@
 
             <section id="section_gameContainer">
 
+                <div id="div_tooltip"></div>
+
                 <section id="section_loadingMap"><span id="section_loadingMap_span">Chargement...</span></section>
 
                 <section id="game_main_board">
@@ -95,8 +97,49 @@
                         <div class="mb_tabs" id="mb_tab_achievments" page="5"><img src="img/gameBoard/trophy_button.png" alt="mainTab" width="35" /><br >Trophées</div>
                     </section>
                     <section id="mb_board_section">
-                        <section class="mb_board_page mb_page_select" id="mb_board_page_mainBoard" page="1">Main Board</section>
-                        <section class="mb_board_page" id="mb_board_page_buy" page="2">Buy page</section>
+                        <section class="mb_board_page mb_page_select" id="mb_board_page_mainBoard" page="1">
+                            <span id="mb_board_avatar"><img src="img/gameBoard/bob-du-paysan.png" alt="avatar"/></span>
+                            <div id="mb_p1_username"></div>
+                            <div id="mb_p1_money"></div>
+                        </section>
+                        <section class="mb_board_page" id="mb_board_page_buy" page="2">
+
+                            <img src="img/gameBoard/verticalSeparator.png" alt="separator" id="mb_vs_1" />
+                            <img src="img/gameBoard/verticalSeparator.png" alt="separator" id="mb_vs_2" />
+                            <img src="img/gameBoard/vitrineFarming.png" alt="vitrine1" id="mb_vitrine_1" />
+                            <img src="img/gameBoard/vitrineBuildings.png" alt="vitrine2" id="mb_vitrine_2" />
+                            <img src="img/gameBoard/vitrineFights.png" alt="vitrine3" id="mb_vitrine_3" />
+
+                            <section id="mg_vitrine_farmings">
+                                <span class="buy_item_span" boxPrice="1"><div class= "mg_seed_img" id="mg_seed1"></div></span>
+                                <span class="buy_item_span" boxPrice="2"><div class= "mg_seed_img" id="mg_seed2"></div></span>
+                                <span class="buy_item_span" boxPrice="3"><div class= "mg_seed_img" id="mg_seed3"></div></span>
+                                <span class="buy_item_span" boxPrice="4"><div class= "mg_seed_img" id="mg_seed4"></div></span>
+                                <span class="buy_item_span" boxPrice="5"><div class= "mg_seed_img" id="mg_seed5"></div></span>
+                                <span class="buy_item_span" boxPrice="6"><div class= "mg_seed_img" id="mg_seed6"></div></span>
+                                <span class="buy_item_span" boxPrice="7"><div class= "mg_seed_img" id="mg_seed7"></div></span>
+                                <span class="buy_item_span" boxPrice="8"><div class= "mg_seed_img" id="mg_seed8"></div></span>
+                                <span class="buy_item_span" boxPrice="9"><div class= "mg_seed_img" id="mg_seed9"></div></span>
+                            </section>
+                            <section id="mg_vitrine_buildings">
+                                <span class="buy_item_span" boxPrice="10"><div class= "mg_build_img" id="mg_build1"></div></span>
+                                <span class="buy_item_span" boxPrice="11"><div class= "mg_build_img" id="mg_build2"></div></span>
+                                <span class="buy_item_span" boxPrice="12"><div class= "mg_build_img" id="mg_build3"></div></span>
+                            </section>
+                            <section id="mg_vitrine_fights">
+                                <span class="buy_item_span" boxPrice="13"><div class= "mg_weapons_img" id="mg_weapon1"></div></span>
+                                <span class="buy_item_span" boxPrice="14"><div class= "mg_weapons_img" id="mg_weapon2"></div></span>
+                                <span class="buy_item_span" boxPrice="15"><div class= "mg_weapons_img" id="mg_weapon3"></div></span>
+                                <span class="buy_item_span" boxPrice="16"><div class= "mg_weapons_img" id="mg_weapon4"></div></span>
+                                <span class="buy_item_span" boxPrice="17"><div class= "mg_weapons_img" id="mg_weapon5"></div></span>
+                                <span class="buy_item_span" boxPrice="18"><div class= "mg_weapons_img" id="mg_weapon6"></div></span>
+                                <span class="buy_item_span" boxPrice="19"><div class= "mg_weapons_img" id="mg_weapon7"></div></span>
+                                <span class="buy_item_span" boxPrice="20"><div class= "mg_weapons_img" id="mg_weapon8"></div></span>
+                                <span class="buy_item_span" boxPrice="21"><div class= "mg_weapons_img" id="mg_weapon9"></div></span>
+                                <span class="buy_item_span" boxPrice="22"><div class= "mg_weapons_img" id="mg_weapon10"></div></span>
+                            </section>
+
+                        </section>
                         <section class="mb_board_page" id="mb_board_page_sell" page="3">Sell page</section>
                         <section class="mb_board_page" id="mb_board_page_fights" page="4">Fights page</section>
                         <section class="mb_board_page" id="mb_board_page_achievments" page="5">Achievements page</section>
@@ -132,9 +175,9 @@
 
 
                     <img src="img/gameMenu/playerIco.png" alt="treasureIco" id="mg_joueur_ico" width="25"/>
-                    <span id="mg_nom_joueur">Madmax</span>
+                    <span id="mg_nom_joueur"></span>
                     <img src="img/gameMenu/treasure.png" alt="treasureIco" id="mg_treasure_ico" width="30"/>
-                    <span id="mg_money_joueur">1235</span>
+                    <span id="mg_money_joueur"></span>
 
                     <table id="mg_bag">
                         <tr>
