@@ -52,6 +52,17 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
 
                 socket.sessions.farmer = self.farmer;
             });
+
+            // mise à jour du nom du fermier et du montant d'argent dont il dispose
+            socket.on('drawMap', function(){
+                socket.emit("getFarmer");
+            });
+
+            socket.on('setFarmer', function(resp){
+                jQuery('#mg_nom_joueur').text(resp.name);
+                jQuery('#mg_money_joueur').text(resp.money);
+            });
+            // fin de la mise à jour
         },
 
         moveFarmer: function(path) {
