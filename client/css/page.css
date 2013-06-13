@@ -7,46 +7,12 @@ html {
 }
 
 body {
-    cursor: url(http://cur.cursors-4u.net/games/gam-3/gam257.cur), progress !important;
+    cursor: url("../img/cursors/main.cur"), progress !important;
     width: 100%;
     height: 100%;
     margin: 0;
 
     background: #000000;
-
-    /* Anciens navigateurs */
-    /*background: #ffffff url("../img/main/gradient-bg.png") repeat-x top;
-    -o-background-size: 100% 100%;
-    -moz-background-size: 100% 100%;
-    -webkit-background-size: 100% 100%;
-    background-size: 100% 100%;*/
-    /* Navigateurs récents */
-    /*background: -webkit-gradient(
-        linear,
-        left top, left bottom,
-        from(olivedrab),
-        to(aliceblue)
-    );
-    background: -webkit-linear-gradient(
-        top,
-        olivedrab,
-        aliceblue
-    );
-    background: -moz-linear-gradient(
-        top,
-        olivedrab,
-        aliceblue
-    );
-    background: -o-linear-gradient(
-        top,
-        olivedrab,
-        aliceblue
-    );
-    background: linear-gradient(
-        top,
-        olivedrab,
-        aliceblue
-    );*/
     background: -webkit-radial-gradient( center, circle, darkgrey, black);
     background:    -moz-radial-gradient( center, circle, darkgrey, black);
     background:     -ms-radial-gradient( center, circle, darkgrey, black);
@@ -139,7 +105,7 @@ header {
 #section_canvas {
     height: 440px;
     display: none;
-
+    background-image: url('../img/main/backgroundGameBox.png');
 }
 
 #section_gameContainer {
@@ -246,13 +212,10 @@ header {
     position: absolute;
     top: 5px;
     left: 700px;
-    cursor: url(http://cur.cursors-4u.net/games/gam-3/gam257.cur), progress !important;
+    cursor: url("../img/cursors/hand.cur"), progress !important;
 }
 
-#btn_arroser:hover,
-#btn_fertiliser:hover,
-#btn_alliance:hover,
-#btn_attaque:hover{
+.action_btn:hover{
     box-shadow: 0px 0px 2pt 2pt black;
 }
 #btn_arroser.active, #btn_fertiliser.active, #btn_alliance.active, #btn_attaque.active {
@@ -264,7 +227,7 @@ header {
     position: absolute;
     top: 5px;
     left: 760px;
-    cursor: url(http://cur.cursors-4u.net/games/gam-3/gam257.cur), progress !important;
+    cursor: url("../img/cursors/hand.cur"), progress !important;
 }
 
 #btn_alliance,
@@ -272,7 +235,7 @@ header {
     position: absolute;
     top: 5px;
     left: 820px;
-    cursor: url(http://cur.cursors-4u.net/games/gam-3/gam257.cur), progress !important;
+    cursor: url("../img/cursors/hand.cur"), progress !important;
 }
 
 #btn_attaque,
@@ -280,7 +243,7 @@ header {
     position: absolute;
     top: 5px;
     left: 880px;
-    cursor: url(http://cur.cursors-4u.net/games/gam-3/gam257.cur), progress !important;
+    cursor: url("../img/cursors/hand.cur"), progress !important;
 }
 
 #mg_notifications_area {
@@ -436,54 +399,65 @@ header {
 /* Game Main Board */
 
 #game_main_board {
-    display:none; /* TODO DELETE HERE */
-    width: 815px;
-    height: 420px;
-    background-image: url('../img/gameMenu/background2.PNG');
+    display:none;
+    width: 710px;
+    height: 370px;
+    background-image: url('../img/gameBoard/passportModify2.png');
     position: absolute;
     z-index: 2;
     top: 10px;
     left: 80px;
-    border: 2px solid black;
+    padding: 20px 50px 20px 50px;
+}
+
+#mb_quit_button {
+    position: absolute;
+    top: 20px;
+    left: 730px;
 }
 
 #mb_header {
     width: 100%;
     height: 20px;
-    background-color: rgba(0,0,0, 0.5);
     font-size: 15px;
     font-weight: bold;
     text-align: center;
-    color: #ffffff;
+    color: black;
 }
 
 #mb_tabs_section {
     float:left;
+    text-align: center;
+}
+
+#mb_tabs_section image {
+    margin-left: 10px;
 }
 
 .mb_tabs {
     width: 80px;
-    height: 80px;
-    border-top: 0.5px solid black;
-    border-bottom: 0.5px solid black;
-    border-right: 2px solid black;
+    height: 70px;
+    opacity: 0.5;
 }
 
-#mb_tab_mainBoard {background-color: blue;}
-#mb_tab_buy {background-color: red;}
-#mb_tab_sell {background-color: green;}
-#mb_tab_fights {background-color: yellow;}
-#mb_tab_achievments {background-color: purple;}
+.mb_tab_select {
+    opacity: 1;
+}
 
 #mb_board_section {
     padding-left: 80px;
 }
 
 .mb_board_page {
+    display:none;
     position: absolute;
-    width: 735px;
-    height: 400px;
-    background-color: gray;
+    width: 580px;
+    height: 340px;
+    padding-left: 40px;
+}
+
+.mb_page_select {
+    display: block;
 }
 
 

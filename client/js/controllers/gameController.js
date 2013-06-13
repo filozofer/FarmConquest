@@ -44,6 +44,28 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 // CALL SERVER TO LOAD NEW MAP TO DISPLAYED FROM NEW POSITION
             });
 
+            socket.on('farmPositionForTeleport', function(tile){
+                var farmerImg = self.app.Ressources["farmer"];
+
+                var positionPx = new Vector2(self.app.World[tile.X][tile.Y].XPx, self.app.World[tile.X][tile.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
+                socket.sessions.farmer.X = tile.X;
+                socket.sessions.farmer.Y = tile.Y;
+                socket.sessions.farmer.XPx = positionPx.X;
+                socket.sessions.farmer.YPx = positionPx.Y;
+                self.canvas.removeFarmerSprite(socket.sessions.farmer);
+                self.canvas.putFarmerSprite(positionPx, farmerImg, socket.sessions.farmer, self.canvas.L_NAME.players);
+
+                self.canvas.stage.fire("dragMapToFarm");
+            });
+
+            $j("#mg_teleport").on('click', function(){
+                //If the farmer don't walk we send a request for teleport to the server
+                if(!socket.sessions.farmer.isWalking)
+                {
+                    socket.emit('getFarmPositionForTeleport');
+                }
+            });
+
             this.tilesModifyEye = undefined;
             $j(document).on('mouseenter mouseleave', "#mg_eye_owner", function(ev){
 
@@ -97,26 +119,25 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
 
             });
 
-            $j("#mg_teleport").on('click', function(){
-                //If the farmer don't walk we send a request for teleport to the server
-                if(!socket.sessions.farmer.isWalking)
-                {
-                    socket.emit('getFarmPositionForTeleport');
-                }
+            $j(".mb_tabs").on('click', function(){
+                $j(".mb_tabs").removeClass("mb_tab_select");
+                $j(this).addClass("mb_tab_select");
+                $j(".mb_board_page").removeClass("mb_page_select");
+                var page = $j(this).attr("page");
+                $j(".mb_board_page[page=" + page + "]").addClass("mb_page_select");
+
             });
 
-            socket.on('farmPositionForTeleport', function(resp){
-                var farmerImg = self.app.Ressources["farmer"];
+            $j(document).on('mouseenter mouseleave', "#mb_quit_button", function(ev){
+                var mouse_is_inside = ev.type === 'mouseenter';
+                if(mouse_is_inside)
+                    $j("#mb_quit_button").attr('src', "img/gameBoard/cross_active_button.png");
+                else
+                    $j("#mb_quit_button").attr('src', "img/gameBoard/cross_clean_button.png");
+            });
 
-                var positionPx = new Vector2(self.app.World[tile.X][tile.Y].XPx, self.app.World[tile.X][tile.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
-                socket.sessions.farmer.X = tile.X;
-                socket.sessions.farmer.Y = tile.Y;
-                socket.sessions.farmer.XPx = positionPx.X;
-                socket.sessions.farmer.YPx = positionPx.Y;
-                self.canvas.removeFarmerSprite(socket.sessions.farmer);
-                self.canvas.putFarmerSprite(positionPx, farmerImg, socket.sessions.farmer, self.canvas.L_NAME.players);
-
-                self.canvas.stage.fire("dragMapToFarm");
+            $j("#mb_quit_button").on('click', function(){
+                $j("#game_main_board").fadeOut(500);
             });
         },
 

@@ -29,6 +29,10 @@ define(['jquery'], function(jQuery){
 
                 $j(document).trigger('FARMER-moveFarmer', {'tile':this, 'goToWork':goToWork});
             }
+            else if(this.contentTile != undefined && this.contentTile.type == "farm" && this.owner != undefined && this.owner.username == socket.sessions.currentUser.username)
+            {
+                 $j("#game_main_board").fadeIn(500);
+            }
 
 		},
 
