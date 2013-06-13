@@ -344,7 +344,6 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             },
 
         getTileAtPosition: function(positionClick) {
-
                 //Get tile coord from mouse position
                 var X0 = positionClick.x - this.stage.attrs.width / 2;
                 var Y0 = positionClick.y - this.stage.attrs.height / 2;
@@ -391,35 +390,36 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                         socket.sessions.tilesMissOpacityMouse = undefined;
                     }
                 }
-                //Detect if mouse on tile behind a building
-                for(var i = 0; i < app.TileBehindBuilding.length; i++)
-                {
-                    if(tile.X == app.TileBehindBuilding[i].X && tile.Y == app.TileBehindBuilding[i].Y)
+                if (tile != undefined){
+                    //Detect if mouse on tile behind a building
+                    for(var i = 0; i < app.TileBehindBuilding.length; i++)
                     {
-                        socket.sessions.tilesMissOpacityMouse = app.TileBehindBuilding[i].locations;
-                        self.opacityToTile(app.TileBehindBuilding[i].tileA, true);
-                        socket.sessions.tileClean = {tA: tile, tileToClean: app.TileBehindBuilding[i].tileA};
+                        if(tile.X == app.TileBehindBuilding[i].X && tile.Y == app.TileBehindBuilding[i].Y)
+                        {
+                            socket.sessions.tilesMissOpacityMouse = app.TileBehindBuilding[i].locations;
+                            self.opacityToTile(app.TileBehindBuilding[i].tileA, true);
+                            socket.sessions.tileClean = {tA: tile, tileToClean: app.TileBehindBuilding[i].tileA};
+                        }
                     }
-                }
 
-                if(self.stage.currentTile == undefined)
-                {
-                    self.stage.currentTile = tile;
-                    if(typeof self.stage.currentTile.mouseOverEvent == 'function'){
-                        self.stage.currentTile.mouseOverEvent();
+                    if(self.stage.currentTile == undefined)
+                    {
+                        self.stage.currentTile = tile;
+                        if(typeof self.stage.currentTile.mouseOverEvent == 'function'){
+                            self.stage.currentTile.mouseOverEvent();
+                        }
+                    }
+                    else if(self.stage.currentTile.X != tile.X || self.stage.currentTile.Y != tile.Y)
+                    {
+                        if(typeof self.stage.currentTile.mouseOutEvent == 'function'){
+                            self.stage.currentTile.mouseOutEvent();
+                        }
+                        self.stage.currentTile = tile;
+                        if(typeof self.stage.currentTile.mouseOverEvent == 'function'){
+                            self.stage.currentTile.mouseOverEvent();
+                        }
                     }
                 }
-                else if(self.stage.currentTile.X != tile.X || self.stage.currentTile.Y != tile.Y)
-                {
-                    if(typeof self.stage.currentTile.mouseOutEvent == 'function'){
-                        self.stage.currentTile.mouseOutEvent();
-                    }
-                    self.stage.currentTile = tile;
-                    if(typeof self.stage.currentTile.mouseOverEvent == 'function'){
-                        self.stage.currentTile.mouseOverEvent();
-                    }
-                }
-
             });
 
             $j("#section_canvas").on("mouseout", function(e){
@@ -520,6 +520,7 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
 
             //Old Center
             var oldCenter = app.World.center;
+            var newCenter = undefined;
             for(var i=ScreenMinX; i<ScreenMaxX; i++){
                 for (var j=ScreenMinY; j<ScreenMaxY; j++){
                     if(app.World[i] != undefined && app.World[i][j] != undefined)
@@ -535,15 +536,34 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                             app.World[i][j].image.setY(newY);
                         }
                         if (newXPx == oldCenter.XPx && newYPx == oldCenter.YPx){
-                            console.log("NEW CENTER = " + i + " - " +j);
-                            app.World.center.X = i;
-                            app.World.center.Y = j;
-                            app.World.center.XPx = newXPx;
-                            app.World.center.YPx = newYPx;
+                            newCenter = new Object();
+                            newCenter.X = i;
+                            newCenter.Y = j;
+                            newCenter.XPx = newXPx;
+                            newCenter.YPx = newYPx;
                         }
                     }
                 }
             }
+
+            if (newCenter == undefined){
+                newCenter = new Object();
+                newCenter.XPx = oldCenter.XPx;
+                newCenter.YPx = oldCenter.YPx;
+
+                //calcul new center coordinates
+                var X0 = (oldCenter.XPx - xToMove) - this.stage.attrs.width / 2;
+                var Y0 = (oldCenter.YPx - yToMove) - this.stage.attrs.height / 2;
+                var X = Y0 + (X0 / 2) + (app.Config.tileWidth/2);
+                var Y = Y0 - (X0 / 2);
+                var Xiso = Math.round(X / app.Config.tileHeight) + oldCenter.X;
+                var Yiso = Math.round(Y / app.Config.tileHeight) + oldCenter.Y;
+
+                newCenter.X = Xiso;
+                newCenter.Y = Yiso;
+            }
+
+            app.World.center = newCenter;
 
             //UPDATE FARMER POSITION
             $j(document).trigger('GAME-updateDisplayedMap', [app.World]);
