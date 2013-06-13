@@ -18,7 +18,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
         },
 
         initEvents : function() {
-
+            // gestion des deux premiers boutons d'action
             jQuery('#btn_arroser, #btn_fertiliser').on('click',function(event){
                 event.preventDefault();
                 if ( jQuery(this).hasClass('active') ) {
@@ -31,6 +31,18 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 }
             });
 
+            jQuery(document).on('FCL-farmerMoveEnd', function(){
+                if ( socket.sessions.selectedActionIndex != undefined ) {
+                    socket.emit('doFarmingAction', { 'tile' : socket.sessions.selectedActionTile, 'index' : socket.sessions.selectedActionIndex});
+                }
+            });
+
+
+            // mise à jour des parametres humidité et fertilité de la tile
+            socket.on('updateTile', function(tile){
+                app.World[tile.X][tile.Y].humidity = tile.humidity;
+                app.World[tile.X][tile.Y].fertility = tile.fertility;
+            });
         }
     }
 
