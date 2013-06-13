@@ -142,6 +142,7 @@ WorldController = function(socket, db, mongoose){
         var farmer = new Farmer();
         farmer.user = user;
         farmer.name = user.username;
+        farmer.money = config.initialMoney;
         farmer.save(function(err){
             if (err) {throw err;}
         });
