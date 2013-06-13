@@ -402,7 +402,7 @@ header {
     display:none;
     width: 710px;
     height: 370px;
-    background-image: url('../img/gameBoard/passportModify2.png');
+    background-image: url('../img/gameBoard/passportModify.png');
     position: absolute;
     z-index: 2;
     top: 10px;

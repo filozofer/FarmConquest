@@ -37,14 +37,22 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                 this.stage.add(this.layers[i]);
             }
 
-            this.test = null;
+            this.timeFPS = Date.now();
 
-            this.drawLoopInterval = window.setInterval(function(){ self.draw(); }, 1000 / 40);
+            this.drawLoopInterval = window.setInterval(function(){ self.draw(); }, 1000 / 60);
 
         },
 
         draw: function() {
 
+            //Display FPS
+            var now = Date.now();
+            var diff = now - this.timeFPS;
+            var fps = 1000 / diff;
+            $j("#FPS").html(Math.floor(fps));
+            this.timeFPS = now;
+
+            //Draw layer
             for (var i in this.layers){
                 this.layers[i].draw();
             }

@@ -16,6 +16,7 @@ var FarmerController    = require('./controllers/farmerController');
 var WorldController     = require('./controllers/worldController');
 var TchatController     = require('./controllers/tchatController');
 var FarmingController   = require('./controllers/farmingController');
+var BoardController     = require('./controllers/boardController');
 
 /* GLOBAL */
 G = new Object();
@@ -70,6 +71,7 @@ LoadServer.prototype = {
             socket.controllers.worldController = new WorldController(socket, db, mongoose);
             socket.controllers.tchatController = new TchatController(socket, db, mongoose);
             socket.controllers.farmingController = new FarmingController(socket, db, mongoose);
+            socket.controllers.boardController = new BoardController(socket, db, mongoose);
         });
     }
 
