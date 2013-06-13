@@ -9,13 +9,16 @@ FarmingController = function(socket, db, mongoose){
 
     var farmingActions = ["arrosage","fertilisation"];
 
-    socket.on('doFarmingAction', function(tile, index){
+    socket.on('doFarmingAction', function(resp){
+        var index = resp.index;
+        var tile = resp.tile;
         var action = farmingActions[index];
 
         switch(action){
             case "arrosage" :
                 if(tile.humidity < 10) {
                     tile.humidity++;
+                    console.log(socket.sessions.farmer.money);
                 }
                 break;
             case "fertilisation" :
@@ -26,6 +29,8 @@ FarmingController = function(socket, db, mongoose){
             default:
                 break;
         }
+
+        socket.emit("updateTile", tile);
     });
 
 };
