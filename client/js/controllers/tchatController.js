@@ -18,7 +18,6 @@ define(['jquery'], function(jQuery) {
             //Submit form login
             $j('#mg_new_message').on('submit', function(event){
                 event.preventDefault();
-                console.log(socket.sessions.farmer);
                 if ($j('#mg_new_message').is(":visible")){
                     socket.emit('newMessage', {
                         message: $j('#new_message').val(),

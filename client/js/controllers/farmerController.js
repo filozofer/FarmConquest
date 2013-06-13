@@ -24,7 +24,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
             });
 
             $j(document).on('FARMER-moveFarmer', function(event, obj) {
-
                 socket.emit('calculatePath', {'finish': obj.tile, 'goToWork' : obj.goToWork});
             });
 
