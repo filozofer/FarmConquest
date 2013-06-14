@@ -120,7 +120,7 @@ FarmerController = function(socket, db, mongoose){
     // recuperation du fermier associé au joureur connecté
     // pour afficher certaines données coté client
     socket.on('getFarmer', function(){
-        Farmer.findOne({user: socket.sessions.user._id }).exec(function(err,farmer){
+        Farmer.findOne({user: socket.sessions.user._id }).populate("bag").exec(function(err,farmer){
             socket.emit("setFarmer", farmer.getAsObject());
         });
     });

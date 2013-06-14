@@ -54,6 +54,7 @@ LoadServer.prototype = {
         require('./models/Tile.js');
         require('./models/farm.js');
         require('./models/worldInfo.js');
+        require('./models/itemBag.js');
     },
 
     callControllers: function(){

@@ -17,6 +17,22 @@ Configuration = function(){
 
     //Tile content types
 
+    /* ID ITEMS */
+    this.idItems = new Object();
+    this.idItems.avoine = { id: 1, name: "avoine" };
+    this.idItems.ble = { id: 2, name: "ble" };
+    this.idItems.carotte = { id: 3, name: "carotte" };
+    this.idItems.citrouille = { id: 4, name: "citrouille" };
+    this.idItems.fayot = { id: 5, name: "fayot" };
+    this.idItems.seigle = { id: 6, name: "seigle" };
+    this.idItems.radis = { id: 7, name: "radis" };
+    this.idItems.salade = { id: 8, name: "salade" };
+    this.idItems.topinambour = { id: 9, name: "topinambour" };
+    //Buildings
+    this.idItems.grangeP = { id: 10, name: "grangeP" };
+    this.idItems.grangeM = { id: 11, name: "grangeM" };
+    this.idItems.grangeG = { id: 12, name: "grangeG" };
+
 
     /* Prices */
     this.prices = new Object();
@@ -75,6 +91,8 @@ Configuration = function(){
     this.lvlAvailable.lightsaber = 10;
     this.lvlAvailable.grenade = 7;
 
+    /* Configurations buy*/
+    this.nbSeedWhenBuy = 5;
 
 };
 

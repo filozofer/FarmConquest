@@ -5,6 +5,9 @@ BoardController = function(socket, db, mongoose){
     var config = new Configuration();
     var self = this;
 
+    var Farmer = mongoose.model("Farmer");
+    var ItemBag = mongoose.model("ItemBag");
+
 
     socket.on('BOARD-getPage', function(page){
 
@@ -37,13 +40,9 @@ BoardController = function(socket, db, mongoose){
     });
 
     socket.on('BOARD-buySomething', function(id){
-        if(id >= 1 && id <= 9)
+        if(id >= 1 && id <= 12)
         {
-            self.buySeed(id);
-        }
-        else if(id >= 10 && id <= 12)
-        {
-            self.buyBuilding(id);
+            self.buySeedOrBuilding(id);
         }
         else if(id >= 13 && id <= 22)
         {
@@ -141,16 +140,112 @@ BoardController = function(socket, db, mongoose){
 
     };
 
-    this.buySeed = function(id){
+    this.buySeedOrBuilding = function(id){
 
-    };
+        //Define which item the player want to buy
+        var keyName = undefined;
+        for(var key in config.idItems)
+        {
+            if(config.idItems[key].id == id)
+            {
+                keyName = config.idItems[key].name;
+            }
+        }
 
-    this.buyBuilding = function(id){
-
+        //If item exist in config
+        if(keyName != undefined)
+        {
+            //Verif player have sufficient level for buy item
+            var lvlRequire = config.lvlAvailable[keyName];
+            if(socket.sessions.farmer.level >= lvlRequire)
+            {
+                //Verif player have sufficient money for buy item
+                var price = config.prices[keyName];
+                if(socket.sessions.farmer.money >= price)
+                {
+                    //Add the new item buy to the bag of the farmer
+                    var bag = socket.sessions.farmer.bag;
+                    var nbItemToAdd = config.nbSeedWhenBuy;
+                    this.addItemInBag(id, keyName, bag, nbItemToAdd, price);
+                }
+            }
+        }
     };
 
     this.buyWeapon = function(id){
 
+    };
+
+    this.addItemInBag = function(id, keyName, bag, nbItemToAdd, price){
+
+        var alreadyInBag = undefined;
+        var firstEmptyPoche = undefined;
+
+        //Looking for empty place in bag or item already in bag
+        for(var i = 0; i < 10; i++)
+        {
+            if(bag[i] == undefined && firstEmptyPoche == undefined)
+            {
+                firstEmptyPoche = i;
+            }
+            else if(bag[i] != undefined)
+            {
+                if(bag[i].idItem == id)
+                {
+                    alreadyInBag = i;
+                }
+            }
+        }
+
+        //If item not in bag
+        if(alreadyInBag == undefined)
+        {
+            //And empty place in bag
+            if(firstEmptyPoche != undefined)
+            {
+                //Create new ItemBag
+                var itemBag = new ItemBag();
+                itemBag.name = config.idItems[keyName].name;
+                itemBag.quantity = nbItemToAdd;
+                itemBag.positionInBag = firstEmptyPoche;
+                itemBag.idItem = id;
+
+                //Save in database the new ItemBag
+                itemBag.save(function(err, itemBagDB){
+
+                    //Push the new item in the bag of the farmer
+                    //Save the modification in database, keep in sessions and send to client
+                    socket.sessions.farmer.mongooseObject.bag.push(itemBagDB);
+                    socket.sessions.farmer.mongooseObject.money = socket.sessions.farmer.money - price;
+                    socket.sessions.farmer.mongooseObject.save(function(err, farmerDB){
+                        Farmer.findById(farmerDB).populate("bag").exec(function(err, farmerWithBag){
+                            socket.sessions.farmer = farmerWithBag.getAsObject();
+                            socket.emit("itemBuyComplete", socket.sessions.farmer);
+                        });
+                    });
+                });
+            }
+            else
+            {
+                //If not empty place, send to client the bag is full (for notification)
+                socket.emit('BOARD-bagFull');
+            }
+        }
+        else
+        {
+            //If item already exist in the bag we update the quantity of the item (add nbItemToAdd)
+            //Get the farmer after update of the bag and money
+            //Keep in session and send to client
+            ItemBag.update({_id: bag[alreadyInBag]._id}, {quantity: bag[alreadyInBag].quantity + nbItemToAdd}, function(err, itemBag){
+                socket.sessions.farmer.mongooseObject.money = socket.sessions.farmer.money - price;
+                socket.sessions.farmer.mongooseObject.save(function(err, farmerDB){
+                    Farmer.findById(farmerDB).populate("bag").exec(function(err, farmerWithBag){
+                        socket.sessions.farmer = farmerWithBag.getAsObject();
+                        socket.emit("itemBuyComplete", socket.sessions.farmer);
+                    });
+                });
+            });
+        }
     };
 
 };

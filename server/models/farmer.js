@@ -15,7 +15,8 @@ var FarmerSchema = new Schema({
     Y: Number,
     money : Number,
     level : Number,
-    experiences : Number
+    experiences : Number,
+    bag: [{ type : Schema.Types.ObjectId, ref : 'ItemBag'}]
 });
 
 // class constructor / On l'utilise sa ?
@@ -45,6 +46,21 @@ FarmerSchema.methods.getAsObject = function(){
     object.money = this.money;
     object.level = this.level;
     object.experiences = this.experiences;
+
+    object.bag = new Array();
+    if(this.bag != undefined && this.bag.length != undefined)
+    {
+        for(var i = 0; i < this.bag.length; i++)
+        {
+            if(this.bag[i] != null && typeof(this.bag[i]._bsontype) == "undefined")
+            {
+                object.bag.push(this.bag[i].getAsObject());
+            }
+        }
+    }
+
+    //Keep reference of this mongoose object
+    object.mongooseObject = this;
 
     return object;
 }

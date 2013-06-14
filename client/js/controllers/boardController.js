@@ -101,7 +101,7 @@ define(['jquery'], function(jQuery) {
             $j(".buy_item_span").on('click', function(){
                 if($j(this).css("opacity") == "1")
                 {
-                    socket.emit('BOARD-buySomething', $j(this).attr('boxPrice'));
+                    socket.emit('BOARD-buySomething', parseInt($j(this).attr('boxPrice')));
                 }
             });
 
