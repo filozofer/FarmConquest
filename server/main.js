@@ -55,6 +55,8 @@ LoadServer.prototype = {
         require('./models/farm.js');
         require('./models/worldInfo.js');
         require('./models/itemBag.js');
+        require('./models/weapon.js');
+        require('./models/arsenal.js');
     },
 
     callControllers: function(){

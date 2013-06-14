@@ -241,9 +241,9 @@ header {
 
 .bagItem_quantity {
     position: absolute;
-    top: 35px;
+    top: 33px;
     left: 32px;
-    color: red;
+    color: #f5f5f5;
 }
 
 .bagItem1 { background-position: 0px 0px; }

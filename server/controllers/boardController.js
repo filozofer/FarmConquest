@@ -3,10 +3,13 @@ BoardController = function(socket, db, mongoose){
 
     var Configuration = require('../config/config');
     var config = new Configuration();
+    var WeaponFactory = require('../models/weaponFactory');
     var self = this;
 
     var Farmer = mongoose.model("Farmer");
     var ItemBag = mongoose.model("ItemBag");
+    var Arsenal = mongoose.model("Arsenal");
+    var Weapon = mongoose.model("Weapon");
 
 
     socket.on('BOARD-getPage', function(page){
@@ -183,6 +186,48 @@ BoardController = function(socket, db, mongoose){
     };
 
     this.buyWeapon = function(id){
+
+        //Define which item the player want to buy
+        var keyName = undefined;
+        for(var key in config.idItems)
+        {
+            if(config.idItems[key].id == id)
+            {
+                keyName = config.idItems[key].name;
+            }
+        }
+
+        //If item exist in config
+        if(keyName != undefined)
+        {
+            //Verif player have sufficient level for buy item
+            var lvlRequire = config.lvlAvailable[keyName];
+            if(socket.sessions.farmer.level >= lvlRequire)
+            {
+                //Verif player have sufficient money for buy item
+                var price = config.prices[keyName];
+                if(socket.sessions.farmer.money >= price)
+                {
+                    /*
+                    //Get the farmer
+                    Arsenal.findById(socket.sessions.farmer.mongooseObject.arsenal).populate("arsenal").exec(function(err, farmer){
+                        var weaponFactory = new WeaponFactory(farmer);
+                        var weapon = weaponFactory.getWeapon(id);
+
+                        if(weapon.type = config.weaponsType.main)
+                        {
+                            farmer.arsenal.mainWeapon = weapon;
+                        }
+                        else if(weapon.type = config.weaponsType.support)
+                        {
+                            farmer.arsenal.supportWeapon = weapon;
+                        }
+
+                    });
+                     */
+                }
+            }
+        }
 
     };
 

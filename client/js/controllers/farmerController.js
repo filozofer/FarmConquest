@@ -89,7 +89,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
             //Other Players
             socket.on('ennemyFarmer', function(ennemyFarmer){
 
-                //window.setInterval(function(){ self.draw(); }, 1000 / 60);
                 self.addEnnemyToParty(ennemyFarmer);
             });
 

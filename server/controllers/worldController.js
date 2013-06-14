@@ -11,6 +11,7 @@ WorldController = function(socket, db, mongoose){
     var WorldInfo = mongoose.model("WorldInfo");
     var ContentTile = mongoose.model("ContentTile");
     var User = mongoose.model("User");
+    var Arsenal = mongoose.model("Arsenal");
     var Configuration = require('../config/config');
     var config = new Configuration();
 
@@ -154,8 +155,13 @@ WorldController = function(socket, db, mongoose){
         farmer.level = 1;
         farmer.experiences = 0;
         farmer.bag = new Array();
-        farmer.save(function(err){
-            if (err) {throw err;}
+        var arsenal = new Arsenal();
+        arsenal.save(function(err){
+            farmer.arsenal = arsenal;
+            farmer.save(function(err){
+                arsenal.farmer = farmer;
+                arsenal.save(function(err){});
+            });
         });
     };
 

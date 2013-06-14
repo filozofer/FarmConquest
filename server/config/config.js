@@ -34,6 +34,18 @@ Configuration = function(){
     this.idItems.grangeP = { id: 10, name: "grangeP" };
     this.idItems.grangeM = { id: 11, name: "grangeM" };
     this.idItems.grangeG = { id: 12, name: "grangeG" };
+    //Weapons
+    this.idItems.weapons = { id: 13, name: "marteau" };
+    this.idItems.weapons = { id: 14, name: "cailloux" };
+    this.idItems.weapons = { id: 15, name: "hache" };
+    this.idItems.weapons = { id: 16, name: "poulet" };
+    this.idItems.weapons = { id: 17, name: "epee" };
+    this.idItems.weapons = { id: 18, name: "nyancat" };
+    this.idItems.weapons = { id: 19, name: "ak47" };
+    this.idItems.weapons = { id: 20, name: "chien" };
+    this.idItems.weapons = { id: 21, name: "lightsaber" };
+    this.idItems.weapons = { id: 22, name: "grenade" };
+
 
 
     /* Prices */
@@ -97,6 +109,12 @@ Configuration = function(){
     this.nbSeedWhenBuy = 5;
     this.nbBuildingWhenBuy = 1;
     this.maxItemByCellBag = 50;
+
+    /* Configurations weapons */
+    this.weaponsType = new Object();
+    this.weaponsType.main = 1;
+    this.weaponsType.support = 2;
+
 
 };
 
