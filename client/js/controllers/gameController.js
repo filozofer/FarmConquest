@@ -1,6 +1,6 @@
 
 
-define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerController'], function(jQuery, Vector2, FCL, Tile, FarmerController) {
+define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerController'], function(jQuery, ui, Vector2, FCL, Tile, FarmerController) {
 
     jQuery.noConflict();
     var $j = jQuery;
@@ -18,6 +18,35 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             var self = this;
 
             GLOBAL_GAMECONTROLLER = new Object();
+
+            //Add reverting event to draggable object
+            $j.ui.draggable.prototype._mouseStop = function(event) {
+                //If we are using droppables, inform the manager about the drop
+                var dropped = false;
+                if ($j.ui.ddmanager && !this.options.dropBehaviour)
+                    dropped = $j.ui.ddmanager.drop(this, event);
+
+                //if a drop comes from outside (a sortable)
+                if(this.dropped) {
+                    dropped = this.dropped;
+                    this.dropped = false;
+                }
+
+                if((this.options.revert == "invalid" && !dropped) || (this.options.revert == "valid" && dropped) || this.options.revert === true || ($j.isFunction(this.options.revert) && this.options.revert.call(this.element, dropped))) {
+                    var self = this;
+                    self._trigger("reverting", event);
+                    $j(this.helper).animate(this.originalPosition, parseInt(this.options.revertDuration, 10), function() {
+                        event.reverted = true;
+                        self._trigger("stop", event);
+                        self._clear();
+                    });
+                } else {
+                    this._trigger("stop", event);
+                    this._clear();
+                }
+
+                return false;
+            }
 
             $j(document).on('startGame', function() {
                 self.startGame();
@@ -148,6 +177,83 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 }
 
             });
+
+
+            $j(document).on('GAME-bagReceive', function(){
+                $j(".mg_item_bag").draggable({
+                    start: function() {
+                        $j(this).attr('idBag', $j(this).parent().attr('idBag'));
+
+                        if($j('#mg_trash_itemBag').css("left") != "0px")
+                        {
+                            $j('#mg_trash_itemBag').hide();
+                            $j('#mg_trash_itemBag').css('left', '0px');
+                            $j('#mg_trash_itemBag').show("slide", {}, 300);
+                        }
+
+                        $j(this).css('z-index', '9');
+                    },
+                    revert: "invalid",
+                    reverting: function(){
+                        if($j('#mg_trash_itemBag').css("left") == "0px")
+                        {
+                            $j('#mg_trash_itemBag').hide("slide", {}, 300, function(){
+                                $j('#mg_trash_itemBag').css('left', '-1000px');
+                            });
+                        }
+                    }
+                });
+            });
+
+            $j("#mg_trash_itemBag").droppable({
+                accept: ".mg_item_bag",
+                drop: function( event, ui ) {
+                    socket.emit('GAME-itemBagDelete', parseInt($j(ui.draggable).attr('idBag')));
+                    $j(ui.draggable).remove();
+                    $j('#mg_trash_itemBag').hide("slide", {}, 300, function(){
+                        $j('#mg_trash_itemBag').css('left', '-1000px');
+                    });
+                }
+            });
+
+            $j(".mg_bag_box").droppable({
+                accept: function(dropElement) {
+
+                    if(dropElement.hasClass('mg_item_bag') && $j(this).html() == "")
+                        return true;
+                    else
+                        return false;
+                },
+
+                drop: function( event, ui ) {
+
+                    var clone = "<span class='mg_item_bag'>" + $j(ui.draggable).html() + "</span>";
+                    $j(ui.draggable).remove();
+                    $j(this).html(clone);
+
+                    $j(document).trigger('GAME-bagReceive');
+
+                    socket.emit('GAME-changePlaceItemBag', { idBag: parseInt($j(ui.draggable).attr('idBag')), newPos: $j(this).attr("idBag")});
+
+                    $j('#mg_trash_itemBag').hide("slide", {}, 300, function(){
+                        $j('#mg_trash_itemBag').css('left', '-1000px');
+                    });
+                }
+            });
+
+            //$j( "#mg_bag" ).hide("explode", {}, 1000, function(){
+
+
+            /*
+             $( "#cart ol" ).droppable({
+             activeClass: "ui-state-default",
+             hoverClass: "ui-state-hover",
+             accept: ":not(.ui-sortable-helper)",
+             drop: function( event, ui ) {
+             $( this ).find( ".placeholder" ).remove();
+             $( "<li></li>" ).text( ui.draggable.text() ).appendTo( this );
+             }
+             }*/
         },
 
         startGame: function() {

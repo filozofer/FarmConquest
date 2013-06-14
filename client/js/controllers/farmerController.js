@@ -75,11 +75,13 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                     for(var i = 0; i < farmer.bag.length; i++)
                     {
                         var itemBag = farmer.bag[i];
-                        var content = "<span class='mg_bag_item bagItem" + itemBag.idItem + "'></span><span class='bagItem_quantity'>" + itemBag.quantity + "</span>";
+                        var content = "<span class='mg_item_bag'><span class='mg_bag_item bagItem" + itemBag.idItem + "'></span><span class='bagItem_quantity'>" + itemBag.quantity + "</span></span>";
 
                         $j(".mg_bag_box[idBag='" + itemBag.positionInBag + "']").html(content);
                     }
                 }
+
+                $j(document).trigger('GAME-bagReceive');
 
             });
             // fin de la mise à jour
