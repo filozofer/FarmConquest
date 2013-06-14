@@ -72,6 +72,33 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 jQuery('#mg_money_joueur').text(resp.money);
             });
             // fin de la mise à jour
+
+            //Other Players
+            socket.on('ennemyFarmer', function(ennemyFarmer){
+
+                //window.setInterval(function(){ self.draw(); }, 1000 / 60);
+                self.addEnnemyToParty(ennemyFarmer);
+            });
+
+            socket.on('ennemyPath', function(resp){
+                var ennemyFarmer = resp.ennemy;
+                var path = resp.path;
+                self.moveEnnemy(path, ennemyFarmer);
+            });
+
+            socket.on('ennemyTeleportedToFarm', function(resp){
+                var farmerImg = self.app.Ressources["farmer"];
+                var ennemyFarmer = undefined;
+                for (var i=0; i<socket.sessions.ennemies.length;i++){
+                    if (socket.sessions.ennemies[i].name == resp.ennemyName){
+                        ennemyFarmer = socket.sessions.ennemies[i];
+                        break;
+                    }
+                }
+                var positionPx = new Vector2(self.app.World[resp.position.X][resp.position.Y].XPx, self.app.World[resp.position.X][resp.position.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
+                self.canvas.removeFarmerSprite(ennemyFarmer);
+                self.canvas.putFarmerSprite(positionPx, farmerImg, ennemyFarmer, self.canvas.L_NAME.players);
+            });
         },
 
         moveFarmer: function(path) {
@@ -94,9 +121,63 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
             }
         },
 
+        moveEnnemy: function(path, ennemy){
+            var isFarmer = true;
+            // retrieve ennemy farmer entity
+            var farmerEnnemy = undefined;
+            for (var i=0; i<socket.sessions.ennemies.length; i++){
+                if (socket.sessions.ennemies[i].name == ennemy.name){
+                    farmerEnnemy = socket.sessions.ennemies[i];
+                    break;
+                }
+            }
+            if (farmerEnnemy != undefined){
+                this.canvas.moveTextureAlongPath(path, farmerEnnemy.image, farmerEnnemy, this.canvas.L_NAME.players, this.app.Config.playerMoveSpeed, isFarmer);
+            }
+
+        },
+
         getRandomInArray: function(arrayR){
             var random = Math.floor((Math.random()*arrayR.length));
             return arrayR[random];
+        },
+
+        addEnnemyToParty: function(ennemyFarmer){
+            var self = this;
+            if (app.World[ennemyFarmer.X] != undefined && app.World[ennemyFarmer.X][ennemyFarmer.Y] != undefined)
+            {
+                if (self.intervalEnnemy != undefined){
+                    window.clearInterval(self.intervalEnnemy);
+                    self.intervalEnnemy = undefined;
+                }
+                socket.sessions.ennemies.push(ennemyFarmer);
+                var farmerImg = self.app.Ressources["farmer"];
+
+                /*
+                tile.XPx = centerScreen.X - ((ennemyFarmer.Y - self.app.World.center.Y) * (self.app.Config.tileWidth/2)) +((ennemyFarmer.X - self.app.World.center.X) * (self.app.Config.tileWidth/2)) - (self.app.Config.tileWidth/2);
+                tile.YPx = centerScreen.Y + ((ennemyFarmer.Y - self.app.World.center.Y) * (self.app.Config.tileHeight/2)) +((ennemyFarmer.X - self.app.World.center.X) * (self.app.Config.tileHeight/2)) - (self.app.Config.tileHeight/2);
+                */
+
+                if (self.app.World[ennemyFarmer.X][ennemyFarmer.Y].XPx == undefined){
+
+                    var centerScreen = new Object();
+                    centerScreen.X = this.canvas.stage.attrs.width/2;
+                    centerScreen.Y = this.canvas.stage.attrs.height/2;
+
+                    self.app.World[ennemyFarmer.X][ennemyFarmer.Y].XPx = centerScreen.X - ((ennemyFarmer.Y - self.app.World.center.Y) * (self.app.Config.tileWidth/2)) +((ennemyFarmer.X - self.app.World.center.X) * (self.app.Config.tileWidth/2)) - (self.app.Config.tileWidth/2);
+                    self.app.World[ennemyFarmer.X][ennemyFarmer.Y].YPx = centerScreen.Y + ((ennemyFarmer.Y - self.app.World.center.Y) * (self.app.Config.tileHeight/2)) +((ennemyFarmer.X - self.app.World.center.X) * (self.app.Config.tileHeight/2)) - (self.app.Config.tileHeight/2);
+                }
+
+                var positionPx = new Vector2(self.app.World[ennemyFarmer.X][ennemyFarmer.Y].XPx, self.app.World[ennemyFarmer.X][ennemyFarmer.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
+                self.canvas.putFarmerSprite(positionPx, farmerImg, ennemyFarmer, self.canvas.L_NAME.players);
+            }
+            else
+            {
+                if (self.intervalEnnemy == undefined)
+                {
+                    self.intervalEnnemy = window.setInterval(function(){ self.addEnnemyToParty(ennemyFarmer); }, 1000);
+                }
+            }
         }
 
     };

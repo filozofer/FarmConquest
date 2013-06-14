@@ -429,6 +429,9 @@ WorldController = function(socket, db, mongoose){
 
          //Send to client
          socket.emit('drawMap', {'worldToDraw': world, 'dimension': worldDimension, 'isRefresh': isRefresh});
+        if (isRefresh){
+            socket.controllers.farmerController.refreshNeighbors();
+        }
     };
 
 };

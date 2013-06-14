@@ -19,6 +19,8 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
                 app = new App();
                 socket = app.init();
 
+                socket.sessions.ennemies = new Array();
+
                 //Load Controllers
                 userController = new UserController(app);
                 gameController = new GameController(app);

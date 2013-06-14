@@ -47,6 +47,8 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             $j(document).on('GAME-updateDisplayedMap', function() {
                 self.canvas.clearCanvas();
                 self.drawMapTexture();
+                //clear list of ennemies before refresh -> avoid same ennemy twice
+                socket.sessions.ennemies.length = 0;
                 // CALL SERVER TO LOAD NEW MAP TO DISPLAYED FROM NEW POSITION
                 socket.emit('changeWorldCenter', app.World.center);
             });
@@ -62,6 +64,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 self.canvas.removeFarmerSprite(socket.sessions.farmer);
                 self.canvas.putFarmerSprite(positionPx, farmerImg, socket.sessions.farmer, self.canvas.L_NAME.players);
 
+                socket.emit('teleportToFarm', {ennemy: socket.sessions.farmer, tile: tile});
                 self.canvas.stage.fire("dragMapToFarm");
             });
 
@@ -71,6 +74,26 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 {
                     socket.emit('getFarmPositionForTeleport');
                 }
+            });
+
+            socket.on('GAME-missingWorld', function(resp){
+
+                for(var i=resp.begin.X; i<resp.finish.X; i++){
+                    for (var j=resp.begin.Y; j<resp.finish.Y; j++){
+                        var currentMissingTile = resp.missingWorld[i][j];
+
+                        if (app.World[i] == undefined){
+                            app.World[i] = new Object();
+                        }
+
+                        app.World[i][j] = new Tile(currentMissingTile.X, currentMissingTile.Y);
+                        app.World[i][j].setContentTile(currentMissingTile.contentTile);
+                        app.World[i][j].owner = currentMissingTile.owner;
+                        app.World[i][j].humidity = currentMissingTile.humidity;
+                        app.World[i][j].fertility = currentMissingTile.fertility;
+                    }
+                }
+
             });
 
             this.tilesModifyEye = undefined;

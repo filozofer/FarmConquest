@@ -18,7 +18,6 @@ define(['jquery'], function(jQuery){
 
 		clickEvent: function(){
             //socket.emit("plantTest", { X: this.X, Y: this.Y});
-            console.log("TILE CLICKED: " + this.X + "/" + this.Y + " - " + this.XPx + "/" + this.YPx);
             if (this.walkable){
                 //si une action est sélectionnée
                 var goToWork = false;

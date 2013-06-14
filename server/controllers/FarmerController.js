@@ -5,8 +5,13 @@ var ShortestPath = require("../lib/shortestPath");
 
 FarmerController = function(socket, db, mongoose){
 
+    var Configuration = require('../config/config');
+    var config = new Configuration();
+
     var Farm = mongoose.model("Farm");
     var Farmer = mongoose.model("Farmer");
+
+    var self = this;
 
     socket.on('getFarmerPosition', function(){
         if(!socket.sessions.loadFarmerOnce){
@@ -14,6 +19,8 @@ FarmerController = function(socket, db, mongoose){
             Farm.findOne({owner: socket.sessions.user._id }).populate("mainPos").exec(function(err, farm){
                 var farmObject = farm.toObject();
                 var mainPos = farmObject.mainPos;
+
+                self.addMissingWorld(mainPos);
 
                 //Get possible empty tile around the farm
                 var possibleTiles = new Array();
@@ -38,6 +45,7 @@ FarmerController = function(socket, db, mongoose){
                     //Send to client
                     socket.emit('farmerPosition', {X: tile.X, Y: tile.Y, farmer: farmer});
                     socket.sessions.loadFarmerOnce = true;
+                    self.generateNeighbors();
                 });
             });
         }
@@ -85,6 +93,13 @@ FarmerController = function(socket, db, mongoose){
         var path = pathManager.shortestPath;
         socket.sessions.pathMove = path;
         socket.emit('farmerPath', {'path': path});
+
+        //FOR ENNEMY, SEND MOVEMENT
+        var neighborSockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
+        for(var i=0; i<neighborSockets.length; i++){
+            var currentSocket = neighborSockets[i];
+            currentSocket.emit('ennemyPath', {ennemy: socket.sessions.farmer, path: path});
+        }
     });
 
     socket.on('updateFarmerPositionOnMove', function(tile){
@@ -109,6 +124,87 @@ FarmerController = function(socket, db, mongoose){
             socket.emit("setFarmer", farmer.getAsObject());
         });
     });
+
+    socket.on('teleportToFarm', function(resp){
+        var neighborSockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
+        for(var i=0; i<neighborSockets.length; i++){
+            var currentSocket = neighborSockets[i];
+            currentSocket.emit('ennemyTeleportedToFarm', {'ennemyName': socket.sessions.farmer.name, 'position':{X: resp.ennemy.X, Y: resp.ennemy.Y}} );
+        }
+    });
+
+    this.generateNeighbors = function(){
+        var neighborSockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
+        console.log("generateNeighbors - Taille socket voisins : " + neighborSockets.length);
+        for(var i=0; i<neighborSockets.length; i++){
+            var currentSocket = neighborSockets[i];
+            currentSocket.emit('ennemyFarmer', socket.sessions.farmer);
+            socket.emit('ennemyFarmer', currentSocket.sessions.farmer);
+        }
+    }
+
+    this.refreshNeighbors = function(){
+        var neighborSockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
+        console.log("generateNeighbors - Taille socket voisins : " + neighborSockets.length);
+        for(var i=0; i<neighborSockets.length; i++){
+            var currentSocket = neighborSockets[i];
+            socket.emit('ennemyFarmer', currentSocket.sessions.farmer);
+        }
+    }
+
+    var getSocketByFarmerPosition = function(X, Y){
+        var socketsToUse = new Array();
+        var minX = X - config.communicationRadius;
+        var maxX = X + config.communicationRadius;
+        var minY = Y - config.communicationRadius;
+        var maxY = Y + config.communicationRadius;
+        for (var i=0; i<userSockets.length; i++){
+            var currentSocket = userSockets[i];
+            var currentFarmer = currentSocket.sessions.farmer;
+            if (currentFarmer != undefined){
+                //if current socket farmer position in the radius of communication of the speaker, save his socket
+                if ((currentFarmer.X >= minX && currentFarmer.X <= maxX) && (currentFarmer.Y >= minY && currentFarmer.Y <= maxY) && (currentSocket.sessions.user.username != socket.sessions.user.username)){
+                    socketsToUse.push(currentSocket);
+                }
+            }
+        }
+        return socketsToUse;
+    }
+
+    this.addMissingWorld = function(mainPos){
+
+        var tileMinX = mainPos.X - (config.farmSize/2 - 2);
+        var tileMinY = mainPos.Y - (config.farmSize/2 - 2);
+        var tileMaxX = tileMinX + config.farmSize;
+        var tileMaxY = tileMinY + config.farmSize;
+
+        var world = new Object();
+
+        for(var i = tileMinX; i < tileMaxX; i++)
+        {
+            for(var j = tileMinY; j < tileMaxY; j++)
+            {
+                if(G.World[i] != undefined && G.World[i][j] != undefined)
+                {
+                    if(world[i] == undefined){world[i] = new Object();}
+                    world[i][j] = G.World[i][j];
+                }
+            }
+        }
+
+        var neighborSockets = getSocketByFarmerPosition(mainPos.X, mainPos.Y);
+
+        for(var i=0; i<neighborSockets.length; i++){
+            var currentSocket = neighborSockets[i];
+            currentSocket.emit('GAME-missingWorld', {
+                missingWorld: world,
+                begin: {X: tileMinX, Y: tileMinY},
+                finish: {X: tileMaxX, Y: tileMaxY}
+            });
+        }
+
+
+    }
 
 };
 

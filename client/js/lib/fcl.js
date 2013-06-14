@@ -218,23 +218,25 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
 
             if( path.length > 0 ) {
 
-                //Determine if farmer walk behind building
-                if(farmer.cleanTile != undefined)
+                if(farmer.name == socket.sessions.farmer.name){
+                    //Determine if farmer walk behind building
+                    if(farmer.cleanTile != undefined)
 
-                {
-                    self.opacityToTile(farmer.cleanTile, false);
-                    farmer.cleanTile = undefined;
-                    socket.sessions.tilesMissOpacity = undefined;
-                    farmer.behindBuiding = false;
-                }
-                for(var i = 0; i < app.TileBehindBuilding.length; i++)
-                {
-                    if(path[0].X == app.TileBehindBuilding[i].X && path[0].Y == app.TileBehindBuilding[i].Y)
                     {
-                        socket.sessions.tilesMissOpacity = app.TileBehindBuilding[i].locations;
-                        self.opacityToTile(app.TileBehindBuilding[i].tileA, true);
-                        farmer.cleanTile = app.TileBehindBuilding[i].tileA;
-                        farmer.behindBuiding = true;
+                        self.opacityToTile(farmer.cleanTile, false);
+                        farmer.cleanTile = undefined;
+                        socket.sessions.tilesMissOpacity = undefined;
+                        farmer.behindBuiding = false;
+                    }
+                    for(var i = 0; i < app.TileBehindBuilding.length; i++)
+                    {
+                        if(path[0].X == app.TileBehindBuilding[i].X && path[0].Y == app.TileBehindBuilding[i].Y)
+                        {
+                            socket.sessions.tilesMissOpacity = app.TileBehindBuilding[i].locations;
+                            self.opacityToTile(app.TileBehindBuilding[i].tileA, true);
+                            farmer.cleanTile = app.TileBehindBuilding[i].tileA;
+                            farmer.behindBuiding = true;
+                        }
                     }
                 }
 
@@ -300,7 +302,9 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                         farmer.YPx = newYPx;
                         farmer.image = farmerImage;
 
-                        socket.emit('updateFarmerPositionOnMove', {X: farmer.X, Y: farmer.Y});
+                        if(farmer.name == socket.sessions.farmer.name){
+                            socket.emit('updateFarmerPositionOnMove', {X: farmer.X, Y: farmer.Y});
+                        }
 
                         if (path.length == 1){
                             farmerImage.stop();
@@ -311,32 +315,34 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                             });
                             farmer.direction = "";
 
-                            console.log("CLICK POSITION = " + socket.sessions.positionClick.X + "/" + socket.sessions.positionClick.Y);
 
-                            //UPDATE MAP DISPLAY
-                            if ((app.Config.tileHeight >= socket.sessions.positionClick.Y) && ((self.stage.attrs.width - app.Config.tileWidth) <= socket.sessions.positionClick.X)){
-                                self.stage.fire("dragMapToTopRight");
-                            }
-                            else if (((self.stage.attrs.height - app.Config.tileHeight) <= socket.sessions.positionClick.Y) && ((self.stage.attrs.width - app.Config.tileWidth) <= socket.sessions.positionClick.X)){
-                                self.stage.fire("dragMapToBottomRight");
-                            }
-                            else if ((app.Config.tileHeight >= socket.sessions.positionClick.Y) && (app.Config.tileWidth >= socket.sessions.positionClick.X)){
-                                self.stage.fire("dragMapToTopLeft");
-                            }
-                            else if (((self.stage.attrs.height - app.Config.tileHeight) <= socket.sessions.positionClick.Y) && (app.Config.tileWidth >= socket.sessions.positionClick.X)){
-                                self.stage.fire("dragMapToBottomLeft");
-                            }
-                            else if ((self.stage.attrs.width - app.Config.tileWidth) <= socket.sessions.positionClick.X){
-                                self.stage.fire("dragMapToRight");
-                            }
-                            else if (app.Config.tileWidth >= socket.sessions.positionClick.X){
-                                self.stage.fire("dragMapToLeft");
-                            }
-                            else if ((self.stage.attrs.height - app.Config.tileHeight) <= socket.sessions.positionClick.Y){
-                                self.stage.fire("dragMapToBottom");
-                            }
-                            else if (app.Config.tileHeight >= socket.sessions.positionClick.Y){
-                                self.stage.fire("dragMapToTop");
+                            if(farmer.name == socket.sessions.farmer.name){
+
+                                //UPDATE MAP DISPLAY
+                                if ((app.Config.tileHeight >= socket.sessions.positionClick.Y) && ((self.stage.attrs.width - app.Config.tileWidth) <= socket.sessions.positionClick.X)){
+                                    self.stage.fire("dragMapToTopRight");
+                                }
+                                else if (((self.stage.attrs.height - app.Config.tileHeight) <= socket.sessions.positionClick.Y) && ((self.stage.attrs.width - app.Config.tileWidth) <= socket.sessions.positionClick.X)){
+                                    self.stage.fire("dragMapToBottomRight");
+                                }
+                                else if ((app.Config.tileHeight >= socket.sessions.positionClick.Y) && (app.Config.tileWidth >= socket.sessions.positionClick.X)){
+                                    self.stage.fire("dragMapToTopLeft");
+                                }
+                                else if (((self.stage.attrs.height - app.Config.tileHeight) <= socket.sessions.positionClick.Y) && (app.Config.tileWidth >= socket.sessions.positionClick.X)){
+                                    self.stage.fire("dragMapToBottomLeft");
+                                }
+                                else if ((self.stage.attrs.width - app.Config.tileWidth) <= socket.sessions.positionClick.X){
+                                    self.stage.fire("dragMapToRight");
+                                }
+                                else if (app.Config.tileWidth >= socket.sessions.positionClick.X){
+                                    self.stage.fire("dragMapToLeft");
+                                }
+                                else if ((self.stage.attrs.height - app.Config.tileHeight) <= socket.sessions.positionClick.Y){
+                                    self.stage.fire("dragMapToBottom");
+                                }
+                                else if (app.Config.tileHeight >= socket.sessions.positionClick.Y){
+                                    self.stage.fire("dragMapToTop");
+                                }
                             }
                         }
                         path.shift();
