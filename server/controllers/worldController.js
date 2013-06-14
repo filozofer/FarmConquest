@@ -21,7 +21,6 @@ WorldController = function(socket, db, mongoose){
     //SOCKET LISTENER
     if (socket != null){
         socket.on('changeWorldCenter', function(newCenter){
-            console.log("New center of client: " + newCenter.X + "/" + newCenter.Y);
             self.sendWorldAtPosition(newCenter, true);
         });
     }

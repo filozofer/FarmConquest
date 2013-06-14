@@ -149,11 +149,30 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             farmer.image.remove();
         },
 
-        changeTexture: function(element) {
+        changeTexture: function(element, action) {
 
             //Remove old kinnetic image associate to the element to change
             var elementToRemove = app.World[element.X][element.Y];
-            elementToRemove.image.remove();
+
+            var zIndex = undefined;
+
+            if (elementToRemove.image != undefined){
+                elementToRemove.image.remove();
+                zIndex = elementToRemove.image.getZIndex();
+            }
+            else {
+                zIndex = 1000;
+            }
+
+            if (self.app.World[elementToRemove.X][elementToRemove.Y].XPx == undefined){
+
+                var centerScreen = new Object();
+                centerScreen.X = this.canvas.stage.attrs.width/2;
+                centerScreen.Y = this.canvas.stage.attrs.height/2;
+
+                elementToRemove.XPx = centerScreen.X - ((elementToRemove.Y - self.app.World.center.Y) * (self.app.Config.tileWidth/2)) +((elementToRemove.X - self.app.World.center.X) * (self.app.Config.tileWidth/2)) - (self.app.Config.tileWidth/2);
+                elementToRemove.YPx = centerScreen.Y + ((elementToRemove.Y - self.app.World.center.Y) * (self.app.Config.tileHeight/2)) +((elementToRemove.X - self.app.World.center.X) * (self.app.Config.tileHeight/2)) - (self.app.Config.tileHeight/2);
+            }
 
             //Change the world with the new element
             element.XPx = elementToRemove.XPx;
@@ -161,7 +180,11 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             app.World[element.X][element.Y] = element;
 
             //Add the associate kinnetic texture of the element in the layer
-            this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx - 20), this.getImageFromType(element.contentTile.type) , app.World[element.X][element.Y], this.L_NAME.tiles, elementToRemove.image.getZIndex());
+            var tileType = null;
+            if (element.contentTile != undefined){
+                tileType = element.contentTile.type;
+            }
+            this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx), this.getImageFromType(tileType, action) , app.World[element.X][element.Y], this.L_NAME.tiles, zIndex);
 
         },
 
@@ -351,10 +374,14 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                         }
                         else {
                             farmer.isWalking = false;
+                            $j(document).trigger('FCL-farmerMoveEnd');
                         }
-
                     }
                 });
+            }
+            else if (path.length == 0) {
+                farmer.isWalking = false;
+                $j(document).trigger('FCL-farmerMoveEnd');
             }
 
             },
@@ -586,15 +613,21 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             $j(document).trigger('FARMER-updatePosition', [xToMove, yToMove]);
         },
 
-        getImageFromType: function(type) {
+        getImageFromType: function(type, action) {
+            var actionImage = "";
+            if (action != undefined){
+                actionImage = "_"+action;
+            }
             switch(type)
             {
                 case "seed":
+                    var nameRessource = "seedTest"+actionImage;
                     return app.Ressources["seedTest"];
                     break;
 
                 default:
-                    return app.Ressources["tileTest"];
+                    var nameRessource = "default_tile"+actionImage;
+                    return app.Ressources[nameRessource];
                     break;
             }
         }

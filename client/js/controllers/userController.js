@@ -100,7 +100,7 @@ define(['jquery', '../entity/user'], function(jQuery, User) {
                             break;
 
                         default:
-                            console.log(element);
+                            break;
                     }
                 });
             }

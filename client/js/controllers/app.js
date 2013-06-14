@@ -111,7 +111,9 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             var self = this;
 
             /* Load Images */
-            this.addRessource("tileTest", self.Type.IMAGE, "tileTest.png");
+            this.addRessource("default_tile", self.Type.IMAGE, "default_tile.png");
+            this.addRessource("default_tile_arrosage", self.Type.IMAGE, "default_tile_arrosage.png");
+            this.addRessource("default_tile_fertilisation", self.Type.IMAGE, "default_tile_fertilisation.png");
             this.addRessource("farmer", self.Type.IMAGE, "farmerSprite.png");
             this.addRessource("farm", self.Type.IMAGE, "farm.png");
 

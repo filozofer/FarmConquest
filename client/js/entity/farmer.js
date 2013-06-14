@@ -13,6 +13,7 @@ define(['jquery'], function(jQuery){
 			this.YPx = undefined;
             this.behindBuiding = false;
             this.isWalking = false;
+            this.isWorking = false;
             this.money = undefined;
             this.level = undefined;
             this.experiences = undefined;

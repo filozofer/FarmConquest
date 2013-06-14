@@ -38,7 +38,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
             });
 
             $j(document).on('FARMER-drawFarmer', function() {
-                console.log("FARMER POSITION : " + socket.sessions.farmer.X + "/" + socket.sessions.farmer.Y + " - " + socket.sessions.farmer.XPx + "/" + socket.sessions.farmer.YPx);
                 var farmerImg = self.app.Ressources["farmer"];
 
                 var positionPx = new Vector2(socket.sessions.farmer.XPx, socket.sessions.farmer.YPx);
@@ -107,6 +106,20 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                         break;
                     }
                 }
+
+                ennemyFarmer.X = resp.position.X;
+                ennemyFarmer.Y = resp.position.Y;
+
+                if (self.app.World[ennemyFarmer.X][ennemyFarmer.Y].XPx == undefined){
+
+                    var centerScreen = new Object();
+                    centerScreen.X = this.canvas.stage.attrs.width/2;
+                    centerScreen.Y = this.canvas.stage.attrs.height/2;
+
+                    self.app.World[ennemyFarmer.X][ennemyFarmer.Y].XPx = centerScreen.X - ((ennemyFarmer.Y - self.app.World.center.Y) * (self.app.Config.tileWidth/2)) +((ennemyFarmer.X - self.app.World.center.X) * (self.app.Config.tileWidth/2)) - (self.app.Config.tileWidth/2);
+                    self.app.World[ennemyFarmer.X][ennemyFarmer.Y].YPx = centerScreen.Y + ((ennemyFarmer.Y - self.app.World.center.Y) * (self.app.Config.tileHeight/2)) +((ennemyFarmer.X - self.app.World.center.X) * (self.app.Config.tileHeight/2)) - (self.app.Config.tileHeight/2);
+                }
+
                 var positionPx = new Vector2(self.app.World[resp.position.X][resp.position.Y].XPx, self.app.World[resp.position.X][resp.position.Y].YPx - ((farmerImg.height  / self.app.Config.farmerSpriteNbLine) /2));
                 self.canvas.removeFarmerSprite(ennemyFarmer);
                 self.canvas.putFarmerSprite(positionPx, farmerImg, ennemyFarmer, self.canvas.L_NAME.players);
@@ -116,21 +129,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
         moveFarmer: function(path) {
             var isFarmer = true;
             this.canvas.moveTextureAlongPath(path, this.farmer.image, this.farmer, this.canvas.L_NAME.players, this.app.Config.playerMoveSpeed, isFarmer);
-
-            // si elle existe, on traite l'action sélectionnée
-            if ( socket.sessions.selectedActionIndex != undefined ) {
-                console.log("Traitement de l'action");
-                switch(socket.sessions.selectedActionIndex) {
-                    // Farming actions
-                    case '0':
-                    case '1':
-                        socket.emit('doFarmingAction');
-                        break;
-                    default:
-                        console.log("Aucun traitement.");
-                        break;
-                }
-            }
         },
 
         moveEnnemy: function(path, ennemy){

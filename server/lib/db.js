@@ -9,7 +9,6 @@
 var mongoose = require('mongoose');
 
 module.exports = function () {
-    //console.log(mongoose.connection);
     var database = mongoose.connect('mongodb://127.0.0.1/FarmConquest',
         function(err) {
             if (err) { throw err; }

@@ -13,6 +13,8 @@ Configuration = function(){
     this.fertilizerPrice = 10;
     // initial amount of money the player is given
     this.initialMoney = 500;
+    // working session time (ms)
+    this.workingTime = 2000;
 
 
     //Tile content types

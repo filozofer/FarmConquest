@@ -26,10 +26,6 @@ Tile.methods.create = function(){
     this.walkable = null;
 }
 
-Tile.methods.print = function(){
-    console.log("["+this.x+","+this.y+"]");
-}
-
 Tile.methods.setRandomStats = function(){
     this.humidity = Math.floor(Math.random()*(8-4+1)+4);
     this.fertility = Math.floor(Math.random()*(8-4+1)+4);

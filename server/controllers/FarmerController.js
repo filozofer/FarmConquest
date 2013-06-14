@@ -138,7 +138,6 @@ FarmerController = function(socket, db, mongoose){
 
     this.generateNeighbors = function(){
         var neighborSockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
-        console.log("generateNeighbors - Taille socket voisins : " + neighborSockets.length);
         for(var i=0; i<neighborSockets.length; i++){
             var currentSocket = neighborSockets[i];
             currentSocket.emit('ennemyFarmer', socket.sessions.farmer);
@@ -148,7 +147,6 @@ FarmerController = function(socket, db, mongoose){
 
     this.refreshNeighbors = function(){
         var neighborSockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
-        console.log("generateNeighbors - Taille socket voisins : " + neighborSockets.length);
         for(var i=0; i<neighborSockets.length; i++){
             var currentSocket = neighborSockets[i];
             socket.emit('ennemyFarmer', currentSocket.sessions.farmer);

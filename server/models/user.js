@@ -28,10 +28,6 @@ User.methods.createFullParameters = function (username, mail, password, dateOfCr
     this.dateOfCreation = dateOfCreation;
 }
 
-User.methods.speak = function (){
-    console.log("I am " + this.username + " !");
-}
-
 User.methods.getAsObject = function(){
 
     var object = new Object();

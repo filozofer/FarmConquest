@@ -83,8 +83,7 @@ ShortestPath = function(world, start, finish, goToWork){
          }
 
          if(this.shortestPath.length != 0){
-         		//console.log("PATH FOUND");
-            if ( this.goToWork == true ) {
+         	if ( this.goToWork == true ) {
                 this.shortestPath.pop();
             }
          }

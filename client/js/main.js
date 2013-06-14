@@ -43,7 +43,6 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
                         userController.initEvents();
 
                         //Log+ContinueLoad
-                        console.log("App initialized.");
                         initGame();
                     }
                 });

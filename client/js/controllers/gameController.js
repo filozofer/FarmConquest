@@ -257,7 +257,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                                 }
                                 else
                                 {
-                                    this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["tileTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
+                                    this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx), this.app.Ressources["default_tile"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
                                 }
 
                                 countCurrentTile++;
