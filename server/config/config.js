@@ -93,6 +93,7 @@ Configuration = function(){
 
     /* Configurations buy*/
     this.nbSeedWhenBuy = 5;
+    this.nbBuildingWhenBuy = 1;
     this.maxItemByCellBag = 50;
 
 };

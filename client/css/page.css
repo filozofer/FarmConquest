@@ -249,6 +249,9 @@ header {
 .bagItem7 { background-position: -240px 0px; }
 .bagItem8 { background-position: -280px 0px; }
 .bagItem9 { background-position: -320px 0px; }
+.bagItem10 { background-image: url('../img/gameBoard/grange_petite.png'); }
+.bagItem11 { background-image: url('../img/gameBoard/grange_moyen.png');}
+.bagItem12 { background-image: url('../img/gameBoard/grange_grande.png');}
 
 #mg_notif_bag {
     display: inline-block;

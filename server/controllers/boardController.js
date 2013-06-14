@@ -169,7 +169,12 @@ BoardController = function(socket, db, mongoose){
                     Farmer.findById(socket.sessions.farmer._id).populate("bag").exec(function(err, farmerWithBag){
                         socket.sessions.farmer = farmerWithBag.getAsObject();
                         var bag = socket.sessions.farmer.bag;
-                        var nbItemToAdd = config.nbSeedWhenBuy;
+                        var nbItemToAdd = 0;
+                        if(id >= 1 && id <= 9)
+                            nbItemToAdd = config.nbSeedWhenBuy;
+                        else if (id >= 10 && id <= 10)
+                            nbItemToAdd = config.nbBuildingWhenBuy;
+
                         self.addItemInBag(id, keyName, bag, nbItemToAdd, price);
                     });
                 }
