@@ -210,21 +210,24 @@ BoardController = function(socket, db, mongoose){
                 {
                     /*
                     //Get the farmer
-                    Arsenal.findById(socket.sessions.farmer.mongooseObject.arsenal).populate("arsenal").exec(function(err, farmer){
-                        var weaponFactory = new WeaponFactory(farmer);
+                    Arsenal.findById(socket.sessions.farmer.mongooseObject.arsenal).populate("mainWeapon supportWeapon").exec(function(err, arsenal){
+                        var weaponFactory = new WeaponFactory(socket.sessions.farmer.mongooseObject);
                         var weapon = weaponFactory.getWeapon(id);
 
-                        if(weapon.type = config.weaponsType.main)
-                        {
-                            farmer.arsenal.mainWeapon = weapon;
-                        }
-                        else if(weapon.type = config.weaponsType.support)
-                        {
-                            farmer.arsenal.supportWeapon = weapon;
-                        }
+                        weapon.save(function(err){
+                            Farmer.findById(socket.sessions.farmer._id, function(err, farmer){
+                                if(weapon.type = config.weaponsType.main)
+                                {
+                                    farmer.arsenal.mainWeapon = weapon;
+                                }
+                                else if(weapon.type = config.weaponsType.support)
+                                {
+                                    farmer.arsenal.supportWeapon = weapon;
+                                }
+                            });
 
-                    });
-                     */
+                        });
+                    });*/
                 }
             }
         }

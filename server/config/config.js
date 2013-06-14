@@ -90,7 +90,7 @@ Configuration = function(){
     this.lvlAvailable.salade = 8;
     this.lvlAvailable.topinambour = 9;
     //Buildings
-    this.lvlAvailable.grangeP = 3;
+    this.lvlAvailable.grangeP = 2;
     this.lvlAvailable.grangeM = 5;
     this.lvlAvailable.grangeG = 8;
     //Weapons
