@@ -198,6 +198,7 @@ header {
     font-weight: bold;
 }
 
+/* BAG */
 
 #mg_bag_ico {
     position: absolute;
@@ -222,7 +223,44 @@ header {
     height: 50px;
     display: inline-block;
     background-color: rgba(0,0,0, 0.5);
+    position: relative;
 }
+
+.mg_bag_item {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-image: url('../img/Farming/seed_set_clean.png');
+}
+
+.bagItem_quantity {
+    position: absolute;
+    top: 35px;
+    left: 32px;
+    color: red;
+}
+
+.bagItem1 { background-position: 0px 0px; }
+.bagItem2 { background-position: -40px 0px; }
+.bagItem3 { background-position: -80px 0px; }
+.bagItem4 { background-position: -120px 0px; }
+.bagItem5 { background-position: -160px 0px; }
+.bagItem6 { background-position: -200px 0px; }
+.bagItem7 { background-position: -240px 0px; }
+.bagItem8 { background-position: -280px 0px; }
+.bagItem9 { background-position: -320px 0px; }
+
+#mg_notif_bag {
+    display: inline-block;
+    width: 273px;
+    position: absolute;
+    top: 5px;
+    left: 350px;
+    color: lavender;
+    font-size: 17px;
+    text-align: center;
+}
+
 
 #btn_arroser,
 #mg_arroser {

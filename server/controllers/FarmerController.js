@@ -39,13 +39,16 @@ FarmerController = function(socket, db, mongoose){
                 var tile = possibleTiles[random];
 
                 //Update position in database
-                Farmer.findOneAndUpdate({name: socket.sessions.user.username}, {X: tile.X, Y: tile.Y}, function(err, farmer){
-                    //Update farmer in socket sessions
-                    socket.sessions.farmer = farmer.getAsObject();
-                    //Send to client
-                    socket.emit('farmerPosition', {X: tile.X, Y: tile.Y, farmer: farmer});
-                    socket.sessions.loadFarmerOnce = true;
-                    self.generateNeighbors();
+                Farmer.update({name: socket.sessions.user.username}, {X: tile.X, Y: tile.Y}, function(err, farmer){
+
+                    Farmer.findOne({name: socket.sessions.user.username}).populate("bag").exec(function(err, farmerWithBag){
+                        //Update farmer in socket sessions
+                        socket.sessions.farmer = farmerWithBag.getAsObject();
+                        //Send to client
+                        socket.emit('farmerPosition', {X: tile.X, Y: tile.Y, farmer: socket.sessions.farmer});
+                        socket.sessions.loadFarmerOnce = true;
+                        self.generateNeighbors();
+                    });
                 });
             });
         }
@@ -117,7 +120,7 @@ FarmerController = function(socket, db, mongoose){
         }
     });
 
-    // recuperation du fermier associé au joureur connecté
+    // Recuperation du fermier associé du joueur connecté
     // pour afficher certaines données coté client
     socket.on('getFarmer', function(){
         Farmer.findOne({user: socket.sessions.user._id }).populate("bag").exec(function(err,farmer){

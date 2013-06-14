@@ -105,6 +105,26 @@ define(['jquery'], function(jQuery) {
                 }
             });
 
+            socket.on('BOARD-itemBuyComplete', function(farmer){
+                jQuery('#mg_money_joueur').text(farmer.money);
+
+                if(farmer.bag != undefined)
+                {
+                    for(var i = 0; i < farmer.bag.length; i++)
+                    {
+                        var itemBag = farmer.bag[i];
+                        var content = "<span class='mg_bag_item bagItem" + itemBag.idItem + "'></span><span class='bagItem_quantity'>" + itemBag.quantity + "</span>";
+
+                        $j(".mg_bag_box[idBag='" + itemBag.positionInBag + "']").html(content);
+                    }
+                }
+            });
+
+            socket.on('BOARD-bagFull', function(){
+                $j("#mg_notif_bag").html("<img src='img/gameMenu/icoDanger.png' width='17' alt='ico_error' /> Le sac est plein !");
+                setTimeout(function(){ $j("#mg_notif_bag").html(""); }, 3000);
+            });
+
         },
 
         fillPageInfos: function(page) {
@@ -119,6 +139,7 @@ define(['jquery'], function(jQuery) {
             {
                 $j(".buy_item_span[boxPrice=" + i + "] .mb_price_span").remove()
                 $j(".buy_item_span[boxPrice=" + i + "]").append("<div class='mb_price_span'>" + page.prices[i] + "<img src='img/gameBoard/miniCoin.png' width='20' alt='coin'/></div>");
+
                 if(socket.sessions.farmer.level < page.lvlAvailable[i])
                 {
                     $j(".buy_item_span[boxPrice=" + i + "]").css('opacity', '0.2');

@@ -67,9 +67,21 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 socket.emit("getFarmer");
             });
 
-            socket.on('setFarmer', function(resp){
-                jQuery('#mg_nom_joueur').text(resp.name);
-                jQuery('#mg_money_joueur').text(resp.money);
+            socket.on('setFarmer', function(farmer){
+                jQuery('#mg_nom_joueur').text(farmer.name);
+                jQuery('#mg_money_joueur').text(farmer.money);
+
+                if(farmer.bag != undefined)
+                {
+                    for(var i = 0; i < farmer.bag.length; i++)
+                    {
+                        var itemBag = farmer.bag[i];
+                        var content = "<span class='mg_bag_item bagItem" + itemBag.idItem + "'></span><span class='bagItem_quantity'>" + itemBag.quantity + "</span>";
+
+                        $j(".mg_bag_box[idBag='" + itemBag.positionInBag + "']").html(content);
+                    }
+                }
+
             });
             // fin de la mise à jour
 
