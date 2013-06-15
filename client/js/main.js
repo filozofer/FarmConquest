@@ -6,12 +6,12 @@
  * To change this template use File | Settings | File Templates.
  */
 
-define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/gameController', 'controllers/farmerController', 'controllers/farmingController', 'controllers/tchatController', 'controllers/boardController'], function(jQuery, App, UserController, GameController, FarmerController, FarmingController, TchatController, BoardController) {
+define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/gameController', 'controllers/farmerController', 'controllers/farmingController', 'controllers/tchatController', 'controllers/boardController', 'controllers/fightController'], function(jQuery, App, UserController, GameController, FarmerController, FarmingController, TchatController, BoardController, FightController) {
 
     jQuery(function($) {
 
         app = undefined;
-        var userController, gameController, farmerController, farmingController, tchatController, boardController;
+        var userController, gameController, farmerController, farmingController, tchatController, boardController, fightController;
 
         //Load the App (html part)
         var initApp = function() {
@@ -28,6 +28,7 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
                 farmingController = new FarmingController();
                 tchatController = new TchatController();
                 boardController = new BoardController();
+                fightController = new FightController();
 
                 //Call init configurations
                 app.center();
@@ -55,6 +56,7 @@ define(['jquery', 'controllers/app', 'controllers/userController', 'controllers/
             farmingController.initEvents();
             tchatController.initEvents();
             boardController.initEvents();
+            fightController.initEvents();
         };
 
         initApp();

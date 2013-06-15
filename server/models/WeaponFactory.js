@@ -30,133 +30,163 @@ WeaponFactory = function(mongoose, farmer){
         var keyFunction = "get_" + keyName;
 
         //Call the function associate for create the asked weapon
-        return this[keyFunction]();
+        return this[keyFunction](id);
     }
 
     this.changeFarmer = function(farmer){
         this.farmer = farmer;
     }
 
-    this.get_marteau = function(){
+    this.get_marteau = function(id){
         var weapon = new Weapon();
 
         weapon.farmer = farmer;
         weapon.type = config.weaponsType.main;
         weapon.power = 15;
         weapon.hitRatio = 80;
+        weapon.idItem = id;
 
         return weapon;
     }
 
-    this.get_hache = function(){
+    this.get_hache = function(id){
         var weapon = new Weapon();
 
         weapon.farmer = farmer;
         weapon.type = config.weaponsType.main;
         weapon.power = 40;
         weapon.hitRatio = 60;
+        weapon.idItem = id;
 
         return weapon;
     }
 
-    this.get_epee = function(){
+    this.get_epee = function(id){
         var weapon = new Weapon();
 
         weapon.farmer = farmer;
         weapon.type = config.weaponsType.main;
         weapon.power = 40;
         weapon.hitRatio = 80;
+        weapon.idItem = id;
 
         return weapon;
     }
 
-    this.get_ak47 = function(){
+    this.get_ak47 = function(id){
         var weapon = new Weapon();
 
         weapon.farmer = farmer;
         weapon.type = config.weaponsType.main;
         weapon.power = 60;
         weapon.hitRatio = 90;
+        weapon.idItem = id;
 
         return weapon;
     }
 
-    this.get_lightsaber = function(){
+    this.get_lightsaber = function(id){
         var weapon = new Weapon();
 
         weapon.farmer = farmer;
         weapon.type = config.weaponsType.main;
         weapon.power = 69;
         weapon.hitRatio = 99;
+        weapon.idItem = id;
 
         return weapon;
     }
 
-    this.get_rocks = function(){
+    this.get_cailloux = function(id){
         var weapon = new Weapon();
 
         weapon.farmer = farmer;
         weapon.type = config.weaponsType.support;
         weapon.power = 5;
         weapon.hitRatio = 30;
-        weapon.effect = function(){
-
+        weapon.idItem = id;
+        weapon.__proto__.effect = function(otherPlayer){
+            var resultEffect = new Object();
+            resultEffect.precisionModifDef = -10;
+            resultEffect.precisionModifAtt = 0;
+            resultEffect.additionnalDamage = 0;
+            return resultEffect;
         }
 
         return weapon;
     }
 
-    this.get_poulet = function(){
+    this.get_poulet = function(id){
         var weapon = new Weapon();
 
         weapon.farmer = farmer;
         weapon.type = config.weaponsType.support;
         weapon.power = 10;
         weapon.hitRatio = 30;
-        weapon.effect = function(){
-
+        weapon.idItem = id;
+        weapon.__proto__.effect = function(otherPlayer){
+            var resultEffect = new Object();
+            resultEffect.precisionModifDef = 0;
+            resultEffect.precisionModifAtt = 10;
+            resultEffect.additionnalDamage = 0;
+            return resultEffect;
         }
 
         return weapon;
     }
 
-    this.get_nyancat = function(){
+    this.get_nyancat = function(id){
         var weapon = new Weapon();
 
         weapon.farmer = farmer;
         weapon.type = config.weaponsType.support;
         weapon.power = 20;
         weapon.hitRatio = 20;
-        weapon.effect = function(){
-
+        weapon.idItem = id;
+        weapon.__proto__.effect = function(otherPlayer){
+            var resultEffect = new Object();
+            resultEffect.precisionModifDef = 0;
+            resultEffect.precisionModifAtt = 0;
+            resultEffect.additionnalDamage = (otherPlayer.supportWeapon.idItem == config.idItems.grenade.id) ? 20 : 0;
+            return resultEffect;
         }
 
         return weapon;
     }
 
-    this.get_chien = function(){
+    this.get_chien = function(id){
         var weapon = new Weapon();
 
         weapon.farmer = farmer;
         weapon.type = config.weaponsType.support;
         weapon.power = 20;
         weapon.hitRatio = 20;
-        weapon.effect = function(){
-
+        weapon.idItem = id;
+        weapon.__proto__.effect = function(otherPlayer){
+            var resultEffect = new Object();
+            resultEffect.precisionModifDef = 0;
+            resultEffect.precisionModifAtt = 0;
+            resultEffect.additionnalDamage = (otherPlayer.supportWeapon.idItem == config.idItems.nyancat.id) ? 20 : 0;
+            return resultEffect;
         }
 
         return weapon;
     }
 
-    this.get_grenade = function(){
+    this.get_grenade = function(id){
         var weapon = new Weapon();
 
         weapon.farmer = farmer;
         weapon.type = config.weaponsType.support;
         weapon.power = 20;
         weapon.hitRatio = 20;
-        weapon.effect = function(){
-
+        weapon.idItem = id;
+        weapon.__proto__.effect = function(otherPlayer){
+            var resultEffect = new Object();
+            resultEffect.precisionModifDef = 0;
+            resultEffect.precisionModifAtt = 0;
+            resultEffect.additionnalDamage = (otherPlayer.supportWeapon.idItem == config.idItems.chien.id) ? 20 : 0;
+            return resultEffect;
         }
 
         return weapon;

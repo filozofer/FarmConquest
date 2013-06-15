@@ -142,9 +142,72 @@
 
                         </section>
                         <section class="mb_board_page" id="mb_board_page_sell" page="3">Sell page</section>
-                        <section class="mb_board_page" id="mb_board_page_fights" page="4">Fights page</section>
+                        <section class="mb_board_page" id="mb_board_page_fights" page="4">
+                            <span id="mb_arsenal_title">Arsenal</span>
+                            <span id="mb_arsenal_main" class="mb_arsenal_weapon"></span>
+                            <span id="mb_arsenal_main_text">Arme principal</span>
+                            <span id="mb_arsenal_secondary" class="mb_arsenal_weapon"></span>
+                            <span id="mb_arsenal_secondary_text">Arme support</span>
+                            <span id="mb_launch_fight"><img src="img/gameBoard/fight_button.png" alt="launch fight" /></span>
+                            <span id="mb_launch_fight_span">Combattre !</span>
+                            <img src="img/gameBoard/verticalSeparator.png" alt="separator" id="mb_vs_fight" />
+                            <span id="mb_fight_title">Historique des combats</span>
+                            <table id="mb_history_fight">
+                                <tr>
+                                    <th id="mb_hf_col_date">Date</th>
+                                    <th id="mb_hf_col_opponent">Adversaire</th>
+                                    <th></th>
+                                    <th id="mb_hf_col_result">Resultat</th>
+                                    <th id="mb_hf_col_actions">Actions</th>
+                                </tr>
+
+                                <tr>
+                                    <td>15/06/2013</td>
+                                    <td>nonoclark</td>
+                                    <td><img src="img/gameBoard/green-light.png" alt="win" /></td>
+                                    <td class="align-right"> +10 <img src="img/gameBoard/miniCoin.png" alt="coin" width="10"/</td>
+                                    <td class="align-center"><img src="img/gameBoard/play.png" alt="play" idFight="1"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td>15/06/2013</td>
+                                    <td>lucienpasbeau</td>
+                                    <td><img src="img/gameBoard/red-light.png" alt="win" /></td>
+                                    <td class="align-right"> -10 <img src="img/gameBoard/miniCoin.png" alt="coin" width="10"/></td>
+                                    <td class="align-center"><img src="img/gameBoard/play.png" alt="play" idFight="1"/></td>
+                                </tr>
+
+                                <tr>
+                                    <td>14/06/2013</td>
+                                    <td>bidule</td>
+                                    <td><img src="img/gameBoard/green-light.png" alt="win" /></td>
+                                    <td class="align-right"> +20 <img src="img/gameBoard/miniCoin.png" alt="coin" width="10"/></td>
+                                    <td class="align-center"><img src="img/gameBoard/play.png" alt="play" idFight="1"/></td>
+                                </tr>
+                            </table>
+                        </section>
                         <section class="mb_board_page" id="mb_board_page_achievments" page="5">Achievements page</section>
                     </section>
+                </section>
+
+                <section id="game_fight_board">
+                    <div id="fb_title">Combattre un adversaire !</div>
+
+                    <div id="fb_farmer_name_title">Nom du fermier:</div>
+                    <span id="fb_farmer_level_title">Level</span>
+                    <input type="text" name="fb_farmer_name" id="" />
+                    <span id="fb_farmer_level"></span>
+                    <img src="img/fightBoard/no_attack.png" alt="attack" width="20" id="fb_attack_specefic_farmer"/>
+
+                    <div id="fb_farmers_list_title">Liste fermiers:</div>
+                    <table id="fb_farmers_list_table">
+                        <tr>
+                            <th class="align-left">Nom</th>
+                            <th class="align-left">Level</th>
+                            <th></th>
+                        </tr>
+                    </table>
+
                 </section>
 
                 <section id="section_canvas"></section>

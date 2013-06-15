@@ -136,7 +136,22 @@ BoardController = function(socket, db, mongoose){
     };
 
     this.fillPageFights = function(){
+        Arsenal.findOne({farmer: socket.sessions.farmer.mongooseObject}).exec(function(err, arsenal){
 
+            Weapon.findById(arsenal.mainWeapon, function(err, mainWeapon){
+                Weapon.findById(arsenal.supportWeapon, function(err, secondaryWeapon){
+
+                    var page = new Object();
+                    page.page = 4;
+
+                    page.mainWeapon = (mainWeapon != null) ? mainWeapon.idItem : 13;
+                    page.secondaryWeapon = (secondaryWeapon != null) ? secondaryWeapon.idItem : 14;
+
+                    socket.emit("BOARD-receivePage", page);
+
+                });
+            });
+        });
     };
 
     this.fillPageTrophy = function(){
@@ -208,26 +223,37 @@ BoardController = function(socket, db, mongoose){
                 var price = config.prices[keyName];
                 if(socket.sessions.farmer.money >= price)
                 {
-                    /*
-                    //Get the farmer
-                    Arsenal.findById(socket.sessions.farmer.mongooseObject.arsenal).populate("mainWeapon supportWeapon").exec(function(err, arsenal){
-                        var weaponFactory = new WeaponFactory(socket.sessions.farmer.mongooseObject);
+                    //Get the arsenal of the farmer
+                    Arsenal.findById(socket.sessions.farmer.mongooseObject.arsenal).exec(function(err, arsenal){
+                        //Create the weapon
+                        var weaponFactory = new WeaponFactory(mongoose, socket.sessions.farmer.mongooseObject);
                         var weapon = weaponFactory.getWeapon(id);
 
+                        //Save weapon in database
                         weapon.save(function(err){
-                            Farmer.findById(socket.sessions.farmer._id, function(err, farmer){
-                                if(weapon.type = config.weaponsType.main)
-                                {
-                                    farmer.arsenal.mainWeapon = weapon;
-                                }
-                                else if(weapon.type = config.weaponsType.support)
-                                {
-                                    farmer.arsenal.supportWeapon = weapon;
-                                }
-                            });
 
+                            //Update farmer money
+                            var money = socket.sessions.farmer.money - price;
+                            Farmer.update(socket.sessions.farmer._id, {money: money}, function(err, farmer){
+                                socket.sessions.farmer.money -= price;
+                                //Update Arsenal
+                                if(weapon.type == config.weaponsType.main)
+                                {
+                                    Weapon.remove({ _id: arsenal.mainWeapon }, function(err){});
+                                    arsenal.mainWeapon = weapon;
+                                }
+                                else if(weapon.type == config.weaponsType.support)
+                                {
+                                    Weapon.remove({ _id: arsenal.supportWeapon }, function(err){});
+                                    arsenal.supportWeapon = weapon;
+                                }
+
+                                arsenal.save(function(err){
+                                    socket.emit('BOARD-weaponBuyComplete', { money: money });
+                                });
+                            });
                         });
-                    });*/
+                    });
                 }
             }
         }

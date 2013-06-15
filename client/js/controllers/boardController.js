@@ -106,7 +106,7 @@ define(['jquery'], function(jQuery) {
             });
 
             socket.on('BOARD-itemBuyComplete', function(farmer){
-                jQuery('#mg_money_joueur').text(farmer.money);
+                $j('#mg_money_joueur').text(farmer.money);
 
                 if(farmer.bag != undefined)
                 {
@@ -121,6 +121,18 @@ define(['jquery'], function(jQuery) {
 
                 $j(document).trigger('GAME-bagReceive');
 
+            });
+
+            socket.on('BOARD-weaponBuyComplete', function(resp){
+                //Update money
+                $j('#mg_money_joueur').html(resp.money);
+                //Change tab view
+                $j(".mb_tabs").removeClass("mb_tab_select");
+                $j("#mb_tab_fights").addClass("mb_tab_select");
+                $j(".mb_board_page").removeClass("mb_page_select");
+                $j(".mb_board_page[page=4]").addClass("mb_page_select");
+
+                socket.emit("BOARD-getPage", 4);
             });
 
             socket.on('BOARD-bagFull', function(){
@@ -157,7 +169,16 @@ define(['jquery'], function(jQuery) {
         },
 
         fillPageFights: function(page) {
+            var idMainWeapon = page.mainWeapon;
+            var idSecondaryWeapon = page.secondaryWeapon;
 
+            $j("#mb_arsenal_main").removeClass();
+            $j("#mb_arsenal_main").addClass("mb_arsenal_weapon");
+            $j("#mb_arsenal_main").addClass("mg_weapon" + idMainWeapon);
+
+            $j("#mb_arsenal_secondary").removeClass();
+            $j("#mb_arsenal_secondary").addClass("mb_arsenal_weapon");
+            $j("#mb_arsenal_secondary").addClass("mg_weapon" + idSecondaryWeapon);
         },
 
         fillPageTrophy: function(page) {

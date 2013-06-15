@@ -155,6 +155,7 @@ WorldController = function(socket, db, mongoose){
         farmer.level = 1;
         farmer.experiences = 0;
         farmer.bag = new Array();
+        farmer.creditFight = 3;
         var arsenal = new Arsenal();
         arsenal.save(function(err){
             farmer.arsenal = arsenal;

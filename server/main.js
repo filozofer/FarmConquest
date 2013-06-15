@@ -17,6 +17,7 @@ var WorldController     = require('./controllers/worldController');
 var TchatController     = require('./controllers/tchatController');
 var FarmingController   = require('./controllers/farmingController');
 var BoardController     = require('./controllers/boardController');
+var FightController     = require('./controllers/fightController');
 
 /* GLOBAL */
 G = new Object();
@@ -57,6 +58,8 @@ LoadServer.prototype = {
         require('./models/itemBag.js');
         require('./models/weapon.js');
         require('./models/arsenal.js');
+        require('./models/actionFight.js');
+        require('./models/fight.js');
     },
 
     callControllers: function(){
@@ -79,6 +82,7 @@ LoadServer.prototype = {
             socket.controllers.tchatController = new TchatController(socket, db, mongoose);
             socket.controllers.farmingController = new FarmingController(socket, db, mongoose);
             socket.controllers.boardController = new BoardController(socket, db, mongoose);
+            socket.controllers.fightController = new FightController(socket, db, mongoose);
         });
     }
 

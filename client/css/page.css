@@ -677,6 +677,16 @@ header {
 #mg_weapon8 { background-image: url("../img/gameBoard/chien.png"); }
 #mg_weapon9 { background-image: url("../img/gameBoard/lightSaber.png"); }
 #mg_weapon10 { background-image: url("../img/gameBoard/grenade.png"); }
+.mg_weapon13 { background-image: url("../img/gameBoard/marteau.png"); }
+.mg_weapon14 { background-image: url("../img/gameBoard/cailloux.png"); }
+.mg_weapon15 { background-image: url("../img/gameBoard/hache.png"); }
+.mg_weapon16 { background-image: url("../img/gameBoard/poulet.png"); }
+.mg_weapon17 { background-image: url("../img/gameBoard/epee.png"); }
+.mg_weapon18 { background-image: url("../img/gameBoard/nyancat.png"); }
+.mg_weapon19 { background-image: url("../img/gameBoard/ak47.png"); }
+.mg_weapon20 { background-image: url("../img/gameBoard/chien.png"); }
+.mg_weapon21 { background-image: url("../img/gameBoard/lightSaber.png"); }
+.mg_weapon22 { background-image: url("../img/gameBoard/grenade.png"); }
 
 .mb_price_span {
     text-align: center;
@@ -685,15 +695,152 @@ header {
 }
 
 
+#mb_arsenal_title {
+    position: absolute;
+    top: 0px;
+    left: 80px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.mb_arsenal_weapon {
+    border: 2px solid black;
+    border-radius: 35px;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+}
+
+#mb_arsenal_main {
+    position: absolute;
+    top: 60px;
+    left: 25px;
+}
+
+#mb_arsenal_main_text {
+    position: absolute;
+    top: 70px;
+    left: 95px;
+}
+
+#mb_arsenal_secondary {
+    position: absolute;
+    top: 140px;
+    left: 25px;
+}
+
+#mb_arsenal_secondary_text {
+    position: absolute;
+    top: 150px;
+    left: 95px;
+}
+
+#mb_launch_fight {
+    position: absolute;
+    top: 225px;
+    left: 75px;
+}
+
+#mb_launch_fight_span {
+    position: absolute;
+    top: 280px;
+    left: 54px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#mb_vs_fight {
+    position: absolute;
+    top: 30px;
+    left: 155px;
+}
+
+#mb_fight_title {
+    position: absolute;
+    top: 0px;
+    left: 308px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#mb_history_fight {
+    position: absolute;
+    top: 35px;
+    left: 215px;
+    width: 415px;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.align-center {
+    text-align: center;
+}
 
 
+/* FIGHT BOARD */
 
+#game_fight_board {
+    display:none;
+    width: 370px;
+    height: 380px;
+    background-image: url('../img/fightBoard/interface.png');
+    position: absolute;
+    z-index: 2;
+    top: 10px;
+    left: 250px;
+    padding: 20px 50px 20px 70px;
+}
 
+#fb_title {
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+}
 
+#fb_farmer_name_title {
+    margin-top: 10px;
+    font-weight: bold;
+}
 
+#fb_farmer_name {
+    width: 160px;
+}
 
+#fb_farmer_level_title {
+    position: absolute;
+    top: 70px;
+    left: 258px;
+    font-weight: bold;
+}
 
+#fb_farmer_level {
+    margin-left: 10px;
+    display: inline-block;
+}
 
+#fb_farmers_list_title {
+    font-weight: bold;
+}
+
+.align-left {
+    text-align: left;
+}
+
+#fb_farmers_list_table {
+    width: 100%;
+}
+
+.fb_btn_attack:hover {
+    cursor: url("../img/cursors/main.cur"), progress !important;
+}
+
+#fb_attack_specefic_farmer {
+    position: absolute;
+    left: 378px;
+}
 
 
 

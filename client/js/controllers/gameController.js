@@ -241,19 +241,6 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                 }
             });
 
-            //$j( "#mg_bag" ).hide("explode", {}, 1000, function(){
-
-
-            /*
-             $( "#cart ol" ).droppable({
-             activeClass: "ui-state-default",
-             hoverClass: "ui-state-hover",
-             accept: ":not(.ui-sortable-helper)",
-             drop: function( event, ui ) {
-             $( this ).find( ".placeholder" ).remove();
-             $( "<li></li>" ).text( ui.draggable.text() ).appendTo( this );
-             }
-             }*/
         },
 
         startGame: function() {

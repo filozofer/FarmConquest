@@ -35,16 +35,16 @@ Configuration = function(){
     this.idItems.grangeM = { id: 11, name: "grangeM" };
     this.idItems.grangeG = { id: 12, name: "grangeG" };
     //Weapons
-    this.idItems.weapons = { id: 13, name: "marteau" };
-    this.idItems.weapons = { id: 14, name: "cailloux" };
-    this.idItems.weapons = { id: 15, name: "hache" };
-    this.idItems.weapons = { id: 16, name: "poulet" };
-    this.idItems.weapons = { id: 17, name: "epee" };
-    this.idItems.weapons = { id: 18, name: "nyancat" };
-    this.idItems.weapons = { id: 19, name: "ak47" };
-    this.idItems.weapons = { id: 20, name: "chien" };
-    this.idItems.weapons = { id: 21, name: "lightsaber" };
-    this.idItems.weapons = { id: 22, name: "grenade" };
+    this.idItems.marteau = { id: 13, name: "marteau" };
+    this.idItems.cailloux = { id: 14, name: "cailloux" };
+    this.idItems.hache = { id: 15, name: "hache" };
+    this.idItems.poulet = { id: 16, name: "poulet" };
+    this.idItems.epee = { id: 17, name: "epee" };
+    this.idItems.nyancat = { id: 18, name: "nyancat" };
+    this.idItems.ak47 = { id: 19, name: "ak47" };
+    this.idItems.chien = { id: 20, name: "chien" };
+    this.idItems.lightsaber = { id: 21, name: "lightsaber" };
+    this.idItems.grenade = { id: 22, name: "grenade" };
 
 
 
@@ -115,6 +115,16 @@ Configuration = function(){
     this.weaponsType.main = 1;
     this.weaponsType.support = 2;
 
+    /* Configurations figths */
+    this.farmerLifeStart = 40;
+    this.farmerLifeByLevel = 10;
+    this.rewardMoneyMinByFight = 20;
+    this.rewardMoneyByLevel = 10;
+    this.rewardMoneyDiffLevelAttacker = 30;
+    this.rewardMoneyDiffLevelDefender = 40;
+    this.rewardCreditConquestByFight = 5;
+    this.maxPrecisionToLose = -20;
+    this.maxPrecisionToWin = 20;
 
 };
 
