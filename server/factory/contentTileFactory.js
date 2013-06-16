@@ -47,7 +47,6 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Avoine";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        contentTile.locations = null;
         contentTile.idItem = item.id;
         contentTile.maturationTime   = 15000;
         contentTile.deathTime        = 300000;
@@ -64,7 +63,6 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Ble";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        contentTile.locations = null;
         contentTile.idItem = item.id;
         contentTile.maturationTime   = 30000;
         contentTile.deathTime        = 600000;
@@ -81,7 +79,6 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Carotte";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        contentTile.locations = null;
         contentTile.idItem = item.id;
         contentTile.maturationTime   = 45000;
         contentTile.deathTime        = 600000;
@@ -98,7 +95,6 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Citrouille";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        contentTile.locations = null;
         contentTile.idItem = item.id;
         contentTile.maturationTime   = 600000;
         contentTile.deathTime        = 900000;
@@ -115,7 +111,6 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Fayot";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        contentTile.locations = null;
         contentTile.idItem = item.id;
         contentTile.maturationTime   = 120000;
         contentTile.deathTime        = 900000;
@@ -132,7 +127,6 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Seigle";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        contentTile.locations = null;
         contentTile.idItem = item.id;
         contentTile.maturationTime   = 150000;
         contentTile.deathTime        = 900000;
@@ -149,7 +143,6 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Radis";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        contentTile.locations = null;
         contentTile.idItem = item.id;
         contentTile.maturationTime   = 180000;
         contentTile.deathTime        = 900000;
@@ -166,7 +159,6 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Salade";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        contentTile.locations = null;
         contentTile.idItem = item.id;
         contentTile.maturationTime   = 300000;
         contentTile.deathTime        = 1200000;
@@ -183,7 +175,6 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Topinambour";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        contentTile.locations = null;
         contentTile.idItem = item.id;
         contentTile.maturationTime   = 360000;
         contentTile.deathTime        = 1200000;
@@ -200,8 +191,8 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Petite grange";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        contentTile.locations = null;
         contentTile.idItem = item.id;
+        contentTile.size = 1;
         return contentTile;
     }
 
@@ -212,9 +203,8 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Moyenne grange";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        console.log("FAIRE LES LOCATIONS DES MOYENNES ET GRANDES GRANGES");
-        contentTile.locations = null;
         contentTile.idItem = item.id;
+        contentTile.size = 4;
         return contentTile;
     }
 
@@ -225,22 +215,10 @@ ContentTileFactory = function(mongoose, farmer){
         contentTile.description = "Grande grange";
         contentTile.mainPos = tile;
         contentTile.owner = farmer;
-        console.log("FAIRE LES LOCATIONS DES MOYENNES ET GRANDES GRANGES");
-        contentTile.locations = null;
         contentTile.idItem = item.id;
+        contentTile.size = 6;
         return contentTile;
     }
-
-    /*this.get_marteau = function(){
-        var weapon = new Weapon();
-
-        weapon.farmer = farmer;
-        weapon.type = config.weaponsType.main;
-        weapon.power = 15;
-        weapon.hitRatio = 80;
-
-        return weapon;
-    }*/
 
 };
 

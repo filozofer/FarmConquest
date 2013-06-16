@@ -18,7 +18,8 @@ var ContentTile = new Schema({
     deathTime: Number,
     productivity: Number,
     unitLosePerDeath: Number,
-    state: Number
+    state: Number,
+    size: Number
 });
 
 ContentTile.methods.create = function(type, name, description){
@@ -40,6 +41,7 @@ ContentTile.methods.getAsObject = function(){
     object.productivity =      this.productivity;
     object.unitLosePerDeath =  this.unitLosePerDeath;
     object.state = this.state;
+    object.size = this.size;
 
     if(this.mainPos != null && typeof(this.mainPos._bsontype) == "undefined")
     {

@@ -11,6 +11,7 @@ FarmingController = function(socket, db, mongoose){
 
     var farmingActions = ["arrosage","fertilisation"];
     var Farmer = mongoose.model("Farmer");
+    var Building = mongoose.model("Building");
     var Tile = mongoose.model("Tile");
     var ContentTile = mongoose.model("ContentTile");
     var ItemBag = mongoose.model("ItemBag");
@@ -64,11 +65,14 @@ FarmingController = function(socket, db, mongoose){
         }, Config.workingTime);
     });
 
-    socket.on('plantSeed', function(resp){
+    socket.on('BuildOrSeed', function(resp){
         var tile = undefined;
         var idItem = resp.idItem;
+        var action = resp.action;
+        var farmerDB = undefined;
 
         Farmer.findById(socket.sessions.farmer._id).populate("bag").exec(function(err, farmerWithBag){
+            farmerDB = farmerWithBag;
             socket.sessions.farmer = farmerWithBag.getAsObject();
             var bag = socket.sessions.farmer.bag;
             var item = undefined;
@@ -91,42 +95,185 @@ FarmingController = function(socket, db, mongoose){
         if (item != undefined){
             socket.emit('BOARD-refreshBag', bag);
 
-        Tile.findOne({ X : resp.tile.X, Y : resp.tile.Y },function (err, tileToTake) {
-            if (err){throw(err);}
+            if (action == Config.actionType.seed){
 
-            if(tileToTake != null) {
-                tile = tileToTake.getAsObject();
-            }
+                Tile.findOne({ X : resp.tile.X, Y : resp.tile.Y },function (err, tileToTake) {
+                    if (err){throw(err);}
 
-               var contentTile = contentTileFactory.getContentTile(idItem, tile);
-            console.log("FarmingController.plantSeed :");
-            console.log(contentTile);
-            contentTile.save(function(err){
-                tileToTake.contentTile = contentTile;
-                var contentT = contentTile.getAsObject();
-                tile.contentTile = contentT;
-                tile.owner = socket.sessions.farmer;
-                G.World[tile.X][tile.Y] = tile;
-                tileToTake.save(function(err){
-                    socket.emit('doPlantSeed', tile);
-
-                    var sockets0 = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
-                    setTimeout(function(){
-                        socket.emit("finishPlant");
-                    }, Config.workingTime);
-                    for (var i=0; i<sockets0.length; i++){
-                        var currentSocket = sockets0[i];
-                        currentSocket.emit("ennemyBeginWork", {tile: tile});
+                    if(tileToTake != null) {
+                        tile = tileToTake.getAsObject();
                     }
 
-                    generatePlantEvolution(tile, tileToTake, contentTile);
+                       var contentTile = contentTileFactory.getContentTile(idItem, tile);
+                    console.log("FarmingController.plantSeed :");
+                    console.log(contentTile);
+                    contentTile.save(function(err){
+                        tileToTake.contentTile = contentTile;
+                        var contentT = contentTile.getAsObject();
+                        tile.contentTile = contentT;
+                        tile.owner = socket.sessions.farmer;
+                        G.World[tile.X][tile.Y] = tile;
+                        tileToTake.save(function(err){
+                            socket.emit('doPlantSeed', tile);
 
-                    //
+                            var sockets0 = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
+                            setTimeout(function(){
+                                socket.emit("finishPlant");
+                            }, Config.workingTime);
+                            for (var i=0; i<sockets0.length; i++){
+                                var currentSocket = sockets0[i];
+                                currentSocket.emit("ennemyBeginWork", {tile: tile});
+                            }
+
+                            generatePlantEvolution(tile, tileToTake, contentTile);
+
+                            //
+                        });
+                    });
+
+
                 });
-            });
+            }
+            else if (action == Config.actionType.build){
+                Tile.findOne({ X : resp.tile.X, Y : resp.tile.Y },function (err, tileToTake) {
+                    if (err){throw(err);}
+
+                    if(tileToTake != null) {
+                        tile = tileToTake.getAsObject();
+                    }
+
+                    var contentTileMainPos = contentTileFactory.getContentTile(idItem, tileToTake);
+                    contentTileMainPos.owner = farmerDB;
+
+                    var request1 = [{X: tile.X, Y: tile.Y}];
+
+                    var request4 = [{X: tile.X, Y: tile.Y},
+                    				{X: tile.X+1, Y: tile.Y},
+                    				{X: tile.X, Y: tile.Y+1},
+                    				{X: tile.X+1, Y: tile.Y+1}];
+
+                    var request6 = [{X: tile.X, Y: tile.Y},
+                    				{X: tile.X+1, Y: tile.Y},
+                    				{X: tile.X, Y: tile.Y+1},
+                    				{X: tile.X+1, Y: tile.Y+1},
+                    				{X: tile.X, Y: tile.Y+2},
+                                    {X: tile.X+1, Y: tile.Y+2}];
+
+                    var request = undefined;
+
+                    var building = new Building();
+                    var buildingClient = new Object();
+                    building.create();
+                    buildingClient.owner = socket.sessions.farmer;
+                    building.owner = farmerDB;
+                    building.mainPos = new Tile();
+                    buildingClient.locations = new Array();
+                    var tempLocation = new Array();
 
 
-        });
+
+                    if (contentTileMainPos.size == 1){
+                        request = request1;
+                    }
+                    else if (contentTileMainPos.size == 4){
+                        //CHECK IF the three neigbors tile are free and own to the farmer
+                        /*
+                            check with G.World
+                            tile1 -> X+1
+                            tile2 -> X+1, Y+1
+                            tile3 -> Y+1
+                        */
+                        if (G.World[tile.X+1][tile.Y].contentTile == undefined && G.World[tile.X+1][tile.Y].owner.name == socket.sessions.farmer.name && G.World[tile.X+1][tile.Y].walkable
+                         && G.World[tile.X+1][tile.Y+1].contentTile == undefined && G.World[tile.X+1][tile.Y+1].owner.name == socket.sessions.farmer.name && G.World[tile.X+1][tile.Y+1].walkable
+                         && G.World[tile.X][tile.Y+1].contentTile == undefined && G.World[tile.X][tile.Y+1].owner.name == socket.sessions.farmer.name && G.World[tile.X][tile.Y+1].walkable){
+                            request = request4;
+                         }
+                    }
+                    else if (contentTileMainPos.size == 6){
+                        //CHECK IF the five neigbors tile are free and own to the farmer
+                        /*
+                            check with G.World
+                            tile1 -> X+1
+                            tile2 -> X+1, Y+1
+                            tile3 -> Y+1
+                            tile4 -> X+2, Y+1
+                            tile5 -> X+2
+                        */
+                        if (G.World[tile.X+1][tile.Y].contentTile == undefined && G.World[tile.X+1][tile.Y].owner.name == socket.sessions.farmer.name && G.World[tile.X+1][tile.Y].walkable
+                         && G.World[tile.X+1][tile.Y+1].contentTile == undefined && G.World[tile.X+1][tile.Y+1].owner.name == socket.sessions.farmer.name && G.World[tile.X+1][tile.Y+1].walkable
+                         && G.World[tile.X][tile.Y+1].contentTile == undefined && G.World[tile.X][tile.Y+1].owner.name == socket.sessions.farmer.name && G.World[tile.X][tile.Y+1].walkable
+                         && G.World[tile.X][tile.Y+2].contentTile == undefined && G.World[tile.X][tile.Y+2].owner.name == socket.sessions.farmer.name && G.World[tile.X][tile.Y+2].walkable
+                         && G.World[tile.X+1][tile.Y+2].contentTile == undefined && G.World[tile.X+1][tile.Y+2].owner.name == socket.sessions.farmer.name && G.World[tile.X+1][tile.Y+2].walkable){
+                            request = request6;
+                         }
+                    }
+
+                    Tile.find({}).or(request).exec(function(err, tiles){
+                    	//go through tiles result
+                    	for (var i=0; i<tiles.length; i++){
+
+                    	    var lastOne = false;
+                    	    if (i == tiles.length -1){
+                    	        lastOne = true;
+                    	    }
+
+                    		var currentTile = tiles[i];
+
+                            currentTile.owner = farmerDB;
+                    		currentTile.walkable = false;
+                    		currentTile.save(function(err, currentT){
+
+                    		        var contentTile = contentTileFactory.getContentTile(idItem, tile);
+                                    contentTile.owner = farmerDB;
+
+                                    contentTile.save(function(err, content){
+
+                    		            currentT.contentTile = content;
+
+
+                    		            currentT.save(function(err, curTile){
+
+                                            var curTileObject = curTile.getAsObject();
+                                            curTileObject.contentTile = content.getAsObject();
+                                            G.World[curTileObject.X][curTileObject.Y] = curTileObject;
+
+                                            if(curTileObject.X == resp.tile.X && curTileObject.Y == resp.tile.Y){
+                                                buildingClient.mainPos = curTileObject;
+                                            }
+
+                    		                building.locations.push(curTile);
+                    		                buildingClient.locations.push(curTileObject);
+                    		                if (buildingClient.locations.length == contentTileMainPos.size){
+                    		                        building.save(function(err, buildingServer){
+                                                        socket.emit('FARMING-makeBuilding', buildingClient);
+
+                                                        var sockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
+                                                        setTimeout(function(){
+                                                            socket.emit("finishPlant");
+                                                        }, Config.buildingTime);
+                                                        for (var i=0; i<sockets.length; i++){
+                                                            var currentSocket = sockets[i];
+                                                            currentSocket.emit("FARMING-ennemyBuilding", buildingClient);
+                                                        }
+                                                    });
+
+                    		                }
+                    		            });
+                                    });
+                            });
+                    	}
+
+                    });
+
+                });
+
+
+                //if number of tile available -> build
+                    // send anim to other player
+
+                //else
+                    // message "No place to build the storage"
+            }
         }
 
         });

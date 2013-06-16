@@ -31,8 +31,14 @@ define(['jquery'], function(jQuery){
                        // we save in session the tile clicked
                        socket.sessions.selectedActionTile = this;
                     }
-                    //SEED-BUILDING ACTION
+                    //SEED ACTION
                     else if (socket.sessions.farmer.name == this.owner.name && socket.sessions.farmer.isFarming){
+                        goToWork = true;
+                        $j("body").css('cursor','url("../img/cursors/main.cur"), progress');
+                        // we save in session the tile clicked
+                        socket.sessions.selectedActionTile = this;
+                    }
+                    else if (socket.sessions.farmer.name == this.owner.name && socket.sessions.farmer.isBuilding){
                         goToWork = true;
                         $j("body").css('cursor','url("../img/cursors/main.cur"), progress');
                         // we save in session the tile clicked
@@ -48,6 +54,10 @@ define(['jquery'], function(jQuery){
             {
                 $j("#game_main_board").fadeIn(500);
                 socket.emit("BOARD-getPage", 1);
+            }
+            else if(this.contentTile != undefined && (this.contentTile.type == app.Config.tileType.grangeP || this.contentTile.type == app.Config.tileType.grangeM || this.contentTile.type == app.Config.tileType.grangeG) && this.owner != undefined && this.owner.name == socket.sessions.farmer.name)
+            {
+                alert("Click on grange !");
             }
 
 		},

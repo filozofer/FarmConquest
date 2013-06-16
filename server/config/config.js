@@ -15,6 +15,7 @@ Configuration = function(){
     this.initialMoney = 500;
     // working session time (ms)
     this.workingTime = 2000;
+    this.buildingTime = 10000;
     // refresh market price frequency (ms)
     this.marketRefreshTime = 300000; // 5 minutes
 
@@ -164,6 +165,14 @@ Configuration = function(){
     this.rewardCreditConquestByFight = 5;
     this.maxPrecisionToLose = -20;
     this.maxPrecisionToWin = 20;
+
+    /* ACTION TYPE */
+    this.actionType = new Object();
+    this.actionType.seed = "Seed";
+    this.actionType.build = "Build";
+
+    this.buildingType = new Object();
+    this.buildingType.grange = "Grange";
 
 };
 

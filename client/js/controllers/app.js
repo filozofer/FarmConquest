@@ -117,6 +117,11 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             configuration.tileType.farm = "farm";
             configuration.tileType.seed = "seed";
 
+            /* ACTION TYPE */
+            configuration.actionType = new Object();
+            configuration.actionType.seed = "Seed";
+            configuration.actionType.build = "Build";
+
             return configuration;
         },
 
@@ -168,6 +173,9 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             this.addRessource("farming_set_fertilisation", self.Type.IMAGE, "Farming/farming_set_fertilisation.png");
             this.addRessource("farmer", self.Type.IMAGE, "farmerSprite.png");
             this.addRessource("farm", self.Type.IMAGE, "farm.png");
+            this.addRessource("grangeP", self.Type.IMAGE, "Buildings/grangeP.png");
+            this.addRessource("grangeM", self.Type.IMAGE, "Buildings/grangeM.png");
+            this.addRessource("grangeG", self.Type.IMAGE, "Buildings/grangeG.png");
 
             this.chargementMax = this.chargement;
 

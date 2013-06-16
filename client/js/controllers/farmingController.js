@@ -47,11 +47,15 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                         }
                         else if (socket.sessions.farmer.isFarming){
                             console.log("PLANT Item with ID=" + socket.sessions.idItemSelected + " at " + socket.sessions.selectedActionTile.X +"/" + socket.sessions.selectedActionTile.Y);
-                            socket.emit('plantSeed', {tile: socket.sessions.selectedActionTile, idItem: socket.sessions.idItemSelected});
+                            socket.emit('BuildOrSeed', {tile: socket.sessions.selectedActionTile, idItem: socket.sessions.idItemSelected, action: app.Config.actionType.seed});
                         }
                         else if (socket.sessions.farmer.isHarvesting){
                             console.log("Harvest Plant : "+ socket.sessions.selectedActionTile.contentTile.type.name);
                             socket.emit("harvestSeed", socket.sessions.selectedActionTile);
+                        }
+                        else if (socket.sessions.farmer.isBuilding){
+                            console.log("Put Building : " + socket.sessions.idItemSelected);
+                            socket.emit("BuildOrSeed", {tile: socket.sessions.selectedActionTile, idItem: socket.sessions.idItemSelected, action: app.Config.actionType.build});
                         }
                     }
                 }
@@ -137,6 +141,17 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 app.World[tile.X][tile.Y] = tile;
                 self.canvas.changeTexture(tile);
             });
+
+            socket.on('FARMING-makeBuilding', function(building){
+                console.log(building);
+                socket.sessions.farmer.isBuilding = false;
+                self.canvas.changeTextureToBuilding(building);
+            });
+
+            socket.on('FARMING-ennemyBuilding', function(building){
+                self.canvas.changeTextureToBuilding(building);
+            });
+
         },
 
         getWorkingTileFromServer: function(tileServer){

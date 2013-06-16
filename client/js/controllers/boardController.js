@@ -112,10 +112,10 @@ define(['jquery'], function(jQuery) {
                 {
                     for(var i = 0; i < farmer.bag.length; i++)
                     {
-                        var itemBag = farmer.bag[i];
-                        var content = "<span class='mg_item_bag'><span class='mg_bag_item bagItem" + itemBag.idItem + "'></span><span class='bagItem_quantity'>" + itemBag.quantity + "</span></span>";
+                            var itemBag = farmer.bag[i];
+                            var content = "<span class='mg_item_bag' iditem='" + itemBag.idItem + "'><span class='mg_bag_item bagItem" + itemBag.idItem + "'></span><span class='bagItem_quantity'>" + itemBag.quantity + "</span></span>";
 
-                        $j(".mg_bag_box[idBag='" + itemBag.positionInBag + "']").html(content);
+                            $j(".mg_bag_box[idBag='" + itemBag.positionInBag + "']").html(content);
                     }
                 }
 

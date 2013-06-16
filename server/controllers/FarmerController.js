@@ -100,6 +100,8 @@ FarmerController = function(socket, db, mongoose){
             socket.sessions.farmer = farmer.getAsObject();
         }
 
+        var isBuilding = false;
+
         var pathManager = new ShortestPath(G.World, socket.sessions.farmer, finish, goToWork);
 
         var path = pathManager.shortestPath;

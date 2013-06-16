@@ -210,7 +210,12 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                         for (var key in app.Config.idItems){
                             var currentItem = app.Config.idItems[key];
                             if (currentItem.id == socket.sessions.idItemSelected){
-                                socket.sessions.farmer.isFarming = true;
+                                if (currentItem.id < 10){
+                                    socket.sessions.farmer.isFarming = true; //seed
+                                }
+                                else if (currentItem.id >= 10 && currentItem.id < 20){
+                                    socket.sessions.farmer.isBuilding = true;
+                                }
                                 var cursorName = "cursor_"+currentItem.name+".png";
                                 $j("body").css('cursor','url("../img/cursors/'+cursorName+'"), progress');
                                 break;
@@ -357,13 +362,30 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                                     {
                                         case self.app.Config.tileType.farm:
                                             if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2 + 5, tile.YPx - 100), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2 + 5, tile.YPx - 100), this.app.Ressources[app.Config.tileType.farm] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
                                             break;
 
                                         case self.app.Config.tileType.seed:
                                             this.canvas.putSeedSprite(new Vector2(tile.XPx, tile.YPx), this.canvas.getImageFromType(tile.contentTile.type), world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
                                             break;
 
+                                        case self.app.Config.tileType.grangeP:
+                                            if(tile.contentTile.mainPos != undefined && tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
+                                                console.log("MAIN POS OF SMALL GRANGE DRAWN: " + tile.X + "/" + tile.Y);
+                                                this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx - 48), this.app.Ressources[app.Config.tileType.grangeP] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                            break;
+
+                                        case self.app.Config.tileType.grangeM:
+                                            if(tile.contentTile.mainPos != undefined && tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
+                                                console.log("MAIN POS OF MEDIUM GRANGE DRAWN: " + tile.X + "/" + tile.Y);
+                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 67), this.app.Ressources[app.Config.tileType.grangeM] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                            break;
+
+                                        case self.app.Config.tileType.grangeG:
+                                            if(tile.contentTile.mainPos != undefined && tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
+                                                console.log("MAIN POS OF BIG GRANGE DRAWN: " + tile.X + "/" + tile.Y);
+                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth, tile.YPx - 100), this.app.Ressources[app.Config.tileType.grangeG] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                            break;
                                         default:
                                             break;
                                     }

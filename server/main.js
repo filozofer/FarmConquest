@@ -60,6 +60,7 @@ LoadServer.prototype = {
         require('./models/arsenal.js');
         require('./models/actionFight.js');
         require('./models/fight.js');
+        require('./models/building.js');
     },
 
     callControllers: function(){

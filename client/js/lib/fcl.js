@@ -228,8 +228,8 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             if (self.app.World[elementToRemove.X][elementToRemove.Y].XPx == undefined){
 
                 var centerScreen = new Object();
-                centerScreen.X = this.canvas.stage.attrs.width/2;
-                centerScreen.Y = this.canvas.stage.attrs.height/2;
+                centerScreen.X = this.stage.attrs.width/2;
+                centerScreen.Y = this.stage.attrs.height/2;
 
                 elementToRemove.XPx = centerScreen.X - ((elementToRemove.Y - self.app.World.center.Y) * (self.app.Config.tileWidth/2)) +((elementToRemove.X - self.app.World.center.X) * (self.app.Config.tileWidth/2)) - (self.app.Config.tileWidth/2);
                 elementToRemove.YPx = centerScreen.Y + ((elementToRemove.Y - self.app.World.center.Y) * (self.app.Config.tileHeight/2)) +((elementToRemove.X - self.app.World.center.X) * (self.app.Config.tileHeight/2)) - (self.app.Config.tileHeight/2);
@@ -247,10 +247,61 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             }
             if (tileType == app.Config.tileType.seed){
                 this.putSeedSprite(new Vector2(elementToRemove.XPx, elementToRemove.YPx), this.getImageFromType(tileType, action), app.World[element.X][element.Y], this.L_NAME.tiles, zIndex);
-            } else {
+            }
+            else {
                 this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx), this.getImageFromType(tileType, action), app.World[element.X][element.Y], this.L_NAME.tiles, zIndex);
             }
 
+        },
+
+        changeTextureToBuilding: function(building){
+                var mainPos = building.mainPos;
+            //Remove old kinnetic image associate to the element to change
+               var elementToRemove = app.World[mainPos.X][mainPos.Y];
+
+               var zIndex = undefined;
+
+               if (elementToRemove.image != undefined){
+                   elementToRemove.image.remove();
+                   zIndex = elementToRemove.image.getZIndex();
+               }
+               else {
+                   zIndex = 1000;
+               }
+
+               if (self.app.World[elementToRemove.X][elementToRemove.Y].XPx == undefined){
+
+                   var centerScreen = new Object();
+                   centerScreen.X = this.stage.attrs.width/2;
+                   centerScreen.Y = this.stage.attrs.height/2;
+
+                   elementToRemove.XPx = centerScreen.X - ((elementToRemove.Y - self.app.World.center.Y) * (self.app.Config.tileWidth/2)) +((elementToRemove.X - self.app.World.center.X) * (self.app.Config.tileWidth/2)) - (self.app.Config.tileWidth/2);
+                   elementToRemove.YPx = centerScreen.Y + ((elementToRemove.Y - self.app.World.center.Y) * (self.app.Config.tileHeight/2)) +((elementToRemove.X - self.app.World.center.X) * (self.app.Config.tileHeight/2)) - (self.app.Config.tileHeight/2);
+               }
+
+               //Change the world with the new element
+               mainPos.XPx = elementToRemove.XPx;
+               mainPos.YPx = elementToRemove.YPx;
+               app.World[mainPos.X][mainPos.Y].contentTile = mainPos.contentTile;
+               app.World[mainPos.X][mainPos.Y].walkable = mainPos.walkable;
+
+               //Add the associate kinnetic texture of the element in the layer
+               var tileType = null;
+               if (mainPos.contentTile != undefined){
+                   tileType = mainPos.contentTile.type;
+               }
+               if (tileType == app.Config.tileType.grangeP) {
+                   this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx - 48), app.Ressources[app.Config.tileType.grangeP] , app.World[mainPos.X][mainPos.Y], this.L_NAME.buildings, zIndex);
+               }
+               else if (tileType == app.Config.tileType.grangeM) {
+                   this.putTexture(new Vector2(elementToRemove.XPx - (app.Config.tileWidth / 2), elementToRemove.YPx - 67), app.Ressources[app.Config.tileType.grangeM] , app.World[mainPos.X][mainPos.Y], this.L_NAME.buildings, zIndex);
+               }
+               else if (tileType == app.Config.tileType.grangeG) {
+                   this.putTexture(new Vector2(elementToRemove.XPx - app.Config.tileWidth, elementToRemove.YPx - 100), app.Ressources[app.Config.tileType.grangeG] , app.World[element.X][element.Y], this.L_NAME.buildings, zIndex);
+               }
+               else {
+                   this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx), this.getImageFromType(tileType, action), app.World[element.X][element.Y], this.L_NAME.tiles, zIndex);
+               }
         },
 
         changeSeedTexture: function(tile){
