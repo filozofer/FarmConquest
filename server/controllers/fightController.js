@@ -9,6 +9,8 @@ FightController = function(socket, db, mongoose){
     var Farmer = mongoose.model("Farmer");
     var Arena = require('../models/arena.js');
     var WeaponFactory = require('../models/weaponFactory');
+    var Fight = mongoose.model("Fight");
+    var ObjectID = mongoose.ObjectID;
 
     socket.on('FIGHT-getFarmersList', function(){
 
@@ -40,7 +42,6 @@ FightController = function(socket, db, mongoose){
         });
     });
 
-
     socket.on('FIGHT-attackFarmer', function(request){
 
         var nameOpponent = request;
@@ -69,12 +70,20 @@ FightController = function(socket, db, mongoose){
 
                     //Send the farmers to the Arena
                     var fight = new Arena(mongoose);
-                    fight.start(farmerAttacker, farmerDefender, function(){
+                    fight.start(farmerAttacker, farmerDefender, function(farmerToSendToClient, fight){
                         console.log('Fight over !');
-                        //socket.emit('FIGHT-fightTransmission', TODOfight );
+                        socket.emit('FIGHT-fightTransmission', { farmer: farmerToSendToClient, fight: fight });
                     });
                 }
             });
+        });
+    });
+
+    socket.on('FIGHT-getFightToPlay', function(id){
+        Fight.findById(id).populate("actionsFights").exec(function(err, fight){
+            var name = socket.sessions.farmer.name;
+            if(fight.farmerAttacker == name || fight.farmerDefender == name)
+                socket.emit('FIGHT-fightTransmission', {fight: fight});
         });
     });
 

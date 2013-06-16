@@ -193,6 +193,7 @@ define(['jquery'], function(jQuery) {
         fillPageFights: function(page) {
             var idMainWeapon = page.mainWeapon;
             var idSecondaryWeapon = page.secondaryWeapon;
+            var fights = page.fights;
 
             $j("#mb_arsenal_main").removeClass();
             $j("#mb_arsenal_main").addClass("mb_arsenal_weapon");
@@ -201,7 +202,42 @@ define(['jquery'], function(jQuery) {
             $j("#mb_arsenal_secondary").removeClass();
             $j("#mb_arsenal_secondary").addClass("mb_arsenal_weapon");
             $j("#mb_arsenal_secondary").addClass("mg_weapon" + idSecondaryWeapon);
-        },
+
+            $j('#mb_history_fight tr:has(td)').remove();
+            for(var i = 0; i < fights.length && i <= 12; i++)
+            {
+                var fight = fights[i];
+                var line = "<tr>";
+                var date = fight.date;
+                var year = date.substr(0,4);
+                var month = date.substr(5,2);
+                var day = date.substr(8,2);
+                var hours = parseInt(date.substr(11,2));
+                var mins = date.substr(14,2);
+
+                hours += 2;
+                if(hours > 24){ hours -= 24; day++; }
+                if(hours == 24) { hours = "00"; }
+                if(hours >= 0 && hours <= 9){ hours = "0" + hours; }
+
+
+                line += "<td>" + day + "/"+ month + " " + hours + ":" + mins + "</td>";
+                var nameOpponent = (socket.sessions.farmer.name != fight.farmerAttacker) ? fight.farmerAttacker : fight.farmerDefender;
+                line += "<td>" + nameOpponent + "</td>";
+                var src = (socket.sessions.farmer.name == fight.winnerName) ? "img/gameBoard/green-light.png" : "img/gameBoard/red-light.png";
+                line += "<td><img src=" + src + " alt='winLoseLight' /></td>";
+                var reward = (socket.sessions.farmer.name == fight.farmerAttacker) ? fight.rewardMoneyAtt : fight.rewardMoneyDef;
+                line += "<td class='align-right'>" + reward + "<img src='img/gameBoard/miniCoin.png' alt='coin' width='10' /></td>";
+                line += "<td class='align-center'><img src='img/gameBoard/play.png' alt='play' idFight='" + String(fight._id) + "' class='mb_play_fight' /></td>";
+                line += "</tr>";
+
+                $j('#mb_history_fight').append(line);
+            }
+
+            $j('.mb_play_fight').on('click', function(){
+                socket.emit('FIGHT-getFightToPlay', $j(this).attr('idFight'));
+            });
+       },
 
         fillPageTrophy: function(page) {
 

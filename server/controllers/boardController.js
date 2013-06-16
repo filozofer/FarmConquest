@@ -10,6 +10,7 @@ BoardController = function(socket, db, mongoose){
     var ItemBag = mongoose.model("ItemBag");
     var Arsenal = mongoose.model("Arsenal");
     var Weapon = mongoose.model("Weapon");
+    var Fight = mongoose.model("Fight");
 
 
     socket.on('BOARD-getPage', function(page){
@@ -147,8 +148,12 @@ BoardController = function(socket, db, mongoose){
                     page.mainWeapon = (mainWeapon != null) ? mainWeapon.idItem : 13;
                     page.secondaryWeapon = (secondaryWeapon != null) ? secondaryWeapon.idItem : 14;
 
-                    socket.emit("BOARD-receivePage", page);
-
+                    //Retrieves the fight where the current user perticipate
+                    var name = socket.sessions.farmer.name;
+                    Fight.find({}).or([{farmerAttacker: name}, {farmerDefender: name}]).sort({date: 'desc'}).exec(function(err, fights){
+                        page.fights = fights;
+                        socket.emit("BOARD-receivePage", page);
+                    });
                 });
             });
         });

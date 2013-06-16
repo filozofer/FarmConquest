@@ -32,6 +32,7 @@ Arena = function(mongoose){
     var Weapon = mongoose.model("Weapon");
     var Fight = mongoose.model("Fight");
     var ActionFight = mongoose.model("ActionFight");
+    var Farmer = mongoose.model("Farmer");
 
 
     //Recuperation of all the needed informations
@@ -130,6 +131,10 @@ Arena = function(mongoose){
         fight.farmerDefender = self.farmerD.name;
         fight.farmerAttackerLife = self.farmerA.life;
         fight.farmerDefenderLife = self.farmerD.life;
+        fight.farmerAttackerMainWeapon = self.farmerA.mainWeapon.idItem;
+        fight.farmerDefenderMainWeapon = self.farmerD.mainWeapon.idItem;
+        fight.farmerAttackerSupportWeapon = self.farmerA.supportWeapon.idItem;
+        fight.farmerDefenderSupportWeapon = self.farmerD.supportWeapon.idItem;
 
         //Fights until someone is K.O.
         while(actualPlayer.life > 0 && otherPlayer.life > 0)
@@ -232,7 +237,23 @@ Arena = function(mongoose){
                 fight.actionsFights.push(result[i]);
             }
             fight.save(function(err, fightDB){
-                self.callbackFunction();
+                Fight.findById(fightDB).populate("actionsFights").exec(function(err, fightActionsPopulate){
+                    Farmer.findOne({ name:  self.farmerAttacker.name }, function(err, fA){
+                        Farmer.findOne({ name:  self.farmerDefender.name }, function(err, fD){
+                            fA.money += fight.rewardMoneyAtt;
+                            fA.money = (fA.money < 0) ? 0 : fA.money;
+                            fA.creditConquest += fight.creditConquest;
+                            fA.creditFight--;
+                            fA.save(function(err, farmerToSendToClient){
+                               fD.money += fight.rewardMoneyDef;
+                               fD.money = (fD.money < 0) ? 0 : fD.money;
+                               fD.save(function(err, farmerD_DB){
+                                   self.callbackFunction(farmerToSendToClient, fightActionsPopulate);
+                               });
+                            });
+                        });
+                    });
+                });
             });
         });
     }

@@ -178,7 +178,6 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
 
             });
 
-
             $j(document).on('GAME-bagReceive', function(){
                 $j(".mg_item_bag").draggable({
                     start: function() {

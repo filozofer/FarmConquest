@@ -18,6 +18,10 @@ var FightSchema = new Schema({
     rewardMoneyAtt: Number,
     rewardMoneyDef: Number,
     creditConquest: Number,
+    farmerAttackerMainWeapon: Number,
+    farmerDefenderMainWeapon: Number,
+    farmerAttackerSupportWeapon: Number,
+    farmerDefenderSupportWeapon: Number,
     actionsFights : [{ type : Schema.Types.ObjectId, ref : 'ActionFight'}]
 });
 
@@ -35,6 +39,10 @@ FightSchema.methods.getAsObject = function(){
     object.winnerName = this.winnerName;
     object.rewardMoney = this.rewardMoney;
     object.creditConquest = this.creditConquest;
+    object.farmerAttackerMainWeapon = this.farmerAttackerMainWeapon;
+    object.farmerDefenderMainWeapon = this.farmerDefenderMainWeapon;
+    object.farmerAttackerSupportWeapon = this.farmerAttackerSupportWeapon;
+    object.farmerDefenderSupportWeapon = this.farmerDefenderSupportWeapon;
 
     object.actionsFights = new Array();
     if(this.actionsFights != undefined && this.actionsFights.length != undefined)

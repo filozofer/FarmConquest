@@ -96,6 +96,19 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             configuration.idItems.grangeP = { id: 10, name: "grangeP" };
             configuration.idItems.grangeM = { id: 11, name: "grangeM" };
             configuration.idItems.grangeG = { id: 12, name: "grangeG" };
+            //Weapons
+            //Weapons
+            configuration.idItems.marteau = { id: 13, name: "marteau", type: 1 };
+            configuration.idItems.cailloux = { id: 14, name: "cailloux", type: 2 };
+            configuration.idItems.hache = { id: 15, name: "hache", type: 1 };
+            configuration.idItems.poulet = { id: 16, name: "poulet", type: 2 };
+            configuration.idItems.epee = { id: 17, name: "epee", type: 1 };
+            configuration.idItems.nyancat = { id: 18, name: "nyancat", type: 2 };
+            configuration.idItems.ak47 = { id: 19, name: "ak47", type: 1 };
+            configuration.idItems.chien = { id: 20, name: "chien", type: 2 };
+            configuration.idItems.lightsaber = { id: 21, name: "lightsaber", type: 1 };
+            configuration.idItems.grenade = { id: 22, name: "grenade", type: 2 };
+
 
             configuration.tileType = new Object();
             configuration.tileType.grangeP = "grangeP";

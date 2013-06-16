@@ -18,7 +18,8 @@ var FarmerSchema = new Schema({
     experiences : Number,
     bag: [{ type : Schema.Types.ObjectId, ref : 'ItemBag'}],
     arsenal: { type : Schema.Types.ObjectId, ref : 'Arsenal'},
-    creditFight: Number
+    creditFight: Number,
+    creditConquest: Number
 });
 
 // class constructor / On l'utilise sa ?
@@ -49,6 +50,7 @@ FarmerSchema.methods.getAsObject = function(){
     object.level = this.level;
     object.experiences = this.experiences;
     object.creditFight = this.creditFight;
+    object.creditConquest = this.creditConquest;
 
     object.bag = new Array();
     if(this.bag != undefined && this.bag.length != undefined)

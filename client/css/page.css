@@ -706,6 +706,16 @@ header {
 .mg_weapon20 { background-image: url("../img/gameBoard/chien.png"); }
 .mg_weapon21 { background-image: url("../img/gameBoard/lightSaber.png"); }
 .mg_weapon22 { background-image: url("../img/gameBoard/grenade.png"); }
+.fui_weapon13 { background-image: url("../img/gameBoard/marteau.png") !important; }
+.fui_weapon14 { background-image: url("../img/gameBoard/cailloux.png") !important; }
+.fui_weapon15 { background-image: url("../img/gameBoard/hache.png") !important; }
+.fui_weapon16 { background-image: url("../img/gameBoard/poulet.png") !important; }
+.fui_weapon17 { background-image: url("../img/gameBoard/epee.png") !important; }
+.fui_weapon18 { background-image: url("../img/gameBoard/nyancat.png") !important; }
+.fui_weapon19 { background-image: url("../img/gameBoard/ak47.png") !important; }
+.fui_weapon20 { background-image: url("../img/gameBoard/chien.png") !important; }
+.fui_weapon21 { background-image: url("../img/gameBoard/lightSaber.png") !important; }
+.fui_weapon22 { background-image: url("../img/gameBoard/grenade.png") !important; }
 
 .mb_price_span {
     text-align: center;
@@ -861,6 +871,216 @@ header {
     left: 378px;
 }
 
+/* FIGHT UI WINDOW */
+
+#game_fight_ui_window {
+    display: none;
+    width: 734px;
+    height: 339px;
+    position: absolute;
+    z-index: 2;
+    top: 30px;
+    left: 88px;
+    padding: 20px 20px 20px 20px;
+    background-image: url('../img/fightBoard/landscape.png');
+    border: 3px solid black;
+    border-radius: 30px;
+}
+
+#pre_fight_fui_top {
+    width: 774px;
+    height: 379px;
+    background-color: rgba(0,0,0,0.5);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-radius: 23px;
+}
+
+#pre_fight_fui_left {
+    position: absolute;
+    top: 40px;
+    left: -6px;
+}
+
+#pre_fight_fui_right {
+    position: absolute;
+    top: 40px;
+    left: 500px;
+}
+
+#pre_fight_fui_left_farmer {
+    position: absolute;
+    top: 113px;
+    left: 117px;
+}
+
+#pre_fight_fui_right_farmer {
+    position: absolute;
+    top: 116px;
+    left: -30px;
+}
+
+#pre_fight_fui_left_bar {
+    width: 200px;
+    height: 30px;
+    background-image: url('../img/fightBoard/rectL.png');
+    text-align: right;
+    padding-right: 75px;
+    color: white;
+    font-size: 20px;
+    padding-top: 10px;
+    margin-left: 6px;
+}
+
+#pre_fight_fui_right_bar {
+    width: 205px;
+    height: 30px;
+    background-image: url('../img/fightBoard/rectR.png');
+    text-align: left;
+    padding-left: 75px;
+    color: white;
+    font-size: 20px;
+    padding-top: 10px;
+}
+
+#container_fui {
+    display: none;
+}
+
+#fui_nameA {
+    font-size: 24px;
+    width: 250px;
+    text-align: left;
+}
+
+#fui_div_lifeA {
+    position: absolute;
+    left: 20px;
+    top: 47px;
+}
+
+#fui_lifeBarRedA {
+    width: 250px;
+    height: 30px;
+    background-color: red;
+    -moz-box-shadow: inset 0px 0px 15px 4px #282727;
+    -webkit-box-shadow: inset 0px 0px 15px 4px #282727;
+    box-shadow: inset 0px 0px 15px 4px #282727;
+}
+
+#fui_lifeBarGreenA {
+    width: 250px;
+    height: 30px;
+    background-color: green;
+    position: relative;
+    left: 0px;
+    top: -30px;
+    -moz-box-shadow: inset 0px 0px 15px 4px #282727;
+    -webkit-box-shadow: inset 0px 0px 15px 4px #282727;
+    box-shadow: inset 0px 0px 15px 4px #282727;
+}
+
+#fui_heath_valueA {
+    display: inline-block;
+    position: relative;
+    top: -54px;
+    width: 250px;
+    text-align: center;
+    color: white;
+}
+
+#fui_nameD {
+    position: absolute;
+    left: 509px;
+    top: 20px;
+    font-size: 24px;
+    width: 250px;
+    text-align: right;
+}
+
+#fui_div_lifeD {
+    position: absolute;
+    left: 509px;
+    top: 47px;
+}
+
+#fui_lifeBarRedD {
+    width: 250px;
+    height: 30px;
+    background-color: red;
+    -moz-box-shadow: inset 0px 0px 15px 4px #282727;
+    -webkit-box-shadow: inset 0px 0px 15px 4px #282727;
+    box-shadow: inset 0px 0px 15px 4px #282727;
+}
+
+#fui_lifeBarGreenD {
+    width: 250px;
+    height: 30px;
+    background-color: green;
+    position: relative;
+    left: 0px;
+    top: -30px;
+    -moz-box-shadow: inset 0px 0px 15px 4px #282727;
+    -webkit-box-shadow: inset 0px 0px 15px 4px #282727;
+    box-shadow: inset 0px 0px 15px 4px #282727;
+}
+
+#fui_heath_valueD {
+    display: inline-block;
+    position: relative;
+    top: -54px;
+    width: 250px;
+    text-align: center;
+    color: white;
+}
+
+#fui_weaponsA {
+    position: absolute;
+    top: 86px;
+}
+
+
+#fui_weaponsD {
+    position: absolute;
+    top: 86px;
+    left: 704px;
+}
+
+#fui_farmerA {
+    position: absolute;
+    top: 160px;
+    left: 112px;
+}
+
+#fui_farmerD {
+    position: absolute;
+    top: 160px;
+    left: 457px;
+}
+
+#fui_notif {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 75px;
+    left: 353px;
+
+    -webkit-background-size: cover; /* pour Chrome et Safari */
+    -moz-background-size: cover; /* pour Firefox */
+    -o-background-size: cover; /* pour Opera */
+    background-size: cover; /* version standardisée */
+}
+
+#fui_result {
+    width: 410px;
+    height: 50px;
+    position: absolute;
+    top: 95px;
+    left: 192px;
+    text-align: center;
+    font-weight: bold;
+}
 
 /* Market Section */
 
@@ -899,6 +1119,12 @@ left: 20px;
 width: 575px;
 height: 190px;
     background-color: white;
+}
+
+#fui_leave {
+    position: absolute;
+    top: 22px;
+    left: 366px;
 }
 
 
