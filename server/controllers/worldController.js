@@ -93,6 +93,25 @@ WorldController = function(socket, db, mongoose){
         });
     };
 
+    this.initMarketFluctuation = function(){
+        setInterval(function(){
+            console.log("============== Market Fluctuation ==============");
+            var keyName = undefined;
+            for(var key in Config.idItems)
+            {
+                var currentCrop = Config.idItems[key];
+                if (currentCrop.id > 100 && currentCrop.id < 200){
+                    var minValue = Config.pricesRange[currentCrop.name].min;
+                    var maxValue = Config.pricesRange[currentCrop.name].max;
+
+                    Config.prices[currentCrop.name] = Math.floor(Math.random()*(maxValue-minValue+1)+minValue);
+                    console.log(currentCrop.displayed + " : " + Config.prices[currentCrop.name]);
+                }
+            }
+            console.log("================================================");
+        }, Config.marketRefreshTime);
+    };
+
     //Add a tile from database in the server world (populate of properties)
     this.addTileToTheWorld = function(tileSend){
         var self = this;

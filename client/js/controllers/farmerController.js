@@ -129,6 +129,11 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 self.canvas.removeFarmerSprite(ennemyFarmer);
                 self.canvas.putFarmerSprite(positionPx, farmerImg, ennemyFarmer, self.canvas.L_NAME.players);
             });
+
+            socket.on('FARMER-newMoney', function(money){
+                socket.sessions.farmer.money = money;
+                jQuery('#mg_money_joueur').text(money);
+            });
         },
 
         moveFarmer: function(path) {

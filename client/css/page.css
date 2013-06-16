@@ -862,6 +862,44 @@ header {
 }
 
 
+/* Market Section */
+
+#mb_board_page_sell{
+}
+
+.market_info {
+    background-color: red;
+width: 111px;
+height: 80px;
+display: inline-block;
+
+}
+
+.market_info_image{
+
+    background-color: yellow;
+}
+
+.market_info_name{
+
+}
+
+.market_info_price{
+
+}
+
+.market_info_range{
+
+}
+
+#market_section{
+position: absolute;
+top: 0px;
+left: 20px;
+width: 575px;
+height: 190px;
+    background-color: white;
+}
 
 
 

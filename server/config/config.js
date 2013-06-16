@@ -15,6 +15,8 @@ Configuration = function(){
     this.initialMoney = 500;
     // working session time (ms)
     this.workingTime = 2000;
+    // refresh market price frequency (ms)
+    this.marketRefreshTime = 300000; // 5 minutes
 
 
     //Tile content types
@@ -76,6 +78,27 @@ Configuration = function(){
     this.prices.radis = 30;
     this.prices.salade = 35;
     this.prices.topinambour = 40;
+    //Crops
+    this.prices.avoineCrop = 1;
+    this.prices.bleCrop = 2;
+    this.prices.carotteCrop = 2;
+    this.prices.citrouilleCrop = 7;
+    this.prices.fayotCrop = 4;
+    this.prices.seigleCrop = 12;
+    this.prices.radisCrop = 22;
+    this.prices.saladeCrop = 300;
+    this.prices.topinambourCrop = 85;
+    //Price range
+    this.pricesRange = new Object();
+    this.pricesRange.avoineCrop = {min: 1, max:1};
+    this.pricesRange.bleCrop = {min: 2, max:2};
+    this.pricesRange.carotteCrop = {min: 1, max:3};
+    this.pricesRange.citrouilleCrop = {min: 6, max:8};
+    this.pricesRange.fayotCrop = {min: 4, max:5};
+    this.pricesRange.seigleCrop = {min: 8, max:16};
+    this.pricesRange.radisCrop = {min: 22, max:22};
+    this.pricesRange.saladeCrop = {min: 270, max:330};
+    this.pricesRange.topinambourCrop = {min: 30, max:200};
     //Buildings
     this.prices.grangeP = 100;
     this.prices.grangeM = 300;

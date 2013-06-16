@@ -45,7 +45,7 @@ LoadServer.prototype = {
         //Init the world from the database
         var worldControllerServer = new WorldController(null, db, mongoose);
         worldControllerServer.initWorld();
-
+        worldControllerServer.initMarketFluctuation();
     },
 
     callModels: function(){

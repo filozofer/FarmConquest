@@ -218,6 +218,11 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                             }
                         }
                     }
+                    else if (idItem > 100 && idItem < 200){
+                        console.log("TEMPORAIRE gameController:222 vente sur click itemBag en attendant interface vente");
+                        var quantity = 1;
+                        socket.emit('GAME-saleCrop', {id: idItem, quantity: quantity});
+                    }
                 });
             });
 
