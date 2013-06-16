@@ -20,6 +20,7 @@ Configuration = function(){
     //Tile content types
 
     /* ID ITEMS */
+    //Seeds
     this.idItems = new Object();
     this.idItems.avoine = { id: 1, name: "avoine" };
     this.idItems.ble = { id: 2, name: "ble" };
@@ -30,6 +31,16 @@ Configuration = function(){
     this.idItems.radis = { id: 7, name: "radis" };
     this.idItems.salade = { id: 8, name: "salade" };
     this.idItems.topinambour = { id: 9, name: "topinambour" };
+    //Crops
+    this.idItems.avoineCrop = { id: 101 ,name: "avoineCrop", displayed:"Avoine" };
+    this.idItems.bleCrop = { id: 102, name: "bleCrop", displayed:"Ble" };
+    this.idItems.carotteCrop = { id: 103, name: "carotteCrop", displayed:"Carotte" };
+    this.idItems.citrouilleCrop = { id: 104, name: "citrouilleCrop", displayed:"Citrouille" };
+    this.idItems.fayotCrop = { id: 105, name: "fayotCrop", displayed:"Fayot" };
+    this.idItems.seigleCrop = { id: 106, name: "seigleCrop", displayed:"Seigle" };
+    this.idItems.radisCrop = { id: 107, name: "radisCrop", displayed:"Radis" };
+    this.idItems.saladeCrop = { id: 108, name: "saladeCrop", displayed:"Salade" };
+    this.idItems.topinambourCrop = { id: 109, name: "topinambourCrop", displayed:"Topinambour" };
     //Buildings
     this.idItems.grangeP = { id: 10, name: "grangeP" };
     this.idItems.grangeM = { id: 11, name: "grangeM" };
@@ -46,7 +57,12 @@ Configuration = function(){
     this.idItems.lightsaber = { id: 21, name: "lightsaber" };
     this.idItems.grenade = { id: 22, name: "grenade" };
 
-
+    this.tileType = new Object();
+    this.tileType.grangeP = "grangeP";
+    this.tileType.grangeM = "grangeM";
+    this.tileType.grangeG = "grangeG";
+    this.tileType.farm = "farm";
+    this.tileType.seed = "seed";
 
     /* Prices */
     this.prices = new Object();

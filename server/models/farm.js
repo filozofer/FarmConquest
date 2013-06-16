@@ -9,7 +9,7 @@ var mongoose    = require("mongoose"),
 
 
 var FarmSchema = new Schema({
-    owner : { type : Schema.ObjectId, ref : 'User'},
+    owner : { type : Schema.ObjectId, ref : 'Farmer'},
     mainPos : { type : Schema.ObjectId, ref : 'Tile'},
     locations : [{ type : Schema.ObjectId, ref : 'Tile'}],
     type : String,

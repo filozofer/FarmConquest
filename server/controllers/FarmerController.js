@@ -15,8 +15,10 @@ FarmerController = function(socket, db, mongoose){
 
     socket.on('getFarmerPosition', function(){
         if(!socket.sessions.loadFarmerOnce){
+
+            Farmer.findOne({name: socket.sessions.user.username}, function(err, farmerToUse){
             //Find the farm of the connect player
-            Farm.findOne({owner: socket.sessions.user._id }).populate("mainPos").exec(function(err, farm){
+            Farm.findOne({owner: farmerToUse._id }).populate("mainPos").exec(function(err, farm){
                 var farmObject = farm.toObject();
                 var mainPos = farmObject.mainPos;
 
@@ -51,12 +53,14 @@ FarmerController = function(socket, db, mongoose){
                     });
                 });
             });
+            });
+            socket.sessions.loadFarmerOnce = true;
         }
     });
 
     socket.on('getFarmPositionForTeleport', function(){
         //Find the farm of the connect player
-        Farm.findOne({owner: socket.sessions.user._id }).populate("mainPos").exec(function(err, farm){
+        Farm.findOne({owner: socket.sessions.farmer._id }).populate("mainPos").exec(function(err, farm){
             var farmObject = farm.toObject();
             var mainPos = farmObject.mainPos;
 
@@ -90,6 +94,11 @@ FarmerController = function(socket, db, mongoose){
 
         var finish = resp.finish;
         var goToWork = resp.goToWork;
+        Farmer.findOne({name: socket.sessions.user.username },function(err, farmer){
+
+        if (socket.sessions.farmer == undefined){
+            socket.sessions.farmer = farmer.getAsObject();
+        }
 
         var pathManager = new ShortestPath(G.World, socket.sessions.farmer, finish, goToWork);
 
@@ -101,8 +110,9 @@ FarmerController = function(socket, db, mongoose){
         var neighborSockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
         for(var i=0; i<neighborSockets.length; i++){
             var currentSocket = neighborSockets[i];
-            currentSocket.emit('ennemyPath', {ennemy: socket.sessions.farmer, path: path});
+            currentSocket.emit('ennemyPath', {ennemy: socket.sessions.farmer, path: path, isHarvesting: resp.isHarvesting});
         }
+        });
     });
 
     socket.on('updateFarmerPositionOnMove', function(tile){

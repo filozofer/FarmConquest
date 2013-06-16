@@ -24,7 +24,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
             });
 
             $j(document).on('FARMER-moveFarmer', function(event, obj) {
-                socket.emit('calculatePath', {'finish': obj.tile, 'goToWork' : obj.goToWork});
+                socket.emit('calculatePath', {'finish': obj.tile, 'goToWork' : obj.goToWork, 'isHarvesting' : socket.sessions.farmer.isHarvesting});
             });
 
             $j(document).on('FARMER-updatePosition', function(event, xToMove, yToMove){
@@ -75,7 +75,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                     for(var i = 0; i < farmer.bag.length; i++)
                     {
                         var itemBag = farmer.bag[i];
-                        var content = "<span class='mg_item_bag'><span class='mg_bag_item bagItem" + itemBag.idItem + "'></span><span class='bagItem_quantity'>" + itemBag.quantity + "</span></span>";
+                        var content = "<span class='mg_item_bag' iditem='" + itemBag.idItem + "'><span class='mg_bag_item bagItem" + itemBag.idItem + "'></span><span class='bagItem_quantity'>" + itemBag.quantity + "</span></span>";
 
                         $j(".mg_bag_box[idBag='" + itemBag.positionInBag + "']").html(content);
                     }
@@ -95,7 +95,11 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
             socket.on('ennemyPath', function(resp){
                 var ennemyFarmer = resp.ennemy;
                 var path = resp.path;
-                self.moveEnnemy(path, ennemyFarmer);
+                var isHarvesting = false;
+                if (resp.isHarvesting != undefined){
+                    isHarvesting = true;
+                }
+                self.moveEnnemy(path, ennemyFarmer, isHarvesting);
             });
 
             socket.on('ennemyTeleportedToFarm', function(resp){
@@ -132,13 +136,14 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
             this.canvas.moveTextureAlongPath(path, this.farmer.image, this.farmer, this.canvas.L_NAME.players, this.app.Config.playerMoveSpeed, isFarmer);
         },
 
-        moveEnnemy: function(path, ennemy){
+        moveEnnemy: function(path, ennemy, isHarvesting){
             var isFarmer = true;
             // retrieve ennemy farmer entity
             var farmerEnnemy = undefined;
             for (var i=0; i<socket.sessions.ennemies.length; i++){
                 if (socket.sessions.ennemies[i].name == ennemy.name){
                     farmerEnnemy = socket.sessions.ennemies[i];
+                    farmerEnnemy.isHarvesting = isHarvesting;
                     break;
                 }
             }

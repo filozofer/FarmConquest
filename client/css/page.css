@@ -7,7 +7,7 @@ html {
 }
 
 body {
-    cursor: url("../img/cursors/main.cur"), progress !important;
+    cursor: url("../img/cursors/main.cur"), progress;
     width: 100%;
     height: 100%;
     margin: 0;
@@ -259,6 +259,25 @@ header {
 .bagItem11 { background-image: url('../img/gameBoard/grange_moyen.png');}
 .bagItem12 { background-image: url('../img/gameBoard/grange_grande.png');}
 
+.bagItem101 { background-image: url('../img/Farming/crops_set_clean.png');
+              background-position: 0px 0px; }
+.bagItem102 { background-image: url('../img/Farming/crops_set_clean.png');
+              background-position: -40px 0px; }
+.bagItem103 { background-image: url('../img/Farming/crops_set_clean.png');
+              background-position: -80px 0px; }
+.bagItem104 { background-image: url('../img/Farming/crops_set_clean.png');
+              background-position: -120px 0px; }
+.bagItem105 { background-image: url('../img/Farming/crops_set_clean.png');
+              background-position: -160px 0px; }
+.bagItem106 { background-image: url('../img/Farming/crops_set_clean.png');
+              background-position: -200px 0px; }
+.bagItem107 { background-image: url('../img/Farming/crops_set_clean.png');
+              background-position: -240px 0px; }
+.bagItem108 { background-image: url('../img/Farming/crops_set_clean.png');
+              background-position: -280px 0px; }
+.bagItem109 { background-image: url('../img/Farming/crops_set_clean.png');
+              background-position: -320px 0px; }
+
 #mg_notif_bag {
     display: inline-block;
     width: 273px;
@@ -285,7 +304,7 @@ header {
     position: absolute;
     top: 5px;
     left: 700px;
-    cursor: url("../img/cursors/hand.cur"), progress !important;
+    cursor: 'pointer';
 }
 
 .action_btn:hover{
@@ -300,7 +319,7 @@ header {
     position: absolute;
     top: 5px;
     left: 760px;
-    cursor: url("../img/cursors/hand.cur"), progress !important;
+    cursor: 'pointer';
 }
 
 #btn_alliance,
@@ -308,7 +327,7 @@ header {
     position: absolute;
     top: 5px;
     left: 820px;
-    cursor: url("../img/cursors/hand.cur"), progress !important;
+    cursor: 'pointer';
 }
 
 #btn_attaque,
@@ -316,7 +335,7 @@ header {
     position: absolute;
     top: 5px;
     left: 880px;
-    cursor: url("../img/cursors/hand.cur"), progress !important;
+    cursor: 'pointer';
 }
 
 #mg_notifications_area {

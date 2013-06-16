@@ -35,7 +35,7 @@ WorldController = function(socket, db, mongoose){
         this.addFarmer(user);
 
         //Add farm
-        this.addFarm(user);
+        //this.addFarm(user);
         //Send to client the world (end of addFarm after add in database)
 
     };
@@ -105,9 +105,9 @@ WorldController = function(socket, db, mongoose){
         if(tileTo.owner != null && typeof(tileTo.owner._bsontype) == "string")
         {
             //Get owner
-            User.findById(tileTo.owner).select('username').exec(function(err, user){
+            Farmer.findById(tileTo.owner).select('name').exec(function(err, farmer){
                 //Set owner
-                tileAsObject.owner = user.getAsObject();
+                tileAsObject.owner = farmer.getAsObject();
 
                 //Verify if tile as contentTile set (ObjectId)
                 if(tileTo.contentTile != null && typeof(tileTo.contentTile._bsontype) == "string")
@@ -147,7 +147,7 @@ WorldController = function(socket, db, mongoose){
 
     //On register, create farmer
     this.addFarmer = function(user){
-
+        var self = this;
         var farmer = new Farmer();
         farmer.user = user;
         farmer.name = user.username;
@@ -162,12 +162,13 @@ WorldController = function(socket, db, mongoose){
             farmer.save(function(err){
                 arsenal.farmer = farmer;
                 arsenal.save(function(err){});
+                self.addFarm(farmer);
             });
         });
     };
 
     //On register, create farm
-    this.addFarm = function(user){
+    this.addFarm = function(farmer){
 
         var caseUL = new Object();
         var caseBR = new Object();
@@ -186,7 +187,7 @@ WorldController = function(socket, db, mongoose){
             var newFarm = null;
             //Case world is empty so first farm in the world
             if (caseUL.X==0 && caseBR.Y == 0){
-                newFarm = self.generateNewFarm(0,0, user);
+                newFarm = self.generateNewFarm(0,0, farmer);
             }
             else{
                 //Ici on fait les 4 tests de voisinage
@@ -200,15 +201,15 @@ WorldController = function(socket, db, mongoose){
                 //nouvelle ferme grace à la fonction generateNewFarm() en lui donnant en paramètre les coordonnées
                 //de la première case de la nouvelle ferme.
                 if((up && !right && !bottom && !left) ||(up && right  && !bottom && !left))
-                    newFarm = self.generateNewFarm(caseUL.X - config.farmSize, caseUL.Y, user);
+                    newFarm = self.generateNewFarm(caseUL.X - config.farmSize, caseUL.Y, farmer);
                 else if((!up && !right && !bottom && left) ||(up  && !right  && !bottom && left))
-                    newFarm = self.generateNewFarm(caseUL.X, caseUL.Y + config.farmSize, user);
+                    newFarm = self.generateNewFarm(caseUL.X, caseUL.Y + config.farmSize, farmer);
                 else if((!up && right && !bottom && !left) || (!up && right && bottom  && !left))
-                    newFarm = self.generateNewFarm(caseUL.X, caseUL.Y - config.farmSize, user);
+                    newFarm = self.generateNewFarm(caseUL.X, caseUL.Y - config.farmSize, farmer);
                 else if((!up && !right && bottom && !left) || (!up && !right && bottom && left))
-                    newFarm = self.generateNewFarm(caseUL.X + config.farmSize, caseUL.Y, user);
+                    newFarm = self.generateNewFarm(caseUL.X + config.farmSize, caseUL.Y, farmer);
                 else
-                    newFarm = self.generateNewFarm(caseUL.X + config.farmSize, caseUL.Y, user);
+                    newFarm = self.generateNewFarm(caseUL.X + config.farmSize, caseUL.Y, farmer);
             }
 
             if(newFarm != null)
@@ -228,12 +229,12 @@ WorldController = function(socket, db, mongoose){
 
     //Generate tiles of a new farm, add in database and in G.World
     //x & y are the coord of the top left tile (the first) of the farm
-    this.generateNewFarm = function(x, y, user){
+    this.generateNewFarm = function(x, y, farmer){
         var self = this;
         var newFarmTiles = new Array();
         var farm = new Farm();
         farm.create();
-        farm.owner = user;
+        farm.owner = farmer;
         farm.locations = new Array();
         var locationsTemp = new Array();
 
@@ -247,7 +248,7 @@ WorldController = function(socket, db, mongoose){
                 var newFarmTile = new Tile();
                 newFarmTile.X = i;
                 newFarmTile.Y = j;
-                newFarmTile.owner = user;
+                newFarmTile.owner = farmer;
                 newFarmTile.contentTile = null;
                 newFarmTile.setRandomStats();
                 newFarmTile.walkable = true;
@@ -285,7 +286,7 @@ WorldController = function(socket, db, mongoose){
                 if (err) { throw err; }
                 //Add in world server
                 var tileAsObject = tileDB.getAsObject();
-                tileAsObject.owner = user.getAsObject();
+                tileAsObject.owner = farmer.getAsObject();
                 if(G.World[tileDB.X] == undefined){ G.World[tileDB.X] = new Object(); }
                 G.World[tileDB.X][tileDB.Y] = tileAsObject;
             });
@@ -298,7 +299,7 @@ WorldController = function(socket, db, mongoose){
                     if (err) { throw err; }
                     //Add in world server
                     var tileAsObject = tileDB.getAsObject();
-                    tileAsObject.owner = user.getAsObject();
+                    tileAsObject.owner = farmer.getAsObject();
                     if(G.World[tileDB.X] == undefined){ G.World[tileDB.X] = new Object(); }
                     G.World[tileDB.X][tileDB.Y] = tileAsObject;
 
@@ -329,7 +330,7 @@ WorldController = function(socket, db, mongoose){
                                             contentTile.locations.push(loc2);
                                             contentTile.locations.push(loc3);
                                             contentTile.locations.push(loc4);
-                                            contentTile.owner = user;
+                                            contentTile.owner = farmer;
 
                                             contentTile.save(function(err, contentTileDBs){
                                                 ContentTile.findById(contentTileDBs._id).populate("owner locations mainPos").exec(function(err, contentTileDB){
@@ -344,16 +345,16 @@ WorldController = function(socket, db, mongoose){
 
                                                                                     var contentTileAsObject = contentTileDB.getAsObject();
                                                                                     var t1 = loca1.getAsObject();
-                                                                                    t1.owner = user.getAsObject();
+                                                                                    t1.owner = farmer.getAsObject();
                                                                                     t1.contentTile = contentTileAsObject;
                                                                                     var t2 = loca2.getAsObject();
-                                                                                    t2.owner = user.getAsObject();
+                                                                                    t2.owner = farmer.getAsObject();
                                                                                     t2.contentTile = contentTileAsObject;
                                                                                     var t3 = loca3.getAsObject();
-                                                                                    t3.owner = user.getAsObject();
+                                                                                    t3.owner = farmer.getAsObject();
                                                                                     t3.contentTile = contentTileAsObject;
                                                                                     var t4 = loca4.getAsObject();
-                                                                                    t4.owner = user.getAsObject();
+                                                                                    t4.owner = farmer.getAsObject();
                                                                                     t4.contentTile = contentTileAsObject;
 
                                                                                     G.World[t1.X][t1.Y] = t1;
@@ -362,7 +363,7 @@ WorldController = function(socket, db, mongoose){
                                                                                     G.World[t4.X][t4.Y] = t4;
 
                                                                                     //Now the farm is save in db we send the map to the client
-                                                                                    self.sendWorldToClient(user);
+                                                                                    self.sendWorldToClient(farmer);
                                                                                 });
                                                                             });
                                                                         });
@@ -391,10 +392,10 @@ WorldController = function(socket, db, mongoose){
     };
 
     //Send to client the world
-    this.sendWorldToClient = function(user){
+    this.sendWorldToClient = function(farmer){
 
         //Get main farm position in database
-        Farm.findOne({owner: user}).populate('mainPos').exec(function(err, farm){
+        Farm.findOne({owner: farmer}).populate('mainPos').exec(function(err, farm){
             if(farm != null)
             {
                 //Collect world tiles from (-1, -1) chunk to (+1, +1) chunk

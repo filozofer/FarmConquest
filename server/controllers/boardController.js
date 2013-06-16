@@ -274,7 +274,7 @@ BoardController = function(socket, db, mongoose){
             }
             else if(bag[i] != undefined)
             {
-                if(bag[i].idItem == id)
+                if(bag[i].idItem == id && bag[i].quantity < Config.maxItemByCellBag)
                 {
                     alreadyInBag = i;
                 }

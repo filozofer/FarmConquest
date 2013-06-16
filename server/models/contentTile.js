@@ -11,8 +11,14 @@ var ContentTile = new Schema({
     name : String,
     description : String,
     mainPos : { type : Schema.ObjectId, ref : 'Tile'},
-    owner : { type : Schema.ObjectId, ref : 'User'},
-    locations : [{ type : Schema.ObjectId, ref : 'Tile'}]
+    owner : { type : Schema.ObjectId, ref : 'Farmer'},
+    locations : [{ type : Schema.ObjectId, ref : 'Tile'}],
+    idItem : Number,
+    maturationTime: Number,
+    deathTime: Number,
+    productivity: Number,
+    unitLosePerDeath: Number,
+    state: Number
 });
 
 ContentTile.methods.create = function(type, name, description){
@@ -28,6 +34,12 @@ ContentTile.methods.getAsObject = function(){
     object.type = this.type;
     object.name = this.name;
     object.description = this.description;
+    object.idItem = this.idItem;
+    object.maturationTime =    this.maturationTime;
+    object.deathTime =         this.deathTime;
+    object.productivity =      this.productivity;
+    object.unitLosePerDeath =  this.unitLosePerDeath;
+    object.state = this.state;
 
     if(this.mainPos != null && typeof(this.mainPos._bsontype) == "undefined")
     {

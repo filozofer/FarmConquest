@@ -20,12 +20,23 @@ define(['jquery'], function(jQuery){
             //socket.emit("plantTest", { X: this.X, Y: this.Y});
             if (this.walkable){
                 if (!socket.sessions.farmer.isWorking){
+                    if(socket.sessions.farmer.isHarvesting){
+                        socket.sessions.farmer.isHarvesting = false;
+                    }
                     //si une action est sélectionnée
                     var goToWork = false;
-                    if ( socket.sessions.selectedActionIndex != undefined && socket.sessions.currentUser.username == this.owner.username) {
+                    //BOARD ACTION
+                    if ( socket.sessions.selectedActionIndex != undefined && socket.sessions.farmer.name == this.owner.name) {
                        goToWork = true;
                        // we save in session the tile clicked
                        socket.sessions.selectedActionTile = this;
+                    }
+                    //SEED-BUILDING ACTION
+                    else if (socket.sessions.farmer.name == this.owner.name && socket.sessions.farmer.isFarming){
+                        goToWork = true;
+                        $j("body").css('cursor','url("../img/cursors/main.cur"), progress');
+                        // we save in session the tile clicked
+                        socket.sessions.selectedActionTile = this;
                     }
                     socket.sessions.positionClick = {X: this.XPx, Y: this.YPx};
                     if(!(socket.sessions.farmer.X == this.X && socket.sessions.farmer.Y == this.Y)){
@@ -33,7 +44,7 @@ define(['jquery'], function(jQuery){
                     }
                 }
             }
-            else if(this.contentTile != undefined && this.contentTile.type == "farm" && this.owner != undefined && this.owner.username == socket.sessions.currentUser.username)
+            else if(this.contentTile != undefined && this.contentTile.type == "farm" && this.owner != undefined && this.owner.name == socket.sessions.farmer.name)
             {
                 $j("#game_main_board").fadeIn(500);
                 socket.emit("BOARD-getPage", 1);
@@ -78,7 +89,13 @@ define(['jquery'], function(jQuery){
             {
                 if(this.image != undefined)
                 {
-                    this.image.setOpacity(1);
+                     if (this.contentTile != undefined){
+                        if (this.contentTile.state != 3){
+                            this.image.setOpacity(1);
+                        }
+                     } else {
+                        this.image.setOpacity(1);
+                     }
                 }
                 else
                 {
@@ -91,17 +108,18 @@ define(['jquery'], function(jQuery){
 		},
 
 		rightClickEvent: function(){
-		    if (this.walkable){
-                            //si une action est sélectionnée
-                            var goToWork = false;
-                            if ( socket.sessions.selectedActionIndex != undefined ) {
-                               goToWork = true;
-                               // we save in session the tile clicked
-                               socket.sessions.selectedActionTile = this;
-                            }
+		    if (this.contentTile != undefined && this.contentTile.type == app.Config.tileType.seed){
+                //si une action est sélectionnée
 
-                            $j(document).trigger('FARMER-moveFarmer', {'tile':this, 'goToWork':goToWork});
-                        }
+                goToWork = true;
+                socket.sessions.farmer.isHarvesting = true;
+                // we save in session the tile clicked
+                socket.sessions.selectedActionTile = this;
+
+                socket.sessions.positionClick = {X: this.XPx, Y: this.YPx};
+
+                $j(document).trigger('FARMER-moveFarmer', {'tile':this, 'goToWork':goToWork});
+            }
 		},
 
         setContentTile: function(contentTile){

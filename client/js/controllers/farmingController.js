@@ -39,10 +39,20 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 }
             });
 
-            jQuery(document).on('FCL-farmerMoveEnd', function(){
+            jQuery(document).on('FARMING-farmerMoveEnd', function(){
                 if (socket.sessions.selectedActionTile != undefined){
-                    if ( socket.sessions.selectedActionIndex != undefined && socket.sessions.selectedActionTile.owner.username == socket.sessions.currentUser.username) {
-                        socket.emit('doFarmingAction', { 'tile' : socket.sessions.selectedActionTile, 'index' : socket.sessions.selectedActionIndex});
+                    if (socket.sessions.selectedActionTile.owner.name == socket.sessions.farmer.name) {
+                        if( socket.sessions.selectedActionIndex != undefined){
+                            socket.emit('doFarmingAction', { 'tile' : socket.sessions.selectedActionTile, 'index' : socket.sessions.selectedActionIndex});
+                        }
+                        else if (socket.sessions.farmer.isFarming){
+                            console.log("PLANT Item with ID=" + socket.sessions.idItemSelected + " at " + socket.sessions.selectedActionTile.X +"/" + socket.sessions.selectedActionTile.Y);
+                            socket.emit('plantSeed', {tile: socket.sessions.selectedActionTile, idItem: socket.sessions.idItemSelected});
+                        }
+                        else if (socket.sessions.farmer.isHarvesting){
+                            console.log("Harvest Plant : "+ socket.sessions.selectedActionTile.contentTile.type.name);
+                            socket.emit("harvestSeed", socket.sessions.selectedActionTile);
+                        }
                     }
                 }
             });
@@ -74,6 +84,57 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             socket.on('ennemyFinishWork', function(resp){
                 var tile = self.getWorkingTileFromServer(resp.tile);
                 app.World[resp.tile.X][resp.tile.Y] = tile;
+                self.canvas.changeTexture(tile);
+            });
+
+            socket.on('doPlantSeed', function(tileServer){
+                socket.sessions.farmer.isWorking = true;
+                socket.sessions.farmer.isFarming = false;
+                var tile = self.getWorkingTileFromServer(tileServer);
+                app.World[tile.X][tile.Y] = tile;
+                self.canvas.changeTexture(tile);
+            });
+
+            socket.on('finishPlant', function(tileServer){
+                socket.sessions.farmer.isWorking = false;
+            });
+
+            socket.on('seedGrowing', function(tile){
+                console.log("seed Grow to State : " + tile.contentTile.state);
+                var tile = self.getWorkingTileFromServer(tile);
+                app.World[tile.X][tile.Y] = tile;
+                self.canvas.changeTexture(tile);
+            });
+
+            socket.on('seedGoingToDie', function(tile){
+                console.log("Seed going to die");
+                var tile = self.getWorkingTileFromServer(tile);
+                if (app.World[tile.X][tile.Y].contentTile != undefined && app.World[tile.X][tile.Y].contentTile.type == tile.contentTile.type && app.World[tile.X][tile.Y].contentTile.state == 2){
+                    app.World[tile.X][tile.Y] = tile;
+                    self.canvas.changeTexture(tile);
+                }
+            });
+
+            socket.on('seedDie', function(tile){
+                console.log("Seed died");
+                var tile = self.getWorkingTileFromServer(tile);
+                if (app.World[tile.X][tile.Y].contentTile != undefined && app.World[tile.X][tile.Y].contentTile.state == 3){
+                    app.World[tile.X][tile.Y] = tile;
+                    self.canvas.changeTexture(tile);
+                }
+            });
+
+            socket.on('FARMING-harvestFordbidden', function(){
+                socket.sessions.farmer.isHarvesting = false;
+                socket.sessions.farmer.image.stop();
+            });
+
+            socket.on('FARMING-HarvestDone', function(tile){
+                console.log("harvest done");
+                if (tile.owner.name == socket.sessions.farmer.name)
+                    socket.sessions.farmer.isHarvesting = false;
+                var tile = self.getWorkingTileFromServer(tile);
+                app.World[tile.X][tile.Y] = tile;
                 self.canvas.changeTexture(tile);
             });
         },

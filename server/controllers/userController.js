@@ -6,6 +6,7 @@ UserController = function(socket, db, mongoose){
 
     //Models
     var User = mongoose.model('User');
+    var Farmer = mongoose.model('Farmer');
 
     socket.on('login', function(userLogin){
 
@@ -32,7 +33,14 @@ UserController = function(socket, db, mongoose){
             //Send response
             socket.emit('login_resp', {'loginState': loginState, 'errorsMessages': errorsMessages});
 
-            socket.controllers.worldController.sendWorldToClient(user);
+            Farmer.findOne({user: user}, function(err, farmer){
+                if (err){throw(err);}
+
+                if(farmer != null) {
+                    socket.controllers.worldController.sendWorldToClient(farmer);
+                }
+            });
+
         });
     });
 

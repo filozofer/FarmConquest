@@ -13,7 +13,8 @@ var ItemBagSchema = new Schema({
     farmer : { type : Schema.Types.ObjectId, ref : 'Farmer'},
     name : String,
     quantity: Number,
-    positionInBag: Number
+    positionInBag: Number,
+    canBeSold: Boolean
 });
 
 
@@ -31,6 +32,7 @@ ItemBagSchema.methods.getAsObject = function(){
     object.name = this.name;
     object.quantity = this.quantity;
     object.positionInBag = this.positionInBag;
+    object.canBeSold = this.canBeSold;
 
     return object;
 };

@@ -110,10 +110,10 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                 walkingNW: self.frames([54,55,56,57,58,59,60,61], 0, 0, 96, 96, 9, 13, 96, 96),
                 walkingSE: self.frames([63,64,65,66,67,68,69,70], 0, 0, 96, 96, 9, 13, 96, 96),
                 walkingSW: self.frames([72,73,74,75,76,77,78,79], 0, 0, 96, 96, 9, 13, 96, 96),
-                sowingNE: self.frames([81,82,83,84,85,86,87,88,89], 0, 0, 96, 96, 9, 13, 96, 96),
-                sowingNW: self.frames([90,91,92,93,94,95,96,97,98], 0, 0, 96, 96, 9, 13, 96, 96),
-                sowingSE: self.frames([99,100,101,102,103,104,105,106,107], 0, 0, 96, 96, 9, 13, 96, 96),
-                sowingSW: self.frames([108,109,110,111,112,113,114,115,116], 0, 0, 96, 96, 9, 13, 96, 96)
+                seedNE: self.frames([81,82,83,84,85,86,87,88,89], 0, 0, 96, 96, 9, 13, 96, 96),
+                seedNW: self.frames([90,91,92,93,94,95,96,97,98], 0, 0, 96, 96, 9, 13, 96, 96),
+                seedSE: self.frames([99,100,101,102,103,104,105,106,107], 0, 0, 96, 96, 9, 13, 96, 96),
+                seedSW: self.frames([108,109,110,111,112,113,114,115,116], 0, 0, 96, 96, 9, 13, 96, 96)
             };
             //----------------------------
 
@@ -143,6 +143,67 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             });
 
             farmerSprite.setZIndex(zIndex);
+        },
+
+
+
+        putSeedSprite: function(vector, imageObj, objectLinked, layerName, zIndex){
+            var self = this;
+
+            var idImageItem = objectLinked.contentTile.idItem - 1;
+            var itemState = objectLinked.contentTile.state;
+            var columnNbr = 3;
+            var state0 = 0 + (columnNbr*idImageItem);
+            var state1 = 1 + (columnNbr*idImageItem);
+            var state2 = 2 + (columnNbr*idImageItem);
+            var state3 = 2 + (columnNbr*idImageItem);
+            var posY = vector.Y - (app.Config.plantHeight - app.Config.tileHeight);
+
+            //DEFINIR ANIMATIONS.....
+            var animations = {
+                0: self.frames([state0], 0, 0, 80, 60, 3, 9, 80, 60),
+                1: self.frames([state1], 0, 0, 80, 60, 3, 9, 80, 60),
+                2: self.frames([state2], 0, 0, 80, 60, 3, 9, 80, 60),
+                3: self.frames([state3], 0, 0, 80, 60, 3, 9, 80, 60),
+            };
+            //----------------------------
+
+            var animationToDisplay = ''+itemState+'';
+
+            var seedSprite = new Kinetic.Sprite({
+                image: imageObj,
+                x: vector.X,
+                y: posY,
+                animation: animationToDisplay,
+                animations: animations,
+                frameRate: 7,
+                index: 0
+            });
+
+            if (itemState == 3){
+                seedSprite.setOpacity(0.5);
+            }
+
+            seedSprite.objectLinked = objectLinked;
+            objectLinked.image = seedSprite;
+
+            if(this.layers[layerName] == undefined)
+            {
+                this.layers[layerName] = new Kinetic.Layer();
+            }
+
+            this.layers[layerName].add(seedSprite);
+
+            seedSprite.start();
+            seedSprite.afterFrame(0.5, function(){
+                seedSprite.stop();
+            });
+
+            seedSprite.setZIndex(zIndex);
+        },
+
+        removeSeedSprite: function(tile){
+            tile.image.remove();
         },
 
         removeFarmerSprite: function(farmer){
@@ -184,7 +245,40 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             if (element.contentTile != undefined){
                 tileType = element.contentTile.type;
             }
-            this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx), this.getImageFromType(tileType, action) , app.World[element.X][element.Y], this.L_NAME.tiles, zIndex);
+            if (tileType == app.Config.tileType.seed){
+                this.putSeedSprite(new Vector2(elementToRemove.XPx, elementToRemove.YPx), this.getImageFromType(tileType, action), app.World[element.X][element.Y], this.L_NAME.tiles, zIndex);
+            } else {
+                this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx), this.getImageFromType(tileType, action), app.World[element.X][element.Y], this.L_NAME.tiles, zIndex);
+            }
+
+        },
+
+        changeSeedTexture: function(tile){
+            var elementToRemove = app.World[tile.X][tile.Y];
+
+            var zIndex = 1000;
+            if (elementToRemove.image != undefined){
+                elementToRemove.image.remove();
+                zIndex = elementToRemove.image.getZIndex();
+            }
+            if (self.app.World[elementToRemove.X][elementToRemove.Y].XPx == undefined){
+
+                var centerScreen = new Object();
+                centerScreen.X = this.canvas.stage.attrs.width/2;
+                centerScreen.Y = this.canvas.stage.attrs.height/2;
+
+                elementToRemove.XPx = centerScreen.X - ((elementToRemove.Y - self.app.World.center.Y) * (self.app.Config.tileWidth/2)) +((elementToRemove.X - self.app.World.center.X) * (self.app.Config.tileWidth/2)) - (self.app.Config.tileWidth/2);
+                elementToRemove.YPx = centerScreen.Y + ((elementToRemove.Y - self.app.World.center.Y) * (self.app.Config.tileHeight/2)) +((elementToRemove.X - self.app.World.center.X) * (self.app.Config.tileHeight/2)) - (self.app.Config.tileHeight/2);
+            }
+
+            //Change the world with the new element
+            tile.XPx = elementToRemove.XPx;
+            tile.YPx = elementToRemove.YPx;
+            app.World[tile.X][tile.Y] = tile;
+
+            var tileType = null;
+
+
 
         },
 
@@ -374,14 +468,14 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                         }
                         else {
                             farmer.isWalking = false;
-                            $j(document).trigger('FCL-farmerMoveEnd');
+                            $j(document).trigger('FARMING-farmerMoveEnd');
                         }
                     }
                 });
             }
             else if (path.length == 0) {
                 farmer.isWalking = false;
-                $j(document).trigger('FCL-farmerMoveEnd');
+                $j(document).trigger('FARMING-farmerMoveEnd');
             }
 
             },
@@ -620,9 +714,9 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             }
             switch(type)
             {
-                case "seed":
-                    var nameRessource = "seedTest"+actionImage;
-                    return app.Ressources["seedTest"];
+                case app.Config.tileType.seed:
+                    var nameRessource = "farming_set"+actionImage;
+                    return app.Ressources[nameRessource];
                     break;
 
                 default:

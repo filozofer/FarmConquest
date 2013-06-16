@@ -106,7 +106,7 @@ define(['jquery'], function(jQuery) {
             });
 
             socket.on('BOARD-itemBuyComplete', function(farmer){
-                $j('#mg_money_joueur').text(farmer.money);
+                jQuery('#mg_money_joueur').text(farmer.money);
 
                 if(farmer.bag != undefined)
                 {
@@ -121,6 +121,28 @@ define(['jquery'], function(jQuery) {
 
                 $j(document).trigger('GAME-bagReceive');
 
+            });
+
+            socket.on('BOARD-refreshBag', function(bag){
+                if(bag != undefined)
+                {
+                    // clean bag
+                    for (var i=0; i < 10; i++){
+                        $j(".mg_bag_box[idBag='" + i + "']").html("");
+                    }
+                    if (bag.length > 0)
+                    {
+                        for(var i = 0; i < bag.length; i++)
+                        {
+                            var itemBag = bag[i];
+                            var content = "<span class='mg_item_bag' iditem='" + itemBag.idItem + "'><span class='mg_bag_item bagItem" + itemBag.idItem + "'></span><span class='bagItem_quantity'>" + itemBag.quantity + "</span></span>";
+
+                            $j(".mg_bag_box[idBag='" + itemBag.positionInBag + "']").html(content);
+                        }
+                    }
+                }
+
+                $j(document).trigger('GAME-bagReceive');
             });
 
             socket.on('BOARD-weaponBuyComplete', function(resp){

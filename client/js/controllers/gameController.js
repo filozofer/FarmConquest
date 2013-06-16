@@ -148,7 +148,7 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                     {
                         if(app.World[i] != undefined && app.World[i][j] != undefined)
                         {
-                            if(app.World[i][j].owner != undefined && app.World[i][j].owner.username != username)
+                            if(app.World[i][j].owner != undefined && app.World[i][j].owner.name != username)
                             {
                                 self.tilesModifyEye.push(app.World[i][j]);
                             }
@@ -200,6 +200,22 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                             $j('#mg_trash_itemBag').hide("slide", {}, 300, function(){
                                 $j('#mg_trash_itemBag').css('left', '-1000px');
                             });
+                        }
+                    }
+                });
+                $j(".mg_item_bag").on('click', function(){
+                    var idItem = parseInt($j(this).attr("iditem"));
+                    if (!(idItem > 100 && idItem < 200)) // if not a crop
+                    {
+                        socket.sessions.idItemSelected = idItem;
+                        for (var key in app.Config.idItems){
+                            var currentItem = app.Config.idItems[key];
+                            if (currentItem.id == socket.sessions.idItemSelected){
+                                socket.sessions.farmer.isFarming = true;
+                                var cursorName = "cursor_"+currentItem.name+".png";
+                                $j("body").css('cursor','url("../img/cursors/'+cursorName+'"), progress');
+                                break;
+                            }
                         }
                     }
                 });
@@ -335,13 +351,13 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                                 {
                                     switch(tile.contentTile.type)
                                     {
-                                        case "farm":
+                                        case self.app.Config.tileType.farm:
                                             if(tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
                                                 this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2 + 5, tile.YPx - 100), this.app.Ressources["farm"] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
                                             break;
 
-                                        case "seed":
-                                            this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx - 20), this.app.Ressources["seedTest"] , world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
+                                        case self.app.Config.tileType.seed:
+                                            this.canvas.putSeedSprite(new Vector2(tile.XPx, tile.YPx), this.canvas.getImageFromType(tile.contentTile.type), world[i][j], this.canvas.L_NAME.tiles, countCurrentTile);
                                             break;
 
                                         default:
@@ -402,7 +418,7 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
             //Owner
             if(tileBoard.owner != undefined)
             {
-                $j("#tile_owner").html(tileBoard.owner.username);
+                $j("#tile_owner").html(tileBoard.owner.name);
             }
             else
             {

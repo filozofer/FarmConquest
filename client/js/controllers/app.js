@@ -51,6 +51,8 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             //TEXTURE
             configuration.tileHeight = 40;
             configuration.tileWidth = 80;
+            configuration.plantHeight = 60;
+            configuration.plantWidth = 80;
 
             //WORLD SCREEN SIZE
             configuration.screenMinX = -13;
@@ -67,6 +69,40 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
 
             //MOVE SPEED
             configuration.playerMoveSpeed = 0.3;
+
+            //SEEDS INFO
+            //Seeds
+            configuration.idItems = new Object();
+            configuration.idItems.avoine = { id: 1, name: "avoine" };
+            configuration.idItems.ble = { id: 2, name: "ble" };
+            configuration.idItems.carotte = { id: 3, name: "carotte" };
+            configuration.idItems.citrouille = { id: 4, name: "citrouille" };
+            configuration.idItems.fayot = { id: 5, name: "fayot" };
+            configuration.idItems.seigle = { id: 6, name: "seigle" };
+            configuration.idItems.radis = { id: 7, name: "radis" };
+            configuration.idItems.salade = { id: 8, name: "salade" };
+            configuration.idItems.topinambour = { id: 9, name: "topinambour" };
+            //Crops
+            configuration.idItems.avoineCrop = { id: 101 ,name: "avoineCrop", displayed:"Avoine" };
+            configuration.idItems.bleCrop = { id: 102, name: "bleCrop", displayed:"Ble" };
+            configuration.idItems.carotteCrop = { id: 103, name: "carotteCrop", displayed:"Carotte" };
+            configuration.idItems.citrouilleCrop = { id: 104, name: "citrouilleCrop", displayed:"Citrouille" };
+            configuration.idItems.fayotCrop = { id: 105, name: "fayotCrop", displayed:"Fayot" };
+            configuration.idItems.seigleCrop = { id: 106, name: "seigleCrop", displayed:"Seigle" };
+            configuration.idItems.radisCrop = { id: 107, name: "radisCrop", displayed:"Radis" };
+            configuration.idItems.saladeCrop = { id: 108, name: "saladeCrop", displayed:"Salade" };
+            configuration.idItems.topinambourCrop = { id: 109, name: "topinambourCrop", displayed:"Topinambour" };
+            //Buildings
+            configuration.idItems.grangeP = { id: 10, name: "grangeP" };
+            configuration.idItems.grangeM = { id: 11, name: "grangeM" };
+            configuration.idItems.grangeG = { id: 12, name: "grangeG" };
+
+            configuration.tileType = new Object();
+            configuration.tileType.grangeP = "grangeP";
+            configuration.tileType.grangeM = "grangeM";
+            configuration.tileType.grangeG = "grangeG";
+            configuration.tileType.farm = "farm";
+            configuration.tileType.seed = "seed";
 
             return configuration;
         },
@@ -114,6 +150,9 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             this.addRessource("default_tile", self.Type.IMAGE, "default_tile.png");
             this.addRessource("default_tile_arrosage", self.Type.IMAGE, "default_tile_arrosage.png");
             this.addRessource("default_tile_fertilisation", self.Type.IMAGE, "default_tile_fertilisation.png");
+            this.addRessource("farming_set", self.Type.IMAGE, "Farming/farming_set.png");
+            this.addRessource("farming_set_arrosage", self.Type.IMAGE, "Farming/farming_set_arrosage.png");
+            this.addRessource("farming_set_fertilisation", self.Type.IMAGE, "Farming/farming_set_fertilisation.png");
             this.addRessource("farmer", self.Type.IMAGE, "farmerSprite.png");
             this.addRessource("farm", self.Type.IMAGE, "farm.png");
 
