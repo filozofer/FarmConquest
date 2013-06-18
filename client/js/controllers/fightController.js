@@ -148,18 +148,21 @@ define(['jquery', '../lib/jquery-ui'], function(jQuery, ui) {
             self.fight = fight;
             fight.over = false;
 
-            self.animateActions(fight.actionsFights, fight.actionsFights.length, self, fight, function(){
-                var farmerToDelete = (fight.farmerAttacker == fight.winnerName) ? "D" : "A";
-                $j('#fui_farmer' + farmerToDelete).fadeOut(1000, function(){
-                    var result = fight.winnerName + " a gagné ! <br />";
-                    result += "L'attaquant gagne " + fight.rewardMoneyAtt + " d'argent et " + fight.creditConquest + " crédit(s) de conquête ! <br />";
-                    var winLose = (fight.winnerName = fight.farmerDefender) ? "perd" : "gagne";
-                    result += "Le defenseur " + winLose + " " + fight.rewardMoneyDef + " d'argent !";
+            setTimeout(function(){
+                self.animateActions(fight.actionsFights, fight.actionsFights.length, self, fight, function(){
+                    var farmerToDelete = (fight.farmerAttacker == fight.winnerName) ? "D" : "A";
+                    $j('#fui_farmer' + farmerToDelete).fadeOut(1000, function(){
+                        var result = fight.winnerName + " a gagné ! <br />";
+                        result += "L'attaquant gagne " + fight.rewardMoneyAtt + " d'argent et " + fight.creditConquest + " crédit(s) de conquête ! <br />";
+                        var winLose = (fight.winnerName = fight.farmerDefender) ? "perd" : "gagne";
+                        result += "Le defenseur " + winLose + " " + fight.rewardMoneyDef + " d'argent !";
 
-                    $j('#fui_result').html(result);
+                        $j('#fui_result').html(result);
+                        $j('#fui_result').show();
+                    });
+
                 });
-
-            });
+            }, 2000);
         },
 
         animateActions : function(actions, total, self, fight, callback){
@@ -221,7 +224,7 @@ define(['jquery', '../lib/jquery-ui'], function(jQuery, ui) {
 
             if (--total && fight.over != true)
                 setTimeout(function(){self.animateActions(actions, actions.length, self, fight, callback);}, 2000);
-            else
+            else if(!fight.over) //Someone has click the cross to quit the fight
                 callback();
         },
 
@@ -249,6 +252,7 @@ define(['jquery', '../lib/jquery-ui'], function(jQuery, ui) {
             $j('#fui_lifeBarGreenD').css('left', '0px');
             $j('#fui_farmerA').show();
             $j('#fui_farmerD').show();
+            $j('#fui_result').hide();
             self.fight.over = true;
         }
 

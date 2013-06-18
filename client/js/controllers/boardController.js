@@ -162,6 +162,15 @@ define(['jquery'], function(jQuery) {
                 setTimeout(function(){ $j("#mg_notif_bag").html(""); }, 3000);
             });
 
+            $j('#mb_sell_box_sell_button').on('click', function(){
+                    var idItem = parseInt($j('#mb_sell_box_drop_zone').children().first().attr('iditem'));
+                    var quantity = parseInt($j('#mb_sell_box_drop_zone').children().first().children().eq(1).html());
+                    socket.emit('BOARD-saleCrop', {id: idItem, quantity: quantity});
+                    $j('#mb_sell_box_drop_zone').html("");
+                    $j('#mb_sell_box_price_zone').hide();
+                    $j('#mb_sell_box_sell_button').hide();
+            });
+
         },
 
         fillPageInfos: function(page) {

@@ -182,6 +182,7 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                 $j(".mg_item_bag").draggable({
                     start: function() {
                         $j(this).attr('idBag', $j(this).parent().attr('idBag'));
+                        $j(this).attr('iditem', $j(this).parent().attr('iditem'));
 
                         if($j('#mg_trash_itemBag').css("left") != "0px")
                         {
@@ -222,11 +223,6 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                             }
                         }
                     }
-                    else if (idItem > 100 && idItem < 200){
-                        console.log("TEMPORAIRE gameController:222 vente sur click itemBag en attendant interface vente");
-                        var quantity = 1;
-                        socket.emit('GAME-saleCrop', {id: idItem, quantity: quantity});
-                    }
                 });
             });
 
@@ -253,12 +249,55 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                 drop: function( event, ui ) {
 
                     var clone = "<span class='mg_item_bag'>" + $j(ui.draggable).html() + "</span>";
+                    var idItem = parseInt($j(ui.draggable).attr("iditem"));
+                    var idBag = parseInt($j(ui.draggable).attr("idBag"));
                     $j(ui.draggable).remove();
                     $j(this).html(clone);
+                    $j(this).children('.mg_item_bag').first().attr('iditem', idItem);
+                    $j(this).children('.mg_item_bag').first().attr('idBag', idBag);
+
+                    $j('#mb_sell_box_price_zone').hide();
+                    $j('#mb_sell_box_sell_button').hide();
 
                     $j(document).trigger('GAME-bagReceive');
 
                     socket.emit('GAME-changePlaceItemBag', { idBag: parseInt($j(ui.draggable).attr('idBag')), newPos: $j(this).attr("idBag")});
+
+                    $j('#mg_trash_itemBag').hide("slide", {}, 300, function(){
+                        $j('#mg_trash_itemBag').css('left', '-1000px');
+                    });
+                }
+            });
+
+            $j("#mb_sell_box_drop_zone").droppable({
+                accept: function(dropElement) {
+                    var idItem = parseInt(dropElement.attr('iditem'));
+                    if(dropElement.hasClass('mg_item_bag') && $j(this).html() == "" && idItem >= 100 && idItem < 200)
+                        return true;
+                    else
+                        return false;
+                },
+
+                drop: function( event, ui ) {
+
+                    var clone = "<span class='mg_item_bag'>" + $j(ui.draggable).html() + "</span>";
+                    var idItem = parseInt($j(ui.draggable).attr("iditem"));
+                    var idBag = parseInt($j(ui.draggable).attr("idBag"));
+                    var quantity = parseInt($j(ui.draggable).children().eq(1).html());
+                    $j(ui.draggable).remove();
+                    $j(this).html(clone);
+                    $j(this).children('.mg_item_bag').first().attr('iditem', idItem);
+                    $j(this).children('.mg_item_bag').first().attr('idBag', idBag);
+
+                    $j(document).trigger('GAME-bagReceive');
+
+                    //socket.emit('BOARD-getPriceItem', { idBag: parseInt($j(ui.draggable).attr('idBag'))});
+                    var price = $j('#market_info' + idItem).children('.market_info_price').first().children().first().html();
+                    price = parseInt(price);
+
+                    $j('#mb_sell_box_price_zone').html(" X " + price + " = " + price * quantity + "<img src='img/gameBoard/miniCoin.png' width='20' alt='coin'/>");
+                    $j('#mb_sell_box_price_zone').show();
+                    $j('#mb_sell_box_sell_button').show();
 
                     $j('#mg_trash_itemBag').hide("slide", {}, 300, function(){
                         $j('#mg_trash_itemBag').css('left', '-1000px');

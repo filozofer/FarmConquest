@@ -717,6 +717,13 @@ header {
 .fui_weapon21 { background-image: url("../img/gameBoard/lightSaber.png") !important; }
 .fui_weapon22 { background-image: url("../img/gameBoard/grenade.png") !important; }
 
+#fui_leave {
+    position: absolute;
+    top: 22px;
+    left: 366px;
+}
+
+
 .mb_price_span {
     text-align: center;
     padding-top: 12px;
@@ -1088,44 +1095,91 @@ header {
 }
 
 .market_info {
-    background-color: red;
-width: 111px;
-height: 80px;
-display: inline-block;
-
+    background-image: url('../img/gameBoard/panelBourse.png');
+    width: 110px;
+    height: 110px;
+    display: inline-block;
 }
 
 .market_info_image{
-
-    background-color: yellow;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-image: url('../img/Farming/crops_set_clean.png');
+    margin-left: 13px;
 }
 
 .market_info_name{
-
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
 }
 
 .market_info_price{
-
+    margin-left: -4px;
 }
 
 .market_info_range{
-
+    display: block;
+    font-size: 13px;
+    width: 100%;
+    text-align: center;
 }
+
+#market_info106 {
+    margin-left: 60px;
+}
+
+.mb_crop101 { background-position: 0px 0px; }
+.mb_crop102 { background-position: -40px 0px; }
+.mb_crop103 { background-position: -80px 0px; }
+.mb_crop104 { background-position: -120px 0px; }
+.mb_crop105 { background-position: -160px 0px; }
+.mb_crop106 { background-position: -200px 0px; }
+.mb_crop107 { background-position: -240px 0px; }
+.mb_crop108 { background-position: -280px 0px; }
+.mb_crop109 { background-position: -320px 0px; }
 
 #market_section{
-position: absolute;
-top: 0px;
-left: 20px;
-width: 575px;
-height: 190px;
-    background-color: white;
+    position: absolute;
+    top: 0px;
+    left: 20px;
+    width: 575px;
+    height: 190px;
 }
 
-#fui_leave {
-    position: absolute;
-    top: 22px;
-    left: 366px;
+#mb_sell_box {
+    width: 100%;
+    text-align: center;
 }
+
+#mb_sell_box_drop_zone {
+    border: 1px solid black;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    background-color: rgba(0,0,0, 0.5);
+    position: relative;
+}
+
+#mb_sell_box_price_zone {
+    font-size: 25px;
+    position: relative;
+    top: -15px;
+    display:none;
+}
+
+#mb_sell_box_sell_button {
+    display:none;
+}
+
+#mb_sell_info_drag {
+    text-align: center;
+    margin-top: 10px;
+}
+
+
 
 
 
