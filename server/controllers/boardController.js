@@ -206,6 +206,29 @@ BoardController = function(socket, db, mongoose){
 
     this.fillPageSell = function(){
 
+        var marketInfos = new Array();
+
+        for(var key in Config.idItems)
+        {
+            if(Config.idItems[key].id >= 100 && config.idItems[key].id < 200)
+            {
+                var info = new Object();
+                info.id = Config.idItems[key].id;
+                info.name = Config.idItems[key].displayed;
+                var keyname = Config.idItems[key].name;
+                info.price = Config.prices[keyname];
+                info.rangePrice = Config.pricesRange[keyname];
+                marketInfos.push(info);
+            }
+        }
+
+        var page = new Object();
+        page.page = 3;
+
+        page.marketInfos = marketInfos;
+
+        socket.emit("BOARD-receivePage", page);
+
     };
 
     this.fillPageFights = function(){

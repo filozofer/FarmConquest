@@ -197,6 +197,26 @@ define(['jquery'], function(jQuery) {
 
         fillPageSell: function(page) {
 
+            //Remove old infos market
+            $j('#market_section .market_info').remove();
+
+            //For each info market return by the server
+            var marketInfos = page.marketInfos;
+            for(var i = marketInfos.length - 1; i >= 0; i--)
+            {
+                var info = marketInfos[i];
+                var infoLine = "<span id='market_info" + info.id + "' class='market_info'>";
+                infoLine += "<span id='market_info" + info.id + "_name' class='market_info_name'>" + info.name + "</span>";
+                infoLine += "<span id='market_info" + info.id + "_image' class='market_info_image mb_crop" + info.id + "'></span>";
+                infoLine += "<span id='market_info" + info.id + "_price' class='market_info_price'><span>" + info.price + "</span> <img src='img/gameBoard/miniCoin.png' width='20' alt='coin'/></span>";
+                infoLine += "<span id='market_info" + info.id + "_range' class='market_info_range'>["+ info.rangePrice.min + " - " + info.rangePrice.max + "]</span>";
+                infoLine += "</span>";
+
+                //Write a panel info
+                $j('#market_section').prepend(infoLine);
+            }
+
+
         },
 
         fillPageFights: function(page) {

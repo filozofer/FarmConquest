@@ -93,6 +93,7 @@ WorldController = function(socket, db, mongoose){
         });
     };
 
+    //Init the market fluctuation (prices of the crops)
     this.initMarketFluctuation = function(){
         setInterval(function(){
             console.log("============== Market Fluctuation ==============");
@@ -100,7 +101,7 @@ WorldController = function(socket, db, mongoose){
             for(var key in Config.idItems)
             {
                 var currentCrop = Config.idItems[key];
-                if (currentCrop.id > 100 && currentCrop.id < 200){
+                if (currentCrop.id >= 100 && currentCrop.id < 200){
                     var minValue = Config.pricesRange[currentCrop.name].min;
                     var maxValue = Config.pricesRange[currentCrop.name].max;
 
