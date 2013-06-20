@@ -262,12 +262,21 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                var zIndex = undefined;
 
                if (elementToRemove.image != undefined){
-                   elementToRemove.image.remove();
                    zIndex = elementToRemove.image.getZIndex();
                }
                else {
                    zIndex = 1000;
                }
+
+               console.log("zIndex: " + zIndex);
+
+                for(var i=0; i<building.locations.length; i++){
+                    var currentLocation = building.locations[i];
+                    if (app.World[currentLocation.X][currentLocation.Y].image != undefined){
+                        app.World[currentLocation.X][currentLocation.Y].image.remove();
+                        app.World[currentLocation.X][currentLocation.Y].image = undefined;
+                    }
+                }
 
                if (self.app.World[elementToRemove.X][elementToRemove.Y].XPx == undefined){
 
@@ -294,10 +303,10 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                    this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx - 48), app.Ressources[app.Config.tileType.grangeP] , app.World[mainPos.X][mainPos.Y], this.L_NAME.buildings, zIndex);
                }
                else if (tileType == app.Config.tileType.grangeM) {
-                   this.putTexture(new Vector2(elementToRemove.XPx - (app.Config.tileWidth / 2), elementToRemove.YPx - 67), app.Ressources[app.Config.tileType.grangeM] , app.World[mainPos.X][mainPos.Y], this.L_NAME.buildings, zIndex);
+                   this.putTexture(new Vector2(elementToRemove.XPx - (app.Config.tileWidth / 2), elementToRemove.YPx - (71 - app.Config.tileHeight)), app.Ressources[app.Config.tileType.grangeM] , app.World[mainPos.X][mainPos.Y], this.L_NAME.buildings, zIndex);
                }
                else if (tileType == app.Config.tileType.grangeG) {
-                   this.putTexture(new Vector2(elementToRemove.XPx - app.Config.tileWidth, elementToRemove.YPx - 100), app.Ressources[app.Config.tileType.grangeG] , app.World[element.X][element.Y], this.L_NAME.buildings, zIndex);
+                   this.putTexture(new Vector2(elementToRemove.XPx - (app.Config.tileWidth+5), elementToRemove.YPx - (105 - app.Config.tileHeight)), app.Ressources[app.Config.tileType.grangeG] , app.World[mainPos.X][mainPos.Y], this.L_NAME.buildings, zIndex);
                }
                else {
                    this.putTexture(new Vector2(elementToRemove.XPx, elementToRemove.YPx), this.getImageFromType(tileType, action), app.World[element.X][element.Y], this.L_NAME.tiles, zIndex);

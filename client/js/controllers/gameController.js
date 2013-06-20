@@ -410,20 +410,17 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
 
                                         case self.app.Config.tileType.grangeP:
                                             if(tile.contentTile.mainPos != undefined && tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                                console.log("MAIN POS OF SMALL GRANGE DRAWN: " + tile.X + "/" + tile.Y);
                                                 this.canvas.putTexture(new Vector2(tile.XPx, tile.YPx - 48), this.app.Ressources[app.Config.tileType.grangeP] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
                                             break;
 
                                         case self.app.Config.tileType.grangeM:
                                             if(tile.contentTile.mainPos != undefined && tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                                console.log("MAIN POS OF MEDIUM GRANGE DRAWN: " + tile.X + "/" + tile.Y);
-                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - 67), this.app.Ressources[app.Config.tileType.grangeM] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth / 2, tile.YPx - (71 - tileHeight)), this.app.Ressources[app.Config.tileType.grangeM] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
                                             break;
 
                                         case self.app.Config.tileType.grangeG:
                                             if(tile.contentTile.mainPos != undefined && tile.contentTile.mainPos.X == tile.X && tile.contentTile.mainPos.Y == tile.Y)
-                                                console.log("MAIN POS OF BIG GRANGE DRAWN: " + tile.X + "/" + tile.Y);
-                                                this.canvas.putTexture(new Vector2(tile.XPx - tileWidth, tile.YPx - 100), this.app.Ressources[app.Config.tileType.grangeG] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
+                                                this.canvas.putTexture(new Vector2(tile.XPx - (tileWidth+5), tile.YPx - (105 - tileHeight)), this.app.Ressources[app.Config.tileType.grangeG] , world[i][j], this.canvas.L_NAME.buildings, countCurrentTile);
                                             break;
                                         default:
                                             break;

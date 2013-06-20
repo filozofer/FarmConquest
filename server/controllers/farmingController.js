@@ -234,8 +234,21 @@ FarmingController = function(socket, db, mongoose){
                     		            currentT.save(function(err, curTile){
 
                                             var curTileObject = curTile.getAsObject();
+
                                             curTileObject.contentTile = content.getAsObject();
-                                            G.World[curTileObject.X][curTileObject.Y] = curTileObject;
+
+                                            console.log(curTileObject);
+
+                                            ContentTile.findById(curTileObject.contentTile).populate("owner locations mainPos").exec(function(err, contentTileDB){
+                                                //Set contentTile
+                                                curTileObject.contentTile = contentTileDB.getAsObject();
+
+                                                //Add to the server world
+                                                if(G.World[curTileObject.X] == undefined){ G.World[curTileObject.X] = new Object(); }
+                                                G.World[curTileObject.X][curTileObject.Y] = curTileObject;
+                                            });
+
+
 
                                             if(curTileObject.X == resp.tile.X && curTileObject.Y == resp.tile.Y){
                                                 buildingClient.mainPos = curTileObject;
