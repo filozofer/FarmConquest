@@ -166,6 +166,18 @@ define(['jquery'], function(jQuery){
                     this.walkable = true;
                     break;
 
+                case app.Config.tileType.grangeP:
+                    this.walkable = false;
+                    break;
+
+                case app.Config.tileType.grangeM:
+                    this.walkable = false;
+                    break;
+
+                case app.Config.tileType.grangeG:
+                    this.walkable = false;
+                    break;
+
                 default:
                     break;
             }
