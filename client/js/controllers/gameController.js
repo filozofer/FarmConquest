@@ -219,7 +219,7 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                                     socket.sessions.farmer.isBuilding = true;
                                 }
                                 var cursorName = "cursor_"+currentItem.name+".png";
-                                $j("body").css('cursor','url("../img/cursors/'+cursorName+'"), progress');
+                                $j("body").css('cursor','url("img/cursors/'+cursorName+'"), progress');
                                 break;
                             }
                         }

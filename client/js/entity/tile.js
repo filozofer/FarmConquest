@@ -33,13 +33,13 @@ define(['jquery'], function(jQuery){
                     //SEED ACTION
                     else if (socket.sessions.farmer.name == this.owner.name && socket.sessions.farmer.isFarming){
                         goToWork = true;
-                        $j("body").css('cursor','url("../img/cursors/main.cur"), progress');
+                        $j("body").css('cursor','url("img/cursors/main.cur"), progress');
                         // we save in session the tile clicked
                         socket.sessions.selectedActionTile = this;
                     }
                     else if (socket.sessions.farmer.name == this.owner.name && socket.sessions.farmer.isBuilding){
                         goToWork = true;
-                        $j("body").css('cursor','url("../img/cursors/main.cur"), progress');
+                        $j("body").css('cursor','url("img/cursors/main.cur"), progress');
                         // we save in session the tile clicked
                         socket.sessions.selectedActionTile = this;
                     }

@@ -94,7 +94,7 @@ define(['jquery'], function(jQuery) {
                 }
                 else
                 {
-                    $j(this).css('cursor','url("../img/cursors/main.cur"), progress !important');
+                    $j(this).css('cursor','url("img/cursors/main.cur"), progress !important');
                 }
             });
 
