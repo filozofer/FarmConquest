@@ -12,7 +12,7 @@ define(['jquery', '../lib/jquery-ui'], function(jQuery, ui) {
 
             var self = this;
 
-            $j("#mg_fight, #mb_launch_fight").on('click', function(){
+            $j("#mg_fight, #mb_launch_fight, #mb_quit_fight_board_button").on('click', function(){
 
                 if($j("#game_fight_board").css("display") == "none")
                 {
