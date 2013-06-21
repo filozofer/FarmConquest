@@ -67,23 +67,34 @@ UserController = function(socket, db, mongoose){
 
         //TODO
         //User Exist
+        User.findOne({ username : newUser.username },function (err, user) {
+                    if (err){throw(err);}
+
+                    if(user != null) {
+                        errors.push("user_exists");
+                        console.log("USER FOUND");
+                    }
 
 
-        if(errors.length == 0) {
-            registerState = true;
-            socket.emit('register_resp', {'registerState': registerState, 'errorsMessages': errors});
 
-            newUser.save(function(err){
-                if (err) { throw err; }
+                    if(errors.length == 0) {
+                        registerState = true;
+                        socket.emit('register_resp', {'registerState': registerState, 'errorsMessages': errors});
 
-                socket.sessions.user = newUser;
-                socket.controllers.worldController.addNewPlayer(newUser);
-            });
-        }
-        else
-        {
-            socket.emit('register_resp', {'registerState': registerState, 'errorsMessages': errors});
-        }
+                        newUser.save(function(err){
+                            if (err) { throw err; }
+
+                            socket.sessions.user = newUser;
+                            socket.controllers.worldController.addNewPlayer(newUser);
+                        });
+                    }
+                    else
+                    {
+                        socket.emit('register_resp', {'registerState': registerState, 'errorsMessages': errors});
+                    }
+
+                    });
+
 
     });
 

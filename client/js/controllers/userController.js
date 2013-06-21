@@ -90,14 +90,18 @@ define(['jquery', '../entity/user'], function(jQuery, User) {
                     {
                         case "username_size":
                             $j("#input_username_r").parent().parent().addClass('error');
-                            $j("#input_username_r").parent().append("<span class='help-inline'>6 à 20 caractères</span>");
+                            $j("#input_username_r").parent().append("<span class='help-inline'>Pseudo entre 6 et 20 caractères.</span>");
                             break;
 
                         case "password_conf":
                             $j("#input_password_r").parent().parent().addClass('error');
                             $j("#input_password_conf_r").parent().parent().addClass('error');
-                            $j("#input_password_conf_r").parent().append("<span class='help-inline'>Mot de passe différent</span>");
+                            $j("#input_password_conf_r").parent().append("<span class='help-inline'>Mots de passe différents.</span>");
                             break;
+
+                        case "user_exists":
+                            $j("#input_username_r").parent().parent().addClass('error');
+                            $j("#input_username_r").parent().append("<span class='help-inline'>Cet utilisateur existe déjà.</span>");
 
                         default:
                             break;
