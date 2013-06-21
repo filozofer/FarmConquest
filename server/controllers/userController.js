@@ -87,10 +87,6 @@ UserController = function(socket, db, mongoose){
 
     });
 
-    socket.on('disconnect', function(){
-        userSockets.splice(userSockets.indexOf(socket), 1);
-    });
-
 
 };
 

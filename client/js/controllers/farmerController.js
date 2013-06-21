@@ -130,6 +130,24 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 self.canvas.putFarmerSprite(positionPx, farmerImg, ennemyFarmer, self.canvas.L_NAME.players);
             });
 
+            socket.on("FARMER-ennemyDisconnect", function(ennemy){
+                var ennemyFarmer = undefined;
+                var indexOfEnnemy = undefined;
+                console.log(socket.sessions.ennemies);
+                for (var i=0; i<socket.sessions.ennemies.length;i++){
+                    if (socket.sessions.ennemies[i].name == ennemy.name){
+                        ennemyFarmer = socket.sessions.ennemies[i];
+                        indexOfEnnemy = i;
+                        break;
+                    }
+                }
+                console.log("ennemy disconnect : ");
+                console.log(ennemyFarmer);
+                ennemyFarmer.image.remove();
+                socket.sessions.ennemies.splice(indexOfEnnemy, 1);
+                console.log(socket.sessions.ennemies);
+            });
+
             socket.on('FARMER-newMoney', function(money){
                 socket.sessions.farmer.money = money;
                 jQuery('#mg_money_joueur').text(money);
