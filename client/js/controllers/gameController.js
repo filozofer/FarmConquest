@@ -428,6 +428,14 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
 
             });
 
+            socket.on('GAME-updateFarmerAttributes', function(resp){
+                $j('#mg_money_joueur').html(resp.money);
+                socket.sessions.farmer.money = resp.money;
+                socket.sessions.farmer.level = resp.level;
+                socket.sessions.farmer.experiences = resp.experiences;
+                socket.sessions.farmer.creditFight = resp.creditFight;
+                socket.sessions.farmer.creditConquest = resp.creditConquest;
+            });
         },
 
         startGame: function() {

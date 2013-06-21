@@ -236,7 +236,7 @@ GameController = function(socket, db, mongoose){
                     if(buildingDB != null)
                     {
                         var building = buildingDB.getAsObject();
-                        socket.emit('GAME-putContentBuilding', { items: building.items, tile: G.World[request.mainPos.X][request.mainPos.Y] });
+                        socket.emit('GAME-putContentBuilding', { items: building.items, tile: G.World[request.mainPos.X][request.mainPos.Y]});
                     }
                 });
             }
