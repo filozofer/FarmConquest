@@ -166,14 +166,41 @@ define(['jquery'], function(jQuery){
 
                 case app.Config.tileType.grangeP:
                     this.walkable = false;
+
+                    if(this.contentTile.mainPos.X == this.X && this.contentTile.mainPos.Y == this.Y)
+                    {
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y, tileA: this, locations: this.contentTile.locations}); // -1, 0
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y-1, tileA: this, locations: this.contentTile.locations});   // -1, -1
+                    }
                     break;
 
                 case app.Config.tileType.grangeM:
                     this.walkable = false;
+
+                    if(this.contentTile.mainPos.X == this.X && this.contentTile.mainPos.Y == this.Y)
+                    {
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y-1, tileA: this, locations: this.contentTile.locations}); // -1, -1
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y, tileA: this, locations: this.contentTile.locations});   // -1, 0
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y+1, tileA: this, locations: this.contentTile.locations});   // -1, +1
+                    }
                     break;
 
                 case app.Config.tileType.grangeG:
                     this.walkable = false;
+
+                    if(this.contentTile.mainPos.X == this.X && this.contentTile.mainPos.Y == this.Y)
+                    {
+                        app.TileBehindBuilding.push({X: this.X-2, Y: this.Y-2, tileA: this, locations: this.contentTile.locations});    // -2, -2
+                        app.TileBehindBuilding.push({X: this.X-2, Y: this.Y-1, tileA: this, locations: this.contentTile.locations});    // -2, -1
+                        app.TileBehindBuilding.push({X: this.X-2, Y: this.Y, tileA: this, locations: this.contentTile.locations});      // -2, 0
+                        app.TileBehindBuilding.push({X: this.X-2, Y: this.Y+1, tileA: this, locations: this.contentTile.locations});    // -2, +1
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y-2, tileA: this, locations: this.contentTile.locations});    // -1, -2
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y-1, tileA: this, locations: this.contentTile.locations});    // -1, -1
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y, tileA: this, locations: this.contentTile.locations});      // -1, 0
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y+1, tileA: this, locations: this.contentTile.locations});    // -1, +1
+                        app.TileBehindBuilding.push({X: this.X-1, Y: this.Y+2, tileA: this, locations: this.contentTile.locations});    // -1, +2
+                        app.TileBehindBuilding.push({X: this.X, Y: this.Y-1, tileA: this, locations: this.contentTile.locations});      // 0, -1
+                    }
                     break;
 
                 default:
