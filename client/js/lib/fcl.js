@@ -268,13 +268,15 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                    zIndex = 1000;
                }
 
-               console.log("zIndex: " + zIndex);
+                var newContentTile = mainPos.contentTile;
+                newContentTile.mainPos = mainPos;
 
                 for(var i=0; i<building.locations.length; i++){
                     var currentLocation = building.locations[i];
                     if (app.World[currentLocation.X][currentLocation.Y].image != undefined){
                         app.World[currentLocation.X][currentLocation.Y].image.remove();
                         app.World[currentLocation.X][currentLocation.Y].image = undefined;
+                        app.World[currentLocation.X][currentLocation.Y].setContentTile(newContentTile);
                     }
                 }
 
@@ -291,7 +293,7 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                //Change the world with the new element
                mainPos.XPx = elementToRemove.XPx;
                mainPos.YPx = elementToRemove.YPx;
-               app.World[mainPos.X][mainPos.Y].contentTile = mainPos.contentTile;
+               app.World[mainPos.X][mainPos.Y].setContentTile = mainPos.contentTile;
                app.World[mainPos.X][mainPos.Y].walkable = mainPos.walkable;
 
                //Add the associate kinnetic texture of the element in the layer

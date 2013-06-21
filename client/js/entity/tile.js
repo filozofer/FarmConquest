@@ -17,8 +17,6 @@ define(['jquery'], function(jQuery){
 		},
 
 		clickEvent: function(){
-            //socket.emit("plantTest", { X: this.X, Y: this.Y});
-            console.log(this);
             if (this.walkable){
                 if (!socket.sessions.farmer.isWorking){
                     if(socket.sessions.farmer.isHarvesting){

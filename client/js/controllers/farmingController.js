@@ -46,15 +46,12 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                             socket.emit('doFarmingAction', { 'tile' : socket.sessions.selectedActionTile, 'index' : socket.sessions.selectedActionIndex});
                         }
                         else if (socket.sessions.farmer.isFarming){
-                            console.log("PLANT Item with ID=" + socket.sessions.idItemSelected + " at " + socket.sessions.selectedActionTile.X +"/" + socket.sessions.selectedActionTile.Y);
                             socket.emit('BuildOrSeed', {tile: socket.sessions.selectedActionTile, idItem: socket.sessions.idItemSelected, action: app.Config.actionType.seed});
                         }
                         else if (socket.sessions.farmer.isHarvesting){
-                            console.log("Harvest Plant : "+ socket.sessions.selectedActionTile.contentTile.type.name);
                             socket.emit("harvestSeed", socket.sessions.selectedActionTile);
                         }
                         else if (socket.sessions.farmer.isBuilding){
-                            console.log("Put Building : " + socket.sessions.idItemSelected);
                             socket.emit("BuildOrSeed", {tile: socket.sessions.selectedActionTile, idItem: socket.sessions.idItemSelected, action: app.Config.actionType.build});
                         }
                     }
@@ -104,14 +101,12 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             });
 
             socket.on('seedGrowing', function(tile){
-                console.log("seed Grow to State : " + tile.contentTile.state);
                 var tile = self.getWorkingTileFromServer(tile);
                 app.World[tile.X][tile.Y] = tile;
                 self.canvas.changeTexture(tile);
             });
 
             socket.on('seedGoingToDie', function(tile){
-                console.log("Seed going to die");
                 var tile = self.getWorkingTileFromServer(tile);
                 if (app.World[tile.X][tile.Y].contentTile != undefined && app.World[tile.X][tile.Y].contentTile.type == tile.contentTile.type && app.World[tile.X][tile.Y].contentTile.state == 2){
                     app.World[tile.X][tile.Y] = tile;
@@ -120,7 +115,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             });
 
             socket.on('seedDie', function(tile){
-                console.log("Seed died");
                 var tile = self.getWorkingTileFromServer(tile);
                 if (app.World[tile.X][tile.Y].contentTile != undefined && app.World[tile.X][tile.Y].contentTile.state == 3){
                     app.World[tile.X][tile.Y] = tile;
@@ -134,7 +128,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             });
 
             socket.on('FARMING-HarvestDone', function(tile){
-                console.log("harvest done");
                 if (tile.owner.name == socket.sessions.farmer.name)
                     socket.sessions.farmer.isHarvesting = false;
                 var tile = self.getWorkingTileFromServer(tile);
@@ -143,7 +136,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             });
 
             socket.on('FARMING-makeBuilding', function(building){
-                console.log(building);
                 socket.sessions.farmer.isBuilding = false;
                 self.canvas.changeTextureToBuilding(building);
             });

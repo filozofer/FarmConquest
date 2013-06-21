@@ -71,7 +71,6 @@ FightController = function(socket, db, mongoose){
                     //Send the farmers to the Arena
                     var fight = new Arena(mongoose);
                     fight.start(farmerAttacker, farmerDefender, function(farmerToSendToClient, fight){
-                        console.log('Fight over !');
                         socket.emit('FIGHT-fightTransmission', { farmer: farmerToSendToClient, fight: fight });
                     });
                 }

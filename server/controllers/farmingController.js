@@ -105,8 +105,6 @@ FarmingController = function(socket, db, mongoose){
                     }
 
                        var contentTile = contentTileFactory.getContentTile(idItem, tile);
-                    console.log("FarmingController.plantSeed :");
-                    console.log(contentTile);
                     contentTile.save(function(err){
                         tileToTake.contentTile = contentTile;
                         var contentT = contentTile.getAsObject();
@@ -236,8 +234,6 @@ FarmingController = function(socket, db, mongoose){
                                             var curTileObject = curTile.getAsObject();
 
                                             curTileObject.contentTile = content.getAsObject();
-
-                                            console.log(curTileObject);
 
                                             ContentTile.findById(curTileObject.contentTile).populate("owner locations mainPos").exec(function(err, contentTileDB){
                                                 //Set contentTile
