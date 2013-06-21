@@ -48,6 +48,14 @@ define(['jquery'], function(jQuery) {
                     $j("#mb_quit_button").attr('src', "img/gameBoard/cross_clean_button.png");
             });
 
+            $j(document).on('mouseenter mouseleave', "#mb_quit_fight_board_button", function(ev){
+                var mouse_is_inside = ev.type === 'mouseenter';
+                if(mouse_is_inside)
+                    $j("#mb_quit_fight_board_button").attr('src', "img/gameBoard/cross_active_button.png");
+                else
+                    $j("#mb_quit_fight_board_button").attr('src', "img/gameBoard/cross_clean_button.png");
+            });
+
             $j("#mb_quit_button").on('click', function(){
                 $j("#game_main_board").fadeOut(500);
             });
