@@ -1180,9 +1180,49 @@ header {
     margin-top: 10px;
 }
 
+/* BUILDING UI */
 
+#game_building_ui {
+    display: none;
+    width: 170px;
+    height: 115px;
+    background-image: url('../img/gameMenu/background.png');
+    position: absolute;
+    top: 150px;
+    left: 400px;
+    border: 2px solid black;
+    border-radius: 10px;
+    z-index: 4;
+}
 
+#gb_trash {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
 
+#gb_quit {
+    position: absolute;
+    top: 0px;
+    left: 137px;
+}
 
+#gb_table {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
 
+#gb_box {
+
+}
+
+#gb_table td{
+    border: 1px solid black;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    background-color: rgba(0,0,0, 0.5);
+    position: relative;
+}
 

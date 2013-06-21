@@ -54,9 +54,11 @@ define(['jquery'], function(jQuery){
                 $j("#game_main_board").fadeIn(500);
                 socket.emit("BOARD-getPage", 1);
             }
-            else if(this.contentTile != undefined && (this.contentTile.type == app.Config.tileType.grangeP || this.contentTile.type == app.Config.tileType.grangeM || this.contentTile.type == app.Config.tileType.grangeG) && this.owner != undefined && this.owner.name == socket.sessions.farmer.name)
+            else if(this.contentTile != undefined && (this.contentTile.type == app.Config.tileType.grangeP || this.contentTile.type == app.Config.tileType.grangeM || this.contentTile.type == app.Config.tileType.grangeG))
             {
-                alert("Click on grange !");
+               //if:  && this.owner != undefined && this.owner.name == socket.sessions.farmer.name
+                var mainPos  = this.contentTile.mainPos;
+                socket.emit('GAME-getBuildingContent', { mainPos: mainPos, tile: this });
             }
 
 		},

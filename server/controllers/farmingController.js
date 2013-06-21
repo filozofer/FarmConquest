@@ -164,7 +164,8 @@ FarmingController = function(socket, db, mongoose){
                     building.create();
                     buildingClient.owner = socket.sessions.farmer;
                     building.owner = farmerDB;
-                    building.mainPos = new Tile();
+                    building.mainPos = tileToTake;
+
                     buildingClient.locations = new Array();
                     var tempLocation = new Array();
 

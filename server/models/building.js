@@ -14,7 +14,8 @@ var Building = new Schema({
     locations : [{ type : Schema.ObjectId, ref : 'Tile'}],
     type : String,
     name : String,
-    description : String
+    description : String,
+    items: [{ type : Schema.ObjectId, ref : 'ItemBag'}]
 
 });
 
@@ -49,6 +50,18 @@ Building.methods.getAsObject = function(){
         for (var i=0; i<this.locations.length; i++){
             if (typeof(this.locations[i]._bsontype) == "undefined"){
                 object.locations.push(this.locations[i].getAsObject());
+            }
+        }
+    }
+
+    object.items = new Array();
+    if(this.items != undefined && this.items.length != undefined)
+    {
+        for(var i = 0; i < this.items.length; i++)
+        {
+            if(this.items[i] != null && typeof(this.items[i]._bsontype) == "undefined")
+            {
+                object.items.push(this.items[i].getAsObject());
             }
         }
     }

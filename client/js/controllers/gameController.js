@@ -205,7 +205,8 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                 });
                 $j(".mg_item_bag").on('click', function(){
                     var idItem = parseInt($j(this).attr("iditem"));
-                    if (!(idItem > 100 && idItem < 200)) // if not a crop
+                    var notInBag = $j(this).parent().hasClass('gb_box');
+                    if (!(idItem > 100 && idItem < 200) && !notInBag) // if not a crop
                     {
                         socket.sessions.idItemSelected = idItem;
                         for (var key in app.Config.idItems){
@@ -251,6 +252,7 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                     var clone = "<span class='mg_item_bag'>" + $j(ui.draggable).html() + "</span>";
                     var idItem = parseInt($j(ui.draggable).attr("iditem"));
                     var idBag = parseInt($j(ui.draggable).attr("idBag"));
+                    var parentIsBuilding = $j(ui.draggable).parent().hasClass('gb_box');
                     $j(ui.draggable).remove();
                     $j(this).html(clone);
                     $j(this).children('.mg_item_bag').first().attr('iditem', idItem);
@@ -261,7 +263,15 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
 
                     $j(document).trigger('GAME-bagReceive');
 
-                    socket.emit('GAME-changePlaceItemBag', { idBag: parseInt($j(ui.draggable).attr('idBag')), newPos: $j(this).attr("idBag")});
+                    //Case ItemBag come from building, set the pos of that building in the request as containerStartPos
+                    var tile = new Object();
+                    if(socket.sessions.tileBuildingOpen != undefined)
+                    {
+                        tile.X = socket.sessions.tileBuildingOpen.X;
+                        tile.Y = socket.sessions.tileBuildingOpen.Y;
+                    }
+
+                    socket.emit('GAME-changePlaceItemBag', { idBag: parseInt($j(ui.draggable).attr('idBag')), newPos: $j(this).attr("idBag"), containerStart: (parentIsBuilding) ? "building": "bag", containerEnd: "bag", containerStartPos: { X: tile.X, Y: tile.Y }});
 
                     $j('#mg_trash_itemBag').hide("slide", {}, 300, function(){
                         $j('#mg_trash_itemBag').css('left', '-1000px');
@@ -303,6 +313,119 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                         $j('#mg_trash_itemBag').css('left', '-1000px');
                     });
                 }
+            });
+
+            $j(document).on('mouseenter mouseleave', "#gb_quit", function(ev){
+                var mouse_is_inside = ev.type === 'mouseenter';
+                if(mouse_is_inside)
+                    $j("#gb_quit").attr('src', "img/gameBoard/cross_active_button.png");
+                else
+                    $j("#gb_quit").attr('src', "img/gameBoard/cross_clean_button.png");
+            });
+            $j('#gb_quit').on('click', function(){
+                $j('#game_building_ui').fadeOut(300);
+            });
+
+            socket.on('GAME-putContentBuilding', function(resp){
+
+                var items = resp.items;
+                var tile = resp.tile;
+                socket.sessions.tileBuildingOpen = tile;
+                var contentTile = resp.tile.contentTile;
+
+                $j('#game_building_ui').fadeOut(300, function(){
+
+                    if(items != undefined)
+                    {
+                        //Clean stock in ui
+                        $j('#gb_table').html("<tr></tr><tr></tr>");
+
+                        //Get number of box to create
+                        //Change window properties
+                        var length = undefined;
+                        switch(contentTile.type)
+                        {
+                            case self.app.Config.tileType.grangeP:
+                                length = 2;
+                                $j('#gb_quit').css('left', '137px');
+                                $j('#game_building_ui').css({
+                                    'left': '400px',
+                                    'width': '170px',
+                                    'height': '115px'
+                                });
+                                break;
+
+                            case self.app.Config.tileType.grangeM:
+                            case self.app.Config.tileType.grangeG:
+                                length = 10;
+                                $j('#gb_quit').css('left', '290px');
+                                $j('#game_building_ui').css({
+                                    'left': '319px',
+                                    'width': '330px',
+                                    'height': '159px'
+                                });
+                                break;
+
+                            default:
+                                length = 0;
+                                break;
+                        }
+
+                        //Create the boxs
+                        for (var i=0; i < length; i++){
+                            $j('#gb_table tr').eq((i < 5) ? 0 : 1).append("<td class='gb_box' idBag='" + i + "'></td>");
+                        }
+
+                        //Fill the box with items send by server
+                        for(var i = 0; i < items.length; i++)
+                        {
+                            var itemBag = items[i];
+                            var content = "<span class='mg_item_bag' iditem='" + itemBag.idItem + "'><span class='mg_bag_item bagItem" + itemBag.idItem + "'></span><span class='bagItem_quantity'>" + itemBag.quantity + "</span></span>";
+
+                            $j(".gb_box[idBag='" + itemBag.positionInBag + "']").html(content);
+                        }
+                    }
+
+                    //Droppable zone refresh
+                    $j(".gb_box").droppable({
+                        accept: function(dropElement) {
+
+                            if(dropElement.hasClass('mg_item_bag') && $j(this).html() == "")
+                                return true;
+                            else
+                                return false;
+                        },
+
+                        drop: function( event, ui ) {
+
+                            var clone = "<span class='mg_item_bag'>" + $j(ui.draggable).html() + "</span>";
+                            var idItem = parseInt($j(ui.draggable).attr("iditem"));
+                            var idBag = parseInt($j(ui.draggable).attr("idBag"));
+                            var parentIsBuilding = $j(ui.draggable).parent().hasClass('gb_box');
+                            $j(ui.draggable).remove();
+                            $j(this).html(clone);
+                            $j(this).children('.mg_item_bag').first().attr('iditem', idItem);
+                            $j(this).children('.mg_item_bag').first().attr('idBag', idBag);
+
+                            $j('#mb_sell_box_price_zone').hide();
+                            $j('#mb_sell_box_sell_button').hide();
+
+                            $j(document).trigger('GAME-bagReceive');
+
+                            socket.emit('GAME-changePlaceItemBag', { idBag: parseInt($j(ui.draggable).attr('idBag')), newPos: $j(this).attr("idBag"), containerStart: (parentIsBuilding) ? "building": "bag", containerEnd: "building", containerStartPos: { X: tile.X, Y: tile.Y }, containerEndPos: { X: tile.X, Y: tile.Y }});
+
+                            $j('#mg_trash_itemBag').hide("slide", {}, 300, function(){
+                                $j('#mg_trash_itemBag').css('left', '-1000px');
+                            });
+                        }
+                    });
+
+                    $j(document).trigger('GAME-bagReceive');
+
+                    //fadeIn
+                    $j('#game_building_ui').fadeIn(300);
+                });
+
             });
 
         },
