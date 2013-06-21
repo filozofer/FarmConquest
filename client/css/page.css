@@ -830,11 +830,17 @@ header {
     padding: 20px 50px 20px 70px;
 }
 
+#mb_quit_fight_board_button{
+    position:absolute;
+    top:17px;
+    right:61px;
+}
+
 #fb_title {
     width: 100%;
     text-align: center;
     font-weight: bold;
-    margin-top: 20px;
+    margin-top: 25px;
 }
 
 #fb_farmer_name_title {
@@ -848,7 +854,7 @@ header {
 
 #fb_farmer_level_title {
     position: absolute;
-    top: 70px;
+    top: 76px;
     left: 258px;
     font-weight: bold;
 }
