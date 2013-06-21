@@ -120,7 +120,7 @@ FarmingController = function(socket, db, mongoose){
                             }, Config.workingTime);
                             for (var i=0; i<sockets0.length; i++){
                                 var currentSocket = sockets0[i];
-                                currentSocket.emit("ennemyBeginWork", {tile: tile});
+                                currentSocket.emit("ennemyBeginWork", {tile: tile, action: undefined});
                             }
 
                             generatePlantEvolution(tile, tileToTake, contentTile);

@@ -492,6 +492,7 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                             farmerImage.afterFrame(0.1, function(){
                                 farmerImage.stop();
                             });
+                            farmer.actionDirection = farmer.direction;
                             farmer.direction = "";
 
 

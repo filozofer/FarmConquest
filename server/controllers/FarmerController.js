@@ -151,12 +151,13 @@ FarmerController = function(socket, db, mongoose){
 
 
     socket.on('disconnect', function(){
-        console.log("disconnection");
-        console.log(socket.sessions.farmer);
-        var neighborsSockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
-        for(var i=0; i<neighborsSockets.length; i++){
-            var currentSocket = neighborsSockets[i];
-            currentSocket.emit("FARMER-ennemyDisconnect", socket.sessions.farmer);
+
+        if(socket.sessions.farmer != undefined){
+            var neighborsSockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
+            for(var i=0; i<neighborsSockets.length; i++){
+                var currentSocket = neighborsSockets[i];
+                currentSocket.emit("FARMER-ennemyDisconnect", socket.sessions.farmer);
+            }
         }
         userSockets.splice(userSockets.indexOf(socket), 1);
     });

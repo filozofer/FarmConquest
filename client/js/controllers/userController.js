@@ -133,7 +133,7 @@ define(['jquery', '../entity/user'], function(jQuery, User) {
                     {
                         case "bad_login":
                             $j("#input_username").parent().parent().addClass('error');
-                            $j("#input_username").parent().append("<span class='help-inline'>Informations incorrect</span>");
+                            $j("#input_username").parent().append("<span class='help-inline'>Informations incorrectes</span>");
                             break;
 
                         default:

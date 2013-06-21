@@ -93,6 +93,12 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 socket.sessions.farmer.isFarming = false;
                 var tile = self.getWorkingTileFromServer(tileServer);
                 app.World[tile.X][tile.Y] = tile;
+                socket.sessions.farmer.image.setAnimation('seed'+socket.sessions.farmer.actionDirection);
+                socket.sessions.farmer.image.start();
+                socket.sessions.farmer.image.afterFrame(5, function(){
+                    socket.sessions.farmer.image.setAnimation('stop'+socket.sessions.farmer.actionDirection)
+                    socket.sessions.farmer.image.stop();
+                });
                 self.canvas.changeTexture(tile);
             });
 
