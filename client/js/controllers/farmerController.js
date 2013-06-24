@@ -67,8 +67,9 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
             });
 
             socket.on('setFarmer', function(farmer){
-                jQuery('#mg_nom_joueur').text(farmer.name);
-                jQuery('#mg_money_joueur').text(farmer.money);
+                $j('#mg_nom_joueur').text(farmer.name);
+                $j('#mg_money_joueur').text(farmer.money);
+                $j('#mg_credits_conquest').html(farmer.creditConquest);
 
                 if(farmer.bag != undefined)
                 {
@@ -82,7 +83,6 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/farmer'], function(
                 }
 
                 $j(document).trigger('GAME-bagReceive');
-
             });
             // fin de la mise à jour
 

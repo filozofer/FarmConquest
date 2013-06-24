@@ -22,6 +22,7 @@ var FightController     = require('./controllers/fightController');
 /* GLOBAL */
 G = new Object();
 G.World = undefined;
+G.Timeout = new Object();
 
 
 var Configuration = require('./config/config');

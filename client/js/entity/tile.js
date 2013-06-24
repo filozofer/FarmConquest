@@ -30,6 +30,10 @@ define(['jquery'], function(jQuery){
                        // we save in session the tile clicked
                        socket.sessions.selectedActionTile = this;
                     }
+                    else if (socket.sessions.selectedActionIndex != undefined && socket.sessions.selectedActionIndex == "4" && socket.sessions.farmer.name != this.owner.name){
+                        goToWork = true;
+                        socket.sessions.selectedActionTile = this;
+                    }
                     //SEED ACTION
                     else if (socket.sessions.farmer.name == this.owner.name && socket.sessions.farmer.isFarming){
                         goToWork = true;
@@ -43,6 +47,7 @@ define(['jquery'], function(jQuery){
                         // we save in session the tile clicked
                         socket.sessions.selectedActionTile = this;
                     }
+
                     socket.sessions.positionClick = {X: this.XPx, Y: this.YPx};
                     if(!(socket.sessions.farmer.X == this.X && socket.sessions.farmer.Y == this.Y)){
                         $j(document).trigger('FARMER-moveFarmer', {'tile':this, 'goToWork':goToWork});
@@ -77,7 +82,7 @@ define(['jquery'], function(jQuery){
                 }
             }
 
-            $j(document).trigger('TILE-mouseOver', {X: this.X, Y: this.Y});
+            $j(document).trigger('TILE-GAME-mouseOver', {X: this.X, Y: this.Y});
 		},
 
 		mouseOutEvent: function(){

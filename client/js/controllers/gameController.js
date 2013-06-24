@@ -69,7 +69,7 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                self.drawElement(resp);
             });
 
-            $j(document).on('TILE-mouseOver', function(e, tile) {
+            $j(document).on('TILE-GAME-mouseOver', function(e, tile) {
                 self.changeNotifTileZone(tile);
             });
 
@@ -430,12 +430,15 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
 
             socket.on('GAME-updateFarmerAttributes', function(resp){
                 $j('#mg_money_joueur').html(resp.money);
+                $j('#mg_credits_conquest').html(resp.creditConquest);
                 socket.sessions.farmer.money = resp.money;
                 socket.sessions.farmer.level = resp.level;
                 socket.sessions.farmer.experiences = resp.experiences;
                 socket.sessions.farmer.creditFight = resp.creditFight;
                 socket.sessions.farmer.creditConquest = resp.creditConquest;
             });
+
+            $j("#tile_image_box").hide();
         },
 
         startGame: function() {
@@ -601,11 +604,33 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
             //Image
             if(tileBoard.image != undefined)
             {
-                $j("#tile_image").attr("src", tileBoard.image.attrs.image.src);
+                if(tileBoard.contentTile != undefined && tileBoard.contentTile.type == "seed")
+                {
+                    $j('#tile_image_box').css('background-image', 'url("img/Farming/farming_set.png")');
+                    var horizontal = '-' + (((tileBoard.contentTile.state > 2) ? 2 : tileBoard.contentTile.state) * 80) + 'px ';
+                    var vertical = '-' + ((tileBoard.contentTile.idItem - 1) * 60) + 'px';
+                    var test = horizontal + vertical;
+                    $j('#tile_image_box').css('background-position', test);
+                    $j("#tile_image").hide();
+                    $j('#tile_image_box').show();
+                }
+                else
+                {
+                    $j("#tile_image").attr("src", tileBoard.image.attrs.image.src);
+                    if(tileBoard.contentTile == undefined)
+                        $j("#tile_image").css('margin-top', '20px');
+                    else
+                        $j("#tile_image").css('margin-top', '0px');
+                    $j("#tile_image_box").hide();
+                    $j("#tile_image").show();
+                }
             }
             else if(tileBoard.contentTile != undefined && tileBoard.contentTile.mainPos != undefined) //Case building
             {
                 $j("#tile_image").attr("src", this.app.World[tileBoard.contentTile.mainPos.X][tileBoard.contentTile.mainPos.Y].image.attrs.image.src);
+                $j("#tile_image").css('margin-top', '0px');
+                $j("#tile_image_box").hide();
+                $j("#tile_image").show();
             }
 
             //Owner
@@ -636,6 +661,7 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
             var random = Math.floor((Math.random()*arrayR.length));
             return arrayR[random];
         }
+
 
     };
 

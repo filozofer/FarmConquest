@@ -7,9 +7,10 @@
 
 define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerController'], function(jQuery, Vector2, FCL, Tile, FarmerController) {
 
+    jQuery.noConflict();
+    var $j = jQuery;
+
     var FarmingController = Class.create();
-
-
     FarmingController.prototype = {
 
         initialize : function() {
@@ -27,15 +28,34 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
             });
 
             // gestion des deux premiers boutons d'action
-            jQuery('#btn_arroser, #btn_fertiliser').on('click',function(event){
+            $j('#btn_arroser, #btn_fertiliser').on('click',function(event){
                 event.preventDefault();
-                if ( jQuery(this).hasClass('active') ) {
-                    jQuery(this).removeClass('active');
+                if ($j(this).hasClass('active') ) {
+                    $j(this).removeClass('active');
                     socket.sessions.selectedActionIndex = undefined;
+                    $j("body").css('cursor','url("../img/cursors/main.cur"), progress');
                 } else {
-                    jQuery('.action_btn').removeClass('active');
-                    jQuery(this).addClass('active');
-                    socket.sessions.selectedActionIndex = jQuery(this).val();
+                    $j('.action_btn').removeClass('active');
+                    $j(this).addClass('active');
+                    socket.sessions.selectedActionIndex = $j(this).val();
+
+                    //Change cursor
+                    switch($j(this).val())
+                    {
+                        case "0":
+                            var cursorName = "cursor_arrosoir.png";
+                            $j("body").css('cursor','url("../img/cursors/'+cursorName+'"), progress');
+                            break;
+
+                        case "1":
+                            var cursorName = "cursor_fertilisation.png";
+                            $j("body").css('cursor','url("../img/cursors/'+cursorName+'"), progress');
+                            break;
+
+                        default:
+                            $j("body").css('cursor','url("../img/cursors/main.cur"), progress');
+                            break;
+                    }
                 }
             });
 
@@ -55,6 +75,9 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                             socket.emit("BuildOrSeed", {tile: socket.sessions.selectedActionTile, idItem: socket.sessions.idItemSelected, action: app.Config.actionType.build});
                         }
                     }
+                    else if(socket.sessions.selectedActionIndex != undefined && socket.sessions.selectedActionIndex == "4") {
+                        socket.emit('doFarmingAction', { 'tile' : socket.sessions.selectedActionTile, 'index' : socket.sessions.selectedActionIndex});
+                    }
                 }
             });
 
@@ -66,6 +89,7 @@ define(['jquery', '../lib/vector2', '../lib/fcl', '../entity/tile', './farmerCon
                 app.World[resp.tile.X][resp.tile.Y] = tile;
                 socket.sessions.farmer.money = resp.money;
                 jQuery("#mg_money_joueur").text(socket.sessions.farmer.money);
+                $j('#mg_credits_conquest').html(resp.creditConquest);
                 self.canvas.changeTexture(tile, resp.action);
             });
 

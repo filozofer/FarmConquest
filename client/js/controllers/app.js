@@ -165,14 +165,14 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             var self = this;
 
             /* Load Images */
-            this.addRessource("default_tile", self.Type.IMAGE, "default_tile.png");
-            this.addRessource("default_tile_arrosage", self.Type.IMAGE, "default_tile_arrosage.png");
-            this.addRessource("default_tile_fertilisation", self.Type.IMAGE, "default_tile_fertilisation.png");
+            this.addRessource("default_tile", self.Type.IMAGE, "Farming/default_tile.png");
+            this.addRessource("default_tile_arrosage", self.Type.IMAGE, "Farming/default_tile_arrosage.png");
+            this.addRessource("default_tile_fertilisation", self.Type.IMAGE, "Farming/default_tile_fertilisation.png");
             this.addRessource("farming_set", self.Type.IMAGE, "Farming/farming_set.png");
             this.addRessource("farming_set_arrosage", self.Type.IMAGE, "Farming/farming_set_arrosage.png");
             this.addRessource("farming_set_fertilisation", self.Type.IMAGE, "Farming/farming_set_fertilisation.png");
-            this.addRessource("farmer", self.Type.IMAGE, "farmerSprite.png");
-            this.addRessource("farm", self.Type.IMAGE, "farm.png");
+            this.addRessource("farmer", self.Type.IMAGE, "Farmer/farmerSprite.png");
+            this.addRessource("farm", self.Type.IMAGE, "Buildings/farm.png");
             this.addRessource("grangeP", self.Type.IMAGE, "Buildings/grangeP.png");
             this.addRessource("grangeM", self.Type.IMAGE, "Buildings/grangeM.png");
             this.addRessource("grangeG", self.Type.IMAGE, "Buildings/grangeG.png");

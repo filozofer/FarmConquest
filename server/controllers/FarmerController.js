@@ -94,7 +94,7 @@ FarmerController = function(socket, db, mongoose){
 
         var finish = resp.finish;
         var goToWork = resp.goToWork;
-        Farmer.findOne({name: socket.sessions.user.username },function(err, farmer){
+        Farmer.findById(socket.sessions.farmer.mongooseObject._id,function(err, farmer){
 
         if (socket.sessions.farmer == undefined){
             socket.sessions.farmer = farmer.getAsObject();
@@ -148,8 +148,6 @@ FarmerController = function(socket, db, mongoose){
         }
     });
 
-
-
     socket.on('disconnect', function(){
 
         if(socket.sessions.farmer != undefined){
@@ -161,7 +159,6 @@ FarmerController = function(socket, db, mongoose){
         }
         userSockets.splice(userSockets.indexOf(socket), 1);
     });
-
 
     this.generateNeighbors = function(){
         var neighborSockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);

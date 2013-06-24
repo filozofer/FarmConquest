@@ -89,6 +89,30 @@ define(['jquery', '../lib/jquery-ui'], function(jQuery, ui) {
                 //Call cleaner
                 self.cleanFight(self);
             });
+
+            $j('#mg_conquest, #mg_credits_conquest').on('click', function(event){
+                event.preventDefault();
+
+                //Change cursor
+                var cursorName = "cursor_conquest.png";
+                $j("body").css('cursor','url("../img/cursors/'+cursorName+'"), progress');
+
+                //Switch on/off fonctionnality (border + set in sessions)
+                if ($j(this).hasClass('active'))
+                {
+                    $j(this).removeClass('active');
+                    socket.sessions.selectedActionIndex = undefined;
+                    $j("body").css('cursor','url("../img/cursors/main.cur"), progress');
+                }
+                else
+                {
+                    $j('.action_btn').removeClass('active');
+                    $j(this).addClass('active');
+                    socket.sessions.selectedActionIndex = $j(this).val();
+                    if(socket.sessions.selectedActionIndex == "")
+                        socket.sessions.selectedActionIndex = $j(this).attr('value');
+                }
+            });
         },
 
         playPreFight: function(fight, self){

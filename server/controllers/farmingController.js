@@ -9,7 +9,7 @@ var ContentTileFactory = require('../factory/contentTileFactory');
 
 FarmingController = function(socket, db, mongoose){
 
-    var farmingActions = ["arrosage","fertilisation"];
+    var farmingActions = ["arrosage","fertilisation", null, null, "conquest"];
     var Farmer = mongoose.model("Farmer");
     var Building = mongoose.model("Building");
     var Tile = mongoose.model("Tile");
@@ -26,29 +26,66 @@ FarmingController = function(socket, db, mongoose){
             case "arrosage" :
                 if(tile.humidity < 10) {
                     tile.humidity++;
-                    socket.sessions.farmer.money -= Config.waterPrice;
+                     socket.sessions.farmer.money -= Config.waterPrice;
                     //UPDATE INFOS
                      Tile.update(query, { humidity: tile.humidity }, null, null);
                      G.World[tile.X][tile.Y].humidity = tile.humidity;
                 }
                 break;
+
             case "fertilisation" :
                 if(tile.fertility < 10) {
                     tile.fertility++;
                     socket.sessions.farmer.money -= Config.fertilizerPrice;
                     //UPDATE INFOS
-                     Farmer.update(query, { fertility: tile.fertility }, null, null);
+                    Tile.update(query, { fertility: tile.fertility }, null, null);
                      G.World[tile.X][tile.Y].humidity = tile.fertility;
                 }
                 break;
+
+            case "conquest":
+                if(tile.owner.name != socket.sessions.farmer.name)
+                {
+                    if(tile.contentTile == undefined || (tile.contentTile != undefined && tile.contentTile.type != Config.tileType.farm))
+                    {
+                        if(socket.sessions.farmer.creditConquest > 0)
+                        {
+                            //Test for tile to conquest is near from one other own tile
+                            if(isNearFromOwnTile(tile.X, tile.Y))
+                            {
+                                socket.sessions.farmer.creditConquest -= 1;
+                                tile.owner = socket.sessions.farmer.mongooseObject;
+                                Farmer.findByIdAndUpdate(socket.sessions.farmer._id, { creditConquest : socket.sessions.farmer.creditConquest}, function(err, farmerDB){
+
+                                    var isBuilding = false;
+                                    var type = (tile.contentTile != undefined) ? tile.contentTile.type : null;
+                                    if(type == Config.tileType.grangeP || type == Config.tileType.grangeM || type == Config.tileType.grangeG)
+                                        isBuilding = true;
+
+                                    if(!isBuilding)
+                                    {
+                                        G.World[tile.X][tile.Y].owner = farmerDB.getAsObject();
+                                        Tile.update(query, { owner: farmerDB}, function(){});
+                                    }
+                                    else
+                                    {
+                                        //TODO Building
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+                break;
+
             default:
                 break;
         }
 
         var farmerQuery = { name: socket.sessions.farmer.name };
-        Farmer.update(farmerQuery, { money: socket.sessions.farmer.money }, null, null);
+        Farmer.update(farmerQuery, { money: socket.sessions.farmer.money, creditConquest: socket.sessions.farmer.creditConquest }, null, null);
 
-        socket.emit("beginWork", {tile: tile, money: socket.sessions.farmer.money, action: action});
+        socket.emit("beginWork", {tile: tile, money: socket.sessions.farmer.money, action: action, creditConquest: socket.sessions.farmer.creditConquest});
 
         var sockets = getSocketByFarmerPosition(socket.sessions.farmer.X, socket.sessions.farmer.Y);
         for (var i=0; i<sockets.length; i++){
@@ -322,9 +359,6 @@ FarmingController = function(socket, db, mongoose){
 
                             addCropInBag(idCrop, keyName, bag, nbItemToAdd, contentInDb, resp);
                         });
-
-
-
                     }
                 });
             }
@@ -382,8 +416,15 @@ FarmingController = function(socket, db, mongoose){
                             tileClient.contentTile = undefined;
                             G.World[tileClient.X][tileClient.Y] = tileClient;
                             Tile.findOne({X: tileClient.X, Y:tileClient.Y}, function(err, tileToEdit){
-                                tileToEdit.contentTile = null;
+                                tileToEdit.contentTile = undefined;
                                 tileToEdit.save();
+
+                                //Clear timer for the crop
+                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].growStateTimeOut);
+                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].doneStateTimeOut);
+                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].deathStateTimeOut);
+                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].dyingStateTimeOut);
+
                             });
                             socket.emit('BOARD-refreshBag', socket.sessions.farmer.bag);
                             var sockets = getSocketByPlantPosition(tileClient.X, tileClient.Y);
@@ -446,8 +487,15 @@ FarmingController = function(socket, db, mongoose){
                                         tileClient.contentTile = undefined;
                                         G.World[tileClient.X][tileClient.Y] = tileClient;
                                         Tile.findOne({X: tileClient.X, Y:tileClient.Y}, function(err, tileToEdit){
-                                            tileToEdit.contentTile = null;
+                                            tileToEdit.contentTile = undefined;
                                             tileToEdit.save();
+
+                                            //Clear timer for the crop
+                                            clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].growStateTimeOut);
+                                            clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].doneStateTimeOut);
+                                            clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].deathStateTimeOut);
+                                            clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].dyingStateTimeOut);
+
                                         });
                                         socket.emit('BOARD-refreshBag', socket.sessions.farmer.bag);
                                         var sockets = getSocketByPlantPosition(tileClient.X, tileClient.Y);
@@ -474,8 +522,15 @@ FarmingController = function(socket, db, mongoose){
                             tileClient.contentTile = undefined;
                             G.World[tileClient.X][tileClient.Y] = tileClient;
                             Tile.findOne({X: tileClient.X, Y:tileClient.Y}, function(err, tileToEdit){
-                                tileToEdit.contentTile = null;
+                                tileToEdit.contentTile = undefined;
                                 tileToEdit.save();
+
+                                //Clear timer for the crop
+                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].growStateTimeOut);
+                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].doneStateTimeOut);
+                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].deathStateTimeOut);
+                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].dyingStateTimeOut);
+
                             });
                             socket.emit('BOARD-refreshBag', socket.sessions.farmer.bag);
                             var sockets = getSocketByPlantPosition(tileClient.X, tileClient.Y);
@@ -510,68 +565,75 @@ FarmingController = function(socket, db, mongoose){
     }
 
     var generatePlantEvolution = function(tile, tileToTake, contentTile){
-        //Grow state
-        setTimeout(function(){
-           contentTile.state = 1;
-           contentTile.save();
-           tile.contentTile.state = 1;
-           G.World[tile.X][tile.Y] = tile;
 
-           //socket.emit("seedGrowing", tile);
-           var sockets1 = getSocketByPlantPosition(tile.X, tile.Y);
-           for (var i=0; i<sockets1.length; i++){
-               var currentSocket = sockets1[i];
-               currentSocket.emit("seedGrowing", tile);
-           }
+        if(G.Timeout[tile.X] == undefined)
+            G.Timeout[tile.X] = new Object();
+        if(G.Timeout[tile.X][tile.Y] == undefined)
+            G.Timeout[tile.X][tile.Y] = new Object();
+
+
+        //Grow state
+        G.Timeout[tile.X][tile.Y].growStateTimeOut = setTimeout(function(){
+
+            G.World[tile.X][tile.Y].contentTile.state = 1;
+
+            Tile.findOne({X: tile.X, Y: tile.Y}, function(err, tileDB){
+                ContentTile.update({ mainPos: tileDB }, { state: 1 }, function(){});
+            });
+
+            var sockets1 = getSocketByPlantPosition(tile.X, tile.Y);
+            for (var i=0; i<sockets1.length; i++){
+                var currentSocket = sockets1[i];
+                currentSocket.emit("seedGrowing", G.World[tile.X][tile.Y]);
+            }
         }, (tile.contentTile.maturationTime / 2));
 
         //Done State
-        setTimeout(function(){
-           contentTile.state = 2;
-           contentTile.save();
-           tile.contentTile.state = 2;
-           G.World[tile.X][tile.Y] = tile;
+        G.Timeout[tile.X][tile.Y].doneStateTimeOut = setTimeout(function(){
 
-           //socket.emit("seedGrowing", tile);
-           var sockets2 = getSocketByPlantPosition(tile.X, tile.Y);
-           for (var i=0; i<sockets2.length; i++){
-               var currentSocket = sockets2[i];
-               currentSocket.emit("seedGrowing", tile);
-           }
+            G.World[tile.X][tile.Y].contentTile.state = 2;
+
+            Tile.findOne({X: tile.X, Y: tile.Y}, function(err, tileDB){
+                ContentTile.update({ mainPos: tileDB }, { state: 1 }, function(){});
+            });
+
+            var sockets2 = getSocketByPlantPosition(tile.X, tile.Y);
+            for (var i=0; i<sockets2.length; i++){
+                var currentSocket = sockets2[i];
+                currentSocket.emit("seedGrowing", G.World[tile.X][tile.Y]);
+            }
         }, (tile.contentTile.maturationTime));
 
         var deathTime  = tile.contentTile.deathTime;
         //End of life state
-        setTimeout(function(){
-           contentTile.state = 3;
-           contentTile.save();
-           tile.contentTile.state = 3;
-           G.World[tile.X][tile.Y] = tile;
+        G.Timeout[tile.X][tile.Y].deathStateTimeOut = setTimeout(function(){
 
-           //socket.emit("seedGoingToDie", tile);
-           var sockets3 = getSocketByPlantPosition(tile.X, tile.Y);
-           for (var i=0; i<sockets3.length; i++){
+            G.World[tile.X][tile.Y].contentTile.state = 3;
+
+            Tile.findOne({X: tile.X, Y: tile.Y}, function(err, tileDB){
+                ContentTile.update({ mainPos: tileDB }, { state: 1 }, function(){});
+            });
+
+            var sockets3 = getSocketByPlantPosition(tile.X, tile.Y);
+            for (var i=0; i<sockets3.length; i++){
                var currentSocket = sockets3[i];
-               currentSocket.emit("seedGoingToDie", tile);
-           }
+                currentSocket.emit("seedGoingToDie", G.World[tile.X][tile.Y]);
+            }
         }, ((deathTime / 3)*2));
 
         //Dying state
-        setTimeout(function(){
-           contentTile.remove();
-           tile.contentTile = undefined;
-           tileToTake.contentTile = null;
-           tileToTake.save();
+        G.Timeout[tile.X][tile.Y].dyingStateTimeOut = setTimeout(function(){
 
-           G.World[tile.X][tile.Y] = tile;
-           tileToTake.save();
+            Tile.findOne({X: tile.X, Y: tile.Y}, function(err, tileDB){
+                ContentTile.findOneAndRemove({ mainPos: tileDB }, function(){});
+            });
+            G.World[tile.X][tile.Y].contentTile = undefined;
 
-           //socket.emit("seedDie", tile);
-           var sockets4 = getSocketByPlantPosition(tile.X, tile.Y);
-           for (var i=0; i<sockets4.length; i++){
-               var currentSocket = sockets4[i];
-               currentSocket.emit("seedDie", tile);
-           }
+            var sockets4 = getSocketByPlantPosition(tile.X, tile.Y);
+            for (var i=0; i<sockets4.length; i++){
+                var currentSocket = sockets4[i];
+                currentSocket.emit("seedDie", G.World[tile.X][tile.Y]);
+            }
         }, deathTime);
     }
 
@@ -592,6 +654,36 @@ FarmingController = function(socket, db, mongoose){
             }
         }
         return socketsToUse;
+    }
+
+    /*
+     *  Description: Tell if the tile at X,Y his near of one owned tile
+     *  Params: X: Number -> coord X of the tile to test , Y: Number -> coord Y of the tile to test
+     *  Return: isNear (Boolean)
+     */
+    var isNearFromOwnTile = function(X, Y){
+
+        //Get the name of the current player
+        var name = socket.sessions.farmer.name;
+
+        //Tell if the tile to conquest is near an owned tile
+        var isNear = false;
+
+        //Test for the 4 adjacents tiles
+        if(G.World[X-1] != undefined && G.World[X-1][Y] != undefined && G.World[X-1][Y].owner.name == name)
+            isNear = true;
+
+        if(G.World[X-1] != undefined && G.World[X-1][Y-1] != undefined && G.World[X-1][Y-1].owner.name == name)
+            isNear = true;
+
+        if(G.World[X] != undefined && G.World[X][Y+1] != undefined && G.World[X][Y+1].owner.name == name)
+            isNear = true;
+
+        if(G.World[X+1] != undefined && G.World[X+1][Y+1] != undefined && G.World[X+1][Y+1].owner.name == name)
+            isNear = true;
+
+        //Return the result (Boolean)
+        return isNear;
     }
 
 };

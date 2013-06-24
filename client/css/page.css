@@ -304,8 +304,8 @@ header {
 #mg_arroser {
     position: absolute;
     top: 5px;
-    left: 700px;
-    cursor: 'pointer';
+    left: 665px;
+    cursor: pointer;
 }
 
 .action_btn:hover{
@@ -319,24 +319,31 @@ header {
 #mg_fertiliser {
     position: absolute;
     top: 5px;
-    left: 760px;
-    cursor: 'pointer';
+    left: 725px;
+    cursor: pointer;
 }
 
 #btn_alliance,
 #mg_teleport {
     position: absolute;
     top: 5px;
-    left: 820px;
-    cursor: 'pointer';
+    left: 785px;
+    cursor: pointer;
 }
 
 #btn_attaque,
 #mg_fight {
     position: absolute;
     top: 5px;
-    left: 880px;
-    cursor: 'pointer';
+    left: 845px;
+    cursor: pointer;
+}
+
+#mg_conquest {
+    position: absolute;
+    top: 5px;
+    left: 905px;
+    cursor: pointer;
 }
 
 #mg_notifications_area {
@@ -451,11 +458,37 @@ header {
     display: inline-block;
     text-align: center;
     width: 95px;
+    height: 75px;
 }
 
 #tile_image {
-    margin: auto;
+    margin: 20px auto auto auto;
+    max-width: 100%;
+    max-height: 100%;
 }
+
+#tile_image_box {
+    display: inline-block;
+    width: 80px;
+    height: 60px;
+    margin: auto;
+    background-image: url('../img/Farming/farming_set.png');
+}
+
+.imgCrop_1 { background-position: 40px 0px; }
+.imgCrop_2 { }
+.imgCrop_3 { }
+.imgCrop_4 { }
+.imgCrop_5 { }
+.imgCrop_6 { }
+.imgCrop_7 { }
+.imgCrop_8 { }
+.imgCrop_9 { }
+
+.imgCropState_0 { }
+.imgCropState_1 { }
+.imgCropState_2 { }
+
 
 #tile_humidity_span {
     position: absolute;
@@ -1230,5 +1263,14 @@ header {
     display: inline-block;
     background-color: rgba(0,0,0, 0.5);
     position: relative;
+}
+
+#mg_credits_conquest {
+    position: absolute;
+    top: 20px;
+    left: 918px;
+    display: inline-block;
+    width: 20px;
+    text-align: center;
 }
 

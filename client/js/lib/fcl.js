@@ -145,8 +145,6 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
             farmerSprite.setZIndex(zIndex);
         },
 
-
-
         putSeedSprite: function(vector, imageObj, objectLinked, layerName, zIndex){
             var self = this;
 
@@ -164,7 +162,7 @@ define(['jquery', './vector2', './kinetic', './tweenlite'], function(jQuery, Vec
                 0: self.frames([state0], 0, 0, 80, 60, 3, 9, 80, 60),
                 1: self.frames([state1], 0, 0, 80, 60, 3, 9, 80, 60),
                 2: self.frames([state2], 0, 0, 80, 60, 3, 9, 80, 60),
-                3: self.frames([state3], 0, 0, 80, 60, 3, 9, 80, 60),
+                3: self.frames([state3], 0, 0, 80, 60, 3, 9, 80, 60)
             };
             //----------------------------
 
