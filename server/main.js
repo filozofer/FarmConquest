@@ -42,8 +42,8 @@ LoadServer.prototype = {
         db();
 
         // OPENSHIFT //
-        ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-        port      = process.env.OPENSHIFT_NODEJS_PORT;
+        ipaddress = "127.0.0.1"; //process.env.OPENSHIFT_NODEJS_IP;
+        port      = "80"; //process.env.OPENSHIFT_NODEJS_PORT;
 
         // Instance du serveur web
         var app = express();

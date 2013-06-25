@@ -32,7 +32,7 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
 
         init: function(){
             var baseURL = this.getBaseURL();
-            var socket = io.connect(baseURL.substr(0, baseURL.length - 1) + ':1337');
+            var socket = io.connect(baseURL.substr(0, baseURL.length - 1));
             socket.sessions = new Object();
             return socket;
          },
