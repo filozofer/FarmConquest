@@ -83,6 +83,7 @@ FarmingController = function(socket, db, mongoose){
         }
 
         var farmerQuery = { name: socket.sessions.farmer.name };
+        if(socket.sessions.farmer.creditConquest == undefined) { socket.sessions.farmer.creditConquest = 0; }
         Farmer.update(farmerQuery, { money: socket.sessions.farmer.money, creditConquest: socket.sessions.farmer.creditConquest }, null, null);
 
         socket.emit("beginWork", {tile: tile, money: socket.sessions.farmer.money, action: action, creditConquest: socket.sessions.farmer.creditConquest});

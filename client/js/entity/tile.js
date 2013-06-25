@@ -68,7 +68,6 @@ define(['jquery'], function(jQuery){
 
 		},
 
-
 		mouseOverEvent: function(){
             if(this.image != undefined)
             {

@@ -206,22 +206,32 @@ define(['jquery', '../lib/jquery-ui', '../lib/vector2', '../lib/fcl', '../entity
                 $j(".mg_item_bag").on('click', function(){
                     var idItem = parseInt($j(this).attr("iditem"));
                     var notInBag = $j(this).parent().hasClass('gb_box');
-                    if (!(idItem > 100 && idItem < 200) && !notInBag) // if not a crop
+                    if (!(idItem > 100 && idItem < 200) && !notInBag && socket.sessions.selectedActionIndex == undefined) // if not a crop
                     {
-                        socket.sessions.idItemSelected = idItem;
-                        for (var key in app.Config.idItems){
-                            var currentItem = app.Config.idItems[key];
-                            if (currentItem.id == socket.sessions.idItemSelected){
-                                if (currentItem.id < 10){
-                                    socket.sessions.farmer.isFarming = true; //seed
+                        if(socket.sessions.idItemSelected == undefined)
+                        {
+                            socket.sessions.idItemSelected = idItem;
+                            for (var key in app.Config.idItems){
+                                var currentItem = app.Config.idItems[key];
+                                if (currentItem.id == socket.sessions.idItemSelected){
+                                    if (currentItem.id < 10){
+                                        socket.sessions.farmer.isFarming = true; //seed
+                                    }
+                                    else if (currentItem.id >= 10 && currentItem.id < 20){
+                                        socket.sessions.farmer.isBuilding = true;
+                                    }
+                                    var cursorName = "cursor_"+currentItem.name+".png";
+                                    $j("body").css('cursor','url("img/cursors/'+cursorName+'"), progress');
+                                    break;
                                 }
-                                else if (currentItem.id >= 10 && currentItem.id < 20){
-                                    socket.sessions.farmer.isBuilding = true;
-                                }
-                                var cursorName = "cursor_"+currentItem.name+".png";
-                                $j("body").css('cursor','url("img/cursors/'+cursorName+'"), progress');
-                                break;
                             }
+                        }
+                        else
+                        {
+                            socket.sessions.idItemSelected = undefined;
+                            socket.sessions.farmer.isFarming = false;
+                            socket.sessions.farmer.isBuilding = false;
+                            $j("body").css('cursor','url("img/cursors/main.cur"), progress');
                         }
                     }
                 });

@@ -201,7 +201,7 @@ define(['jquery', '../lib/kinetic'], function(jQuery, Kinetic){
             }
             else
             {
-                var pourcentage = 100 - (load * 100 / loadMax);
+                var pourcentage = Math.round(100 - (load * 100 / loadMax));
                 $j('#pourcentage').html(pourcentage + " %");
             }
         },
