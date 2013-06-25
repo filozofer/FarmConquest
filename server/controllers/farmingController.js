@@ -421,11 +421,13 @@ FarmingController = function(socket, db, mongoose){
                                 tileToEdit.save();
 
                                 //Clear timer for the crop
-                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].growStateTimeOut);
-                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].doneStateTimeOut);
-                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].deathStateTimeOut);
-                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].dyingStateTimeOut);
-
+                                if(G.Timeout[tileToEdit.X] != undefined && G.Timeout[tileToEdit.X][tileToEdit.Y] != undefined)
+                                {
+                                    clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].growStateTimeOut);
+                                    clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].doneStateTimeOut);
+                                    clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].deathStateTimeOut);
+                                    clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].dyingStateTimeOut);
+                                }
                             });
                             socket.emit('BOARD-refreshBag', socket.sessions.farmer.bag);
                             var sockets = getSocketByPlantPosition(tileClient.X, tileClient.Y);
@@ -492,11 +494,13 @@ FarmingController = function(socket, db, mongoose){
                                             tileToEdit.save();
 
                                             //Clear timer for the crop
-                                            clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].growStateTimeOut);
-                                            clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].doneStateTimeOut);
-                                            clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].deathStateTimeOut);
-                                            clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].dyingStateTimeOut);
-
+                                            if(G.Timeout[tileToEdit.X] != undefined && G.Timeout[tileToEdit.X][tileToEdit.Y] != undefined)
+                                            {
+                                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].growStateTimeOut);
+                                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].doneStateTimeOut);
+                                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].deathStateTimeOut);
+                                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].dyingStateTimeOut);
+                                            }
                                         });
                                         socket.emit('BOARD-refreshBag', socket.sessions.farmer.bag);
                                         var sockets = getSocketByPlantPosition(tileClient.X, tileClient.Y);
@@ -527,11 +531,13 @@ FarmingController = function(socket, db, mongoose){
                                 tileToEdit.save();
 
                                 //Clear timer for the crop
-                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].growStateTimeOut);
-                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].doneStateTimeOut);
-                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].deathStateTimeOut);
-                                clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].dyingStateTimeOut);
-
+                                if(G.Timeout[tileToEdit.X] != undefined && G.Timeout[tileToEdit.X][tileToEdit.Y] != undefined)
+                                {
+                                    clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].growStateTimeOut);
+                                    clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].doneStateTimeOut);
+                                    clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].deathStateTimeOut);
+                                    clearTimeout(G.Timeout[tileToEdit.X][tileToEdit.Y].dyingStateTimeOut);
+                                }
                             });
                             socket.emit('BOARD-refreshBag', socket.sessions.farmer.bag);
                             var sockets = getSocketByPlantPosition(tileClient.X, tileClient.Y);
