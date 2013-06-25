@@ -1,2 +1,2 @@
-db.js
+server/lib/db.js
 node_modules/express
