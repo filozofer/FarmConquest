@@ -84,7 +84,7 @@ LoadServer.prototype = {
         require('./models/user.js');
         require('./models/contentTile.js');
         require('./models/farmer.js');
-        require('./models/Tile.js');
+        require('./models/tile.js');
         require('./models/farm.js');
         require('./models/worldInfo.js');
         require('./models/itemBag.js');
