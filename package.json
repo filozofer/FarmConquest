@@ -32,6 +32,10 @@
   "devDependencies": {},
   "bundleDependencies": [],
 
+  "scripts": {
+      "start": "node server.js --websocket-port=8000 --log-level=1"
+  },
+
   "private": true,
   "main": "main.js"
 }

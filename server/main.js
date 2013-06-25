@@ -1,13 +1,17 @@
 //Config Server
 var EventEmitter = require('events').EventEmitter;
-var http        = require('http'),
-    mongoose    = require('mongoose'),
-    db          = require('./lib/db');
+var http        = require('http');
+var mongoose    = require('mongoose');
+var db          = require('./lib/db');
 
-//Change log level
-io = require('socket.io').listen(1337);
-io.set('log level', 1);
+// OPENSHIFT //
+var express		= require('express');
+var connect		= require('connect');
+var fs			= require('fs');
+// END OPENSHIFT //
 
+//Prepare for socket io
+io = undefined;
 
 //Controllers Import
 var UserController      = require('./controllers/userController');
@@ -23,13 +27,10 @@ var FightController     = require('./controllers/fightController');
 G = new Object();
 G.World = undefined;
 G.Timeout = new Object();
-
+userSockets = new Array();
 
 var Configuration = require('./config/config');
 Config = new Configuration();
-
-//userSockets = {};
-userSockets = new Array();
 
 
 function LoadServer(){};
@@ -39,6 +40,31 @@ LoadServer.prototype = {
         //The server is launch line 5 (require socket.io and listen)
         console.log('Server Start...');
         db();
+
+        // OPENSHIFT //
+        ipaddress = process.env.OPENSHIFT_NODEJS_IP;
+        port      = process.env.OPENSHIFT_NODEJS_PORT;
+
+        // Instance du serveur web
+        var app = express();
+
+        // Configuration du serveur web
+        app.use(express.logger());
+        app.use('/', express.static(WEBROOT));
+        app.use(app.router);
+        server = http.createServer(app);
+
+        // Ecoute du serveur web
+        io = require('socket.io').listen(server);
+        io.configure(function() {
+            io.set("transports", ["websocket"]);
+        });
+        server.listen(port, ipaddress, function() {
+            console.log('%s: Node server started on %s:%d ...',
+                Date(Date.now() ), ipaddress, port);
+        });
+
+        // END OPENSHIFT //
     },
 
     initWorld: function() {
