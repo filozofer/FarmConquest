@@ -42,20 +42,24 @@ LoadServer.prototype = {
         db();
 
         // OPENSHIFT //
-        ipaddress = "127.0.0.1"; //process.env.OPENSHIFT_NODEJS_IP;
-        port      = "80"; //process.env.OPENSHIFT_NODEJS_PORT;
+        ipaddress = process.env.OPENSHIFT_NODEJS_IP;
+        port      = process.env.OPENSHIFT_NODEJS_PORT || 80;
+        if (typeof ipaddress === "undefined") {
+            ipaddress = "127.0.0.1";
+        }
 
         // Instance du serveur web
         var app = express();
 
         // Configuration du serveur web
-        app.use(express.logger());
+        //app.use(express.logger()); //log from server web
         app.use('/', express.static(WEBROOT));
         app.use(app.router);
         server = http.createServer(app);
 
         // Ecoute du serveur web
         io = require('socket.io').listen(server);
+        io.set('log level', 1);
         io.configure(function() {
             io.set("transports", ["websocket"]);
         });
