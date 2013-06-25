@@ -198,7 +198,7 @@ define(['jquery', '../lib/jquery-ui'], function(jQuery, ui) {
                 var f1 = (action.nameAttacker == fight.farmerAttacker) ? "A" : "D";
                 var f2 = (action.nameAttacker == fight.farmerAttacker) ? "D" : "A";
                 var f1MaxLife = (action.nameAttacker == fight.farmerAttacker) ? fight.farmerAttackerLife : fight.farmerDefenderLife;
-                var f2MaxLife = (action.nameAttacker == fight.farmerAttacker) ? fight.farmerAttackerLife : fight.farmerDefenderLife;
+                var f2MaxLife = (action.nameAttacker == fight.farmerAttacker) ? fight.farmerDefenderLife : fight.farmerAttackerLife;
                 var d1 = (action.nameAttacker == fight.farmerAttacker) ? "+=30" : "-=30";
                 var d2 = (action.nameAttacker == fight.farmerAttacker) ? "-=30" : "+=30";
 
@@ -224,7 +224,8 @@ define(['jquery', '../lib/jquery-ui'], function(jQuery, ui) {
                     fight['life' + f2] -= action.damageWeapon;
                     $j('#fui_heath_value' + f2).html(fight['life' + f2] + " / " + f2MaxLife);
                     var widthActual = parseFloat($j('#fui_lifeBarGreen' + f2).css('width').replace('px', ''));
-                    var widthBarLife = fight['life' + f2] * widthActual / f2MaxLife;
+                    var widthMaxBarLife = 250; //Max width of the life bar
+                    var widthBarLife = fight['life' + f2] * widthMaxBarLife / f2MaxLife;
 
                     var diff = '-=' + (widthActual - widthBarLife) + 'px';
                     var diffLeft = '0px';
