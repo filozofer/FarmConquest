@@ -134,8 +134,17 @@ WorldController = function(socket, db, mongoose){
                 {
                     //Get Content tile (populate work here... I don't know why)
                     ContentTile.findById(tileTo.contentTile).populate("owner locations mainPos").exec(function(err, contentTileDB){
-                        //Set contentTile
-                        tileAsObject.contentTile = contentTileDB.getAsObject();
+
+                        if(contentTileDB != null)
+                        {
+                            //Set contentTile
+                            tileAsObject.contentTile = contentTileDB.getAsObject();
+                        }
+                        else
+                        {
+                            tileSend.contentTile = undefined;
+                            tileSend.save();
+                        }
 
                         //Add to the server world
                         if(G.World[tileTo.X] == undefined){ G.World[tileTo.X] = new Object(); }

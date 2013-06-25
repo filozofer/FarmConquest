@@ -290,7 +290,7 @@ BoardController = function(socket, db, mongoose){
                         var nbItemToAdd = 0;
                         if(id >= 1 && id <= 9)
                             nbItemToAdd = config.nbSeedWhenBuy;
-                        else if (id >= 10 && id <= 10)
+                        else if (id >= 10 && id <= 12)
                             nbItemToAdd = config.nbBuildingWhenBuy;
 
                         self.addItemInBag(id, keyName, bag, nbItemToAdd, price);

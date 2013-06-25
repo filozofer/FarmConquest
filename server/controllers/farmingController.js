@@ -595,7 +595,7 @@ FarmingController = function(socket, db, mongoose){
             G.World[tile.X][tile.Y].contentTile.state = 2;
 
             Tile.findOne({X: tile.X, Y: tile.Y}, function(err, tileDB){
-                ContentTile.update({ mainPos: tileDB }, { state: 1 }, function(){});
+                ContentTile.update({ mainPos: tileDB }, { state: 2 }, function(){});
             });
 
             var sockets2 = getSocketByPlantPosition(tile.X, tile.Y);
@@ -612,7 +612,7 @@ FarmingController = function(socket, db, mongoose){
             G.World[tile.X][tile.Y].contentTile.state = 3;
 
             Tile.findOne({X: tile.X, Y: tile.Y}, function(err, tileDB){
-                ContentTile.update({ mainPos: tileDB }, { state: 1 }, function(){});
+                ContentTile.update({ mainPos: tileDB }, { state: 3 }, function(){});
             });
 
             var sockets3 = getSocketByPlantPosition(tile.X, tile.Y);
