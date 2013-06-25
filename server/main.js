@@ -56,7 +56,11 @@ LoadServer.prototype = {
         server = http.createServer(app);
 
         // Ecoute du serveur web
-        io = require('socket.io').listen(server);
+        if(ipaddress == "127.0.0.1")
+            io = require('socket.io').listen(8000);
+        else
+            io = require('socket.io').listen(server);
+
         io.set('log level', 1);
         io.configure(function() {
             io.set("transports", ["websocket"]);
