@@ -5,9 +5,9 @@ var mongoose    = require('mongoose');
 var db          = require('./lib/db');
 
 // OPENSHIFT //
-var express		= require('express');
+//var express		= require('express');
 //var connect		= require('connect');
-var fs			= require('fs');
+//var fs			= require('fs');
 // END OPENSHIFT //
 
 //Prepare for socket io
