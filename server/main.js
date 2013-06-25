@@ -42,7 +42,6 @@ LoadServer.prototype = {
         db();
 
         // OPENSHIFT //
-        /*
         ipaddress = process.env.OPENSHIFT_NODEJS_IP;
         port      = process.env.OPENSHIFT_NODEJS_PORT || 80;
         if (typeof ipaddress === "undefined") {
@@ -67,8 +66,7 @@ LoadServer.prototype = {
         server.listen(port, ipaddress, function() {
             console.log('%s: Node server started on %s:%d ...',
                 Date(Date.now() ), ipaddress, port);
-        });*/
-
+        });
         // END OPENSHIFT //
     },
 
